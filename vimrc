@@ -23,7 +23,8 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
 " Auto insert closing brackets
-Plugin 'jiangmiao/auto-pairs'
+" WARNING: causes bug when using ibus-bamboo
+" Plugin 'jiangmiao/auto-pairs'
 
 " Python autocompletion
 Plugin 'ycm-core/YouCompleteMe'
