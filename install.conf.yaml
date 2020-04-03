@@ -8,3 +8,5 @@
     ~/.vimrc: vimrc
     ~/.zshrc: zshrc
 
+- create:
+  - ~/.vim/swapfiles
