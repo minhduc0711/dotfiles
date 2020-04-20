@@ -18,12 +18,12 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'tpope/vim-fugitive'
 " Git diff lines
 Plugin 'airblade/vim-gitgutter'
-" status bar (including Git)
+" pretty status bar (including Git)
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
 " Auto insert closing brackets
-" WARNING: causes bug when using ibus-bamboo
+" WARNING: disabled cuz it bugged when using ibus-bamboo
 " Plugin 'jiangmiao/auto-pairs'
 
 " Python autocompletion
@@ -48,9 +48,11 @@ Plugin 'google/vim-glaive'
 Plugin 'dense-analysis/ale'
 
 " fzf fuzzy search
-" If installed using git
 set rtp+=~/.fzf
 Plugin 'junegunn/fzf.vim'
+
+" theme
+Plugin 'kaicataldo/material.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -76,6 +78,19 @@ set tabstop=4 shiftwidth=4 expandtab
 
 " syntax highlighting
 syntax on
+
+" Theme
+syntax enable
+if (has("termguicolors"))
+  set termguicolors
+endif
+colorscheme material
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'ocean'
+
+" fix colors when using tmux
+set background=dark
+set t_Co=256
 
 " toggle ibus-bamboo
 function! IBusOff()
@@ -103,7 +118,7 @@ augroup END
 call IBusOff()
 
 " disable word wrap by default 
-set nowrap 
+" set nowrap
 
 " tweak command autocompletion behavior (similar to terminal)
 set wildmode=longest:full,full
@@ -160,7 +175,7 @@ set timeoutlen=1000 ttimeoutlen=0
 " 2. Link to patched font: https://github.com/powerline/fonts/raw/master/NotoMono/Noto%20Mono%20for%20Powerline.ttf
 let g:airline_powerline_fonts = 1
 " status bar theme
-" let g:airline_theme='wombat'
+let g:airline_theme='material'
 
 " disable vim-markdown concealing
 set conceallevel=0
