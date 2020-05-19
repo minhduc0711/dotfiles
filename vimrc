@@ -32,9 +32,6 @@ Plugin 'ycm-core/YouCompleteMe'
 " Support (syntax, indent...) for many languages
 Plugin 'sheerun/vim-polyglot'
 
-" Show indent lines
-Plugin 'Yggdroot/indentLine'
-
 " Code formatting
 " Add maktaba and codefmt to the runtimepath.
 " (The latter must be installed before it can be used.)
@@ -93,6 +90,7 @@ set background=dark
 set t_Co=256
 
 " toggle ibus-bamboo
+" WARNING: cause delays when switching modes, makes bracket expanding very slow
 function! IBusOff()
   " Lưu engine hiện tại
   let g:ibus_prev_engine = system('ibus engine')
@@ -116,6 +114,20 @@ augroup IBusHandler
     autocmd InsertLeave * call IBusOff()
 augroup END
 call IBusOff()
+
+" Bracket expanding: auto close {
+"function! s:CloseBracket()
+"    let line = getline('.')
+"    if line =~# '^\s*\(struct\|class\|enum\) '
+"        return "{\<Enter>};\<Esc>O"
+"    elseif searchpair('(', '', ')', 'bmn', '', line('.'))
+"        " Probably inside a function call. Close it off.
+"        return "{\<Enter>});\<Esc>O"
+"    else
+"        return "{\<Enter>}\<Esc>O"
+"    endif
+"endfunction
+"inoremap <expr> {<Enter> <SID>CloseBracket()
 
 " disable word wrap by default 
 " set nowrap
@@ -164,9 +176,6 @@ highlight GitGutterChangeDelete ctermfg=4
 " Disable ale gutters (sign column)
 let g:ale_set_signs = 0
 
-" indent character
-let g:indentLine_char = '▏'
-
 " remove delay when switching to normal mode
 set timeoutlen=1000 ttimeoutlen=0
 
@@ -177,6 +186,5 @@ let g:airline_powerline_fonts = 1
 " status bar theme
 let g:airline_theme='material'
 
-" disable vim-markdown concealing
+" disable text concealing in Markdown 
 set conceallevel=0
-let g:indentLine_conceallevel = 0
