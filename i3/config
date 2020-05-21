@@ -214,3 +214,7 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 # Desktop wallpaper
 exec --no-startup-id nitrogen --restore
+
+# Nightlight
+exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
+exec --no-startup-id redshift
