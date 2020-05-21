@@ -11,6 +11,7 @@
     ~/.config/polybar: polybar
     ~/.config/compton.conf: compton.conf
     ~/.config/flashfocus: flashfocus
+    ~/.config/gtk-3.0: gtk-3.0
 
 - create:
   - ~/.vim/swapfiles
