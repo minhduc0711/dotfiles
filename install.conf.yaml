@@ -7,6 +7,10 @@
 - link:
     ~/.vimrc: vimrc
     ~/.zshrc: zshrc
+    ~/.config/i3: i3
+    ~/.config/polybar: polybar
+    ~/.config/compton.conf: compton.conf
+    ~/.config/flashfocus: flashfocus
 
 - create:
   - ~/.vim/swapfiles

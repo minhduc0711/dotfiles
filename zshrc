@@ -104,14 +104,14 @@ stty -ixon
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/home/minhduc0711/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/opt/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/opt/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "/home/minhduc0711/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/minhduc0711/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/opt/miniconda3/bin:$PATH"
+        export PATH="/home/minhduc0711/miniconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
@@ -122,18 +122,9 @@ fpath+=("$HOME/.zsh/pure")
 autoload -U promptinit; promptinit
 prompt pure
 
-# term-greetings
-python /media/minhduc0711/Libraries/Codes/scripts/term-greetings/main.py
-
 # command_not_found + package suggestions
 source /etc/zsh_command_not_found
 
-# Flutter
-export PATH="$PATH:/opt/flutter/bin"
-
-# add chromedriver to path 
-path=('/opt/chromedriver_linux64/' $path)
-export PATH
-
 # fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source /usr/share/doc/fzf/examples/key-bindings.zsh
