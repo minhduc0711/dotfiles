@@ -1,6 +1,11 @@
 - defaults:
     link:
       relink: true
+      create: true
+      force: true
+    shell:
+      stdout: true
+      stderr: true
 
 - clean: ['~']
 
@@ -16,3 +21,6 @@
 
 - create:
   - ~/.vim/swapfiles
+
+- shell:
+    - sudo ./install_sudo

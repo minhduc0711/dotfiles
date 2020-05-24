@@ -1,0 +1,9 @@
+- defaults:
+    link:
+      relink: true
+      create: true
+      force: true
+
+- link:
+    /etc/X11/xorg.conf.d/90-touchpad.conf: 90-touchpad.conf
+    /usr/share/ibus/component/simple.xml: ibus/simple.xml
