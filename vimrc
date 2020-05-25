@@ -77,6 +77,7 @@ set tabstop=4 shiftwidth=4 expandtab
 syntax on
 
 " Theme
+set t_Co=256
 syntax enable
 if (has("termguicolors"))
   set termguicolors
@@ -84,10 +85,7 @@ endif
 colorscheme material
 let g:material_terminal_italics = 1
 let g:material_theme_style = 'ocean'
-
-" fix colors when using tmux
-set background=dark
-set t_Co=256
+hi Normal guibg=NONE ctermbg=NONE
 
 " toggle ibus-bamboo
 " WARNING: cause delays when switching modes, makes bracket expanding very slow
