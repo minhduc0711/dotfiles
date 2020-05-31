@@ -1,21 +1,15 @@
 #!/usr/bin/env sh
 
-# Terminate already-running bar instances
+# Terminate already running bar instances
 killall -q polybar
 
-# Wait until the processes have been shutdown
-while pgrep -x polybar >/dev/null; do sleep 1; done
-
-# Get network interface name
-#export NETWORK_INTERFACE=$(ip link show | grep "state UP" | head -n 1 | cut -d" " -f2 | cut -d":" -f1)
-
-# Get CPU thermal zone
-#export THERMAL_ZONE=$(ls /sys/class/thermal | grep thermal_zone | grep -oE "[0-9]" | sort -nr | head -n 1)
+# Wait until the processes have been shut down
+while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
 if type "xrandr"; then
     for m in $(polybar --list-monitors | cut -d":" -f1); do
-        MONITOR=$m polybar --reload example &
+        MONITOR=$m polybar -c ~/.config/polybar/config.ini main &
     done
 else
-  polybar --reload example &
+    polybar -c ~/.config/polybar/config.ini main &
 fi
