@@ -15,6 +15,7 @@
     ~/.config/kitty: kitty
     ~/.config/i3: i3
     ~/.config/polybar: polybar
+    ~/.config/rofi: rofi
     ~/.config/compton.conf: compton.conf
     ~/.config/flashfocus: flashfocus
     ~/.config/gtk-3.0: gtk-3.0
