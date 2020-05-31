@@ -1,58 +1,58 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+" Install vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
+" Specify a directory for plugins
+" - For Neovim: stdpath('data') . '/plugged'
+" - Avoid using standard Vim directory names like 'plugin'
+call plug#begin('~/.vim/plugged')
 
 " File explorer  
-Plugin 'preservim/nerdtree' 
-Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plug 'preservim/nerdtree' 
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 " Git commands
-Plugin 'tpope/vim-fugitive'
+Plug 'tpope/vim-fugitive'
 " Git diff lines
-Plugin 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter'
 " pretty status bar (including Git)
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 
 " Auto insert closing brackets
 " WARNING: disabled cuz it bugged when using ibus-bamboo
 " Plugin 'jiangmiao/auto-pairs'
 
-" Python autocompletion
-Plugin 'ycm-core/YouCompleteMe'
+" autocompletion
+Plug 'ycm-core/YouCompleteMe'
 
 " Support (syntax, indent...) for many languages
-Plugin 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
 
 " Code formatting
 " Add maktaba and codefmt to the runtimepath.
 " (The latter must be installed before it can be used.)
-Plugin 'google/vim-maktaba'
-Plugin 'google/vim-codefmt'
+Plug 'google/vim-maktaba'
+Plug 'google/vim-codefmt'
 " Also add Glaive, which is used to configure codefmt's maktaba flags. See
 " `:help :Glaive` for usage.
-Plugin 'google/vim-glaive'
+Plug 'google/vim-glaive'
 
 " Linting
-Plugin 'dense-analysis/ale'
+Plug 'dense-analysis/ale'
 
 " fzf fuzzy search
 set rtp+=~/.fzf
-Plugin 'junegunn/fzf.vim'
+Plug 'junegunn/fzf.vim'
 
 " theme
-Plugin 'kaicataldo/material.vim'
+Plug 'kaicataldo/material.vim'
 
 " All of your Plugins must be added before the following line
-call vundle#end()            " required
+call plug#end()            " required
 " the glaive#Install() should go after the "call vundle#end()"
 call glaive#Install()
 filetype plugin indent on    " required
@@ -134,7 +134,7 @@ call IBusOff()
 set wildmode=longest:full,full
 
 " change the swap directory
-set directory=~/.vim/swapfiles//
+set directory=~/.vim/swapfiles/
 
 " remember last position in a file
 if has("autocmd")
@@ -156,7 +156,7 @@ nnoremap <C-H> <C-W><C-H>
 
 " YCM stuffs
 let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Git Gutter"
 set updatetime=250
