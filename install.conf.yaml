@@ -14,6 +14,7 @@
     ~/.zshrc: zshrc
     ~/.config/kitty: kitty
     ~/.config/i3: i3
+    ~/.config/dunst: dunst
     ~/.config/polybar: polybar
     ~/.config/rofi: rofi
     ~/.config/compton.conf: compton.conf
