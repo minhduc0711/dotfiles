@@ -27,4 +27,5 @@
   - ~/.vim/swapfiles
 
 - shell:
+    - gcc ~/.config/polybar/monitor_watcher.c -o ~/.config/polybar/monitor_watcher.o -lxcb -lxcb-randr
     - sudo ./install_sudo
