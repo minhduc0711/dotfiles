@@ -305,4 +305,4 @@ bind C-a send-prefix
 #bind -n M-j select-pane -D
 
 # move status line to top
-#set -g status-position top
+set -g status-position top

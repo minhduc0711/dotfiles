@@ -1,3 +1,6 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
 " Install vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
@@ -73,19 +76,22 @@ set listchars=tab:>-
 
 set tabstop=4 shiftwidth=4 expandtab
 
-" syntax highlighting
-syntax on
-
 " Theme
+set background=dark
 set t_Co=256
-syntax enable
-if (has("termguicolors"))
-  set termguicolors
-endif
 colorscheme material
 let g:material_terminal_italics = 1
 let g:material_theme_style = 'ocean'
+
+" Transparent background
 hi Normal guibg=NONE ctermbg=NONE
+
+" This is only necessary if you use "set termguicolors".
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+if (has("termguicolors"))
+  set termguicolors
+endif
 
 " toggle ibus-bamboo
 " WARNING: cause delays when switching modes, makes bracket expanding very slow
