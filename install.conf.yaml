@@ -12,6 +12,8 @@
 - link:
     ~/.vimrc: vimrc
     ~/.zshrc: zshrc
+    ~/.tmux.conf: .tmux/.tmux.conf
+    ~/.tmux.conf.local: tmux.conf.local
     ~/.config/kitty: kitty
     ~/.config/i3: i3
     ~/.config/dunst: dunst
