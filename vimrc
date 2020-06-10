@@ -95,43 +95,43 @@ endif
 
 " toggle ibus-bamboo
 " WARNING: cause delays when switching modes, makes bracket expanding very slow
-function! IBusOff()
-  " Lưu engine hiện tại
-  let g:ibus_prev_engine = system('ibus engine')
-  " Chuyển sang engine tiếng Anh
-  execute 'silent !ibus engine xkb:us::eng'
-endfunction
-function! IBusOn()
-  let l:current_engine = system('ibus engine')
-  " nếu engine được set trong normal mode thì
-  " lúc vào insert mode duùn luôn engine đó
-  if l:current_engine !~? 'xkb:us::eng'
-    let g:ibus_prev_engine = l:current_engine
-  endif
-  " Khôi phục lại engine
-  execute 'silent !' . 'ibus engine ' . g:ibus_prev_engine
-endfunction
-augroup IBusHandler
-    autocmd CmdLineEnter [/?] call IBusOn()
-    autocmd CmdLineLeave [/?] call IBusOff()
-    autocmd InsertEnter * call IBusOn()
-    autocmd InsertLeave * call IBusOff()
-augroup END
-call IBusOff()
+"function! IBusOff()
+"  " Lưu engine hiện tại
+"  let g:ibus_prev_engine = system('ibus engine')
+"  " Chuyển sang engine tiếng Anh
+"  execute 'silent !ibus engine xkb:us::eng'
+"endfunction
+"function! IBusOn()
+"  let l:current_engine = system('ibus engine')
+"  " nếu engine được set trong normal mode thì
+"  " lúc vào insert mode duùn luôn engine đó
+"  if l:current_engine !~? 'xkb:us::eng'
+"    let g:ibus_prev_engine = l:current_engine
+"  endif
+"  " Khôi phục lại engine
+"  execute 'silent !' . 'ibus engine ' . g:ibus_prev_engine
+"endfunction
+"augroup IBusHandler
+"    autocmd CmdLineEnter [/?] call IBusOn()
+"    autocmd CmdLineLeave [/?] call IBusOff()
+"    autocmd InsertEnter * call IBusOn()
+"    autocmd InsertLeave * call IBusOff()
+"augroup END
+"call IBusOff()
 
 " Bracket expanding: auto close {
-"function! s:CloseBracket()
-"    let line = getline('.')
-"    if line =~# '^\s*\(struct\|class\|enum\) '
-"        return "{\<Enter>};\<Esc>O"
-"    elseif searchpair('(', '', ')', 'bmn', '', line('.'))
-"        " Probably inside a function call. Close it off.
-"        return "{\<Enter>});\<Esc>O"
-"    else
-"        return "{\<Enter>}\<Esc>O"
-"    endif
-"endfunction
-"inoremap <expr> {<Enter> <SID>CloseBracket()
+function! s:CloseBracket()
+    let line = getline('.')
+    if line =~# '^\s*\(struct\|class\|enum\) '
+        return "{\<Enter>};\<Esc>O"
+    elseif searchpair('(', '', ')', 'bmn', '', line('.'))
+        " Probably inside a function call. Close it off.
+        return "{\<Enter>});\<Esc>O"
+    else
+        return "{\<Enter>}\<Esc>O"
+    endif
+endfunction
+inoremap <expr> {<Enter> <SID>CloseBracket()
 
 " disable word wrap by default 
 " set nowrap
