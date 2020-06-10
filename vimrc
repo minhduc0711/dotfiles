@@ -181,6 +181,7 @@ set timeoutlen=1000 ttimeoutlen=0
 " 1. Font installation: https://powerline.readthedocs.io/en/master/installation/linux.html#patched-font-installation 
 " 2. Link to patched font: https://github.com/powerline/fonts/raw/master/NotoMono/Noto%20Mono%20for%20Powerline.ttf
 let g:airline_powerline_fonts = 1
+set encoding=utf-8
 " status bar theme
 let g:airline_theme='material'
 
