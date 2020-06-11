@@ -36,7 +36,7 @@ int main() {
           char *name[] = {
             "/bin/bash",
             "-c",
-            "~/.config/polybar/launch.sh",
+            "~/.config/polybar/launch.sh; nitrogen --restore",
             NULL
           };
           execvp(name[0], name);
