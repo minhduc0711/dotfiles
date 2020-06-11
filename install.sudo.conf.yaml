@@ -5,5 +5,6 @@
       force: true
 
 - link:
+    /etc/systemd/logind.conf: logind.conf
     /etc/X11/xorg.conf.d/90-touchpad.conf: 90-touchpad.conf
     /usr/share/ibus/component/simple.xml: ibus/simple.xml
