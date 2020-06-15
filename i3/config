@@ -23,8 +23,9 @@ font pango:DejaVu Sans Mono 8
 # they are included here as an example. Modify as you see fit.
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-# screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id multilockscreen -w
+exec --no-startup-id xss-lock --transfer-sleep-lock -- multilockscreen -l blur
+bindsym Scroll_Lock exec multilockscreen -l blur
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -175,9 +176,6 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-# screenlock
-bindsym Scroll_Lock exec i3lock -c 4c0080 
-bindsym XF86Sleep exec i3lock -c 4c0080 && systemctl suspend
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -234,9 +232,6 @@ exec_always --no-startup-id "conda activate base; flashfocus"
 # polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 exec_always --no-startup-id $HOME/.config/polybar/monitor_watcher.o
-
-# Desktop wallpaper
-exec --no-startup-id nitrogen --restore
 
 # Nightlight
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
