@@ -54,6 +54,9 @@ Plug 'junegunn/fzf.vim'
 " theme
 Plug 'kaicataldo/material.vim'
 
+" auto detect indent
+Plug 'ciaranm/detectindent'
+
 " All of your Plugins must be added before the following line
 call plug#end()            " required
 " the glaive#Install() should go after the "call vundle#end()"
@@ -70,11 +73,18 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+
+" show line numbers
 set number
+
+" make tabs visible
 set list
 set listchars=tab:>-
 
+" default indent settings
 set tabstop=4 shiftwidth=4 expandtab
+" try to detect indent settings from file
+autocmd VimEnter * DetectIndent
 
 " Theme
 set background=dark
