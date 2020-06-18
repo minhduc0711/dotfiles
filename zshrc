@@ -128,3 +128,17 @@ source /etc/zsh_command_not_found
 # fzf
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source /usr/share/doc/fzf/examples/key-bindings.zsh
+
+# access jupyter lab instance on remote server
+function jllocal {
+  port=3142
+  remote_username=ducpm
+  remote_hostname=ictlab.usth.edu.vn
+  url="http://localhost:$port"
+ 
+  ( sleep 2; echo "Opening $url" ; xdg-open "$url") &
+
+  cmd="ssh -p 22222 -CNL localhost:"$port":localhost:"$port" $remote_username@$remote_hostname"
+  echo "Running '$cmd'"
+  eval "$cmd"
+}
