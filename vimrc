@@ -57,6 +57,9 @@ Plug 'kaicataldo/material.vim'
 " auto detect indent
 Plug 'ciaranm/detectindent'
 
+" tmux + vim navigation
+Plug 'christoomey/vim-tmux-navigator'
+
 " All of your Plugins must be added before the following line
 call plug#end()            " required
 " the glaive#Install() should go after the "call vundle#end()"
@@ -82,7 +85,9 @@ set list
 set listchars=tab:>-
 
 " default indent settings
-set tabstop=4 shiftwidth=4 expandtab
+set expandtab
+set shiftwidth=4
+set softtabstop=4
 " try to detect indent settings from file
 autocmd VimEnter * DetectIndent
 

@@ -142,3 +142,5 @@ function jllocal {
   echo "Running '$cmd'"
   eval "$cmd"
 }
+
+export EDITOR=vim
