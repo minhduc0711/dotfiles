@@ -72,6 +72,7 @@ filetype plugin indent on    " required
 
 " show line numbers
 set number
+set relativenumber
 
 " make tabs visible
 set list
@@ -142,9 +143,6 @@ function! s:CloseBracket()
 endfunction
 inoremap <expr> {<Enter> <SID>CloseBracket()
 
-" disable word wrap by default 
-" set nowrap
-
 " tweak command autocompletion behavior (similar to terminal)
 set wildmode=longest:full,full
 
@@ -162,12 +160,6 @@ endif
 autocmd VimEnter * wincmd p
 " Key to toggle nerdtree
 nmap <F4> :NERDTreeToggle<CR>
-
-" split navigations using ctrl+h, ctrl+j,...
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
 
 " ====== coc.nvim config starts ======
 
