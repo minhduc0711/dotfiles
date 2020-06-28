@@ -170,6 +170,22 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 bindsym $mod+Shift+greater move workspace to output right
 bindsym $mod+Shift+less move workspace to output left
 
+# assign workspaces to different monitors
+workspace 1 output eDP-1
+workspace 2 output eDP-1
+workspace 3 output eDP-1
+workspace 4 output eDP-1
+workspace 5 output eDP-1
+workspace 6 output HDMI-1 eDP-1 
+workspace 7 output HDMI-1 eDP-1
+workspace 8 output HDMI-1 eDP-1
+workspace 9 output HDMI-1 eDP-1
+workspace 10 output HDMI-1 eDP-1
+
+# assign some apps to preferred workspaces
+for_window [class="Spotify"] move to workspace $ws9
+assign [class="Skype"] 10
+
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
@@ -225,9 +241,8 @@ exec --no-startup-id ibus-daemon --xim -d -r
 exec_always --no-startup-id compton -b
 
 # flashfocus
-exec_always --no-startup-id "conda activate base; flashfocus"
-# flash focused window
-bindsym $mod+n exec --no-startup-id "conda activate base; flash_window"
+exec_always --no-startup-id flashfocus
+bindsym $mod+n exec --no-startup-id flash_window
 
 # polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh

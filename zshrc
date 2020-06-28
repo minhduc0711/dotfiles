@@ -117,10 +117,8 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# pure prompt
-fpath+=("$HOME/.zsh/pure")
-autoload -U promptinit; promptinit
-prompt pure
+# starship prompt
+eval "$(starship init zsh)"
 
 # command_not_found + package suggestions
 source /etc/zsh_command_not_found
