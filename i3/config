@@ -23,9 +23,11 @@ font pango:DejaVu Sans Mono 8
 # they are included here as an example. Modify as you see fit.
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-exec --no-startup-id ~/.fehbg
 exec --no-startup-id xss-lock --transfer-sleep-lock -- multilockscreen -l dim -- -c 00000000
 bindsym Scroll_Lock exec multilockscreen -l dim -- -c 00000000
+
+# wallpaper
+exec --no-startup-id ~/.fehbg
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -185,6 +187,8 @@ workspace 10 output HDMI-1 eDP-1
 # assign some apps to preferred workspaces
 for_window [class="Spotify"] move to workspace $ws9
 assign [class="Skype"] 10
+assign [class="Slack"] 10
+assign [class="discord"] 10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -221,9 +225,9 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Gaps
-for_window [class=".*"] border pixel 0
-smart_gaps on
-gaps inner 10
+for_window [class=".*"] border pixel 0 # disable window titlebars
+smart_gaps inverse_outer
+gaps inner 15
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)

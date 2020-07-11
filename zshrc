@@ -117,9 +117,6 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# starship prompt
-eval "$(starship init zsh)"
-
 # command_not_found + package suggestions
 source /etc/zsh_command_not_found
 
@@ -142,3 +139,6 @@ function jllocal {
 }
 
 export EDITOR=vim
+
+# starship prompt
+eval "$(starship init zsh)"
