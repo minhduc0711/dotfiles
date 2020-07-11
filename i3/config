@@ -67,7 +67,7 @@ bindsym --release Control+Shift+Print \
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec kitty --single-instance
+bindsym $mod+Return exec xfce4-terminal
 
 # kill focused window
 bindsym $mod+q kill

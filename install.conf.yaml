@@ -26,6 +26,8 @@
     ~/.config/redshift: redshift
     ~/.config/ranger: ranger
     ~/.config/multilock: multilock
+    ~/.config/xfce4/terminal: xfce4/terminal
+    ~/.config/xfce4/xfconf: xfce4/xfconf
 
 - create:
   - ~/.vim/swapfiles
