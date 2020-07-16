@@ -26,12 +26,10 @@
     ~/.config/redshift: redshift
     ~/.config/ranger: ranger
     ~/.config/multilock: multilock
-    ~/.config/xfce4/terminal: xfce4/terminal
-    ~/.config/xfce4/xfconf: xfce4/xfconf
+    ~/.config/xfce4/terminal/terminalrc: xfce4-terminal
 
 - create:
   - ~/.vim/swapfiles
 
 - shell:
     - gcc ~/.config/polybar/monitor_watcher.c -o ~/.config/polybar/monitor_watcher.o -lxcb -lxcb-randr
-    - sudo ./install_sudo
