@@ -117,6 +117,9 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# conda auto activating env when in project dir
+source conda_auto_env
+
 # command_not_found + package suggestions
 source /etc/zsh_command_not_found
 
