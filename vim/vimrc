@@ -135,7 +135,7 @@ augroup END
 silent call IBusOff()
 
 " enable mouse
-set mouse=n
+"set mouse=n
 
 " Bracket expanding: auto close {
 function! s:CloseBracket()
@@ -165,6 +165,9 @@ if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
+" Toggle paste mode
+set pastetoggle=<F3>
+
 " Open NERDtree when open
 " autocmd vimenter * NERDTree
 " Go to previous (last accessed) window.
@@ -178,6 +181,8 @@ autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "Fi
 function! OpenInTab(node)
     call a:node.activate({'reuse': 'all', 'where': 't'})
 endfunction 
+" Close NERDTree after opening a file
+let NERDTreeQuitOnOpen=1
 
 " ====== coc.nvim config starts ======
 
@@ -220,14 +225,14 @@ endfunction
 " ====== coc.nvim config ends ======
 
 " Git Gutter
-let g:gitgutter_max_signs = 500
-" No mapping
-let g:gitgutter_map_keys = 0
+let g:gitgutter_max_signs = 500 " surpress signs threshold to avoid slowing down UI
+" No key mapping
+"let g:gitgutter_map_keys = 0
 " Colors
 let g:gitgutter_override_sign_column_highlight = 0
-highlight clear SignColumn
+highlight clear SignColumn " remove sign column background color
 highlight GitGutterAdd ctermfg=2
-highlight GitGutterChange ctermfg=3
+highlight GitGutterChange guifg=#3681e3 ctermfg=3
 highlight GitGutterDelete ctermfg=1
 highlight GitGutterChangeDelete ctermfg=4
 
