@@ -1,4 +1,11 @@
 #!/usr/bin/env bash 
+
+pkill -x py_spotify_list
+~/.config/polybar/scripts/spotify/py_spotify_listener.py &
+
+pkill -x monitor_watcher
+~/.config/polybar/monitor_watcher.o &
+
 (
   flock 200
 

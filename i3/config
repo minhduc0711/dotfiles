@@ -55,13 +55,13 @@ bindsym XF86MonBrightnessDown exec light -U 10
 
 # Screenshots
 bindsym --release Print exec mkdir -p ~/Pictures/screenshots && \
-        exec maim ~/Pictures/screenshots/$(date "+%Y-%m-%d_%H-%M-%S").png
+        exec maim -u ~/Pictures/screenshots/$(date "+%Y-%m-%d_%H-%M-%S").png
 bindsym --release Control+Print \
-        exec maim | xclip -selection clipboard -t image/png 
+        exec maim -u | xclip -selection clipboard -t image/png 
 bindsym --release Shift+Print exec mkdir -p ~/Pictures/screenshots && \
-        exec maim ~/Pictures/screenshots/$(date "+%Y-%m-%d_%H-%M-%S").png -s
+        exec maim -u ~/Pictures/screenshots/$(date "+%Y-%m-%d_%H-%M-%S").png -s
 bindsym --release Control+Shift+Print \
-        exec maim -s | xclip -selection clipboard -t image/png 
+        exec maim -u -s | xclip -selection clipboard -t image/png 
         
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -250,7 +250,6 @@ bindsym $mod+n exec --no-startup-id flash_window
 
 # polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id $HOME/.config/polybar/monitor_watcher.o
 
 # Nightlight
 exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
