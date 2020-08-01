@@ -135,7 +135,7 @@ augroup END
 silent call IBusOff()
 
 " enable mouse
-"set mouse=n
+set mouse=a
 
 " Bracket expanding: auto close {
 function! s:CloseBracket()
