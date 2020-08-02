@@ -138,7 +138,7 @@ class PlayerManager:
             if current_player != None:
                 _printFlush(self.player_states[current_player.bus_name])
             else:
-                _printFlush(ICON_STOPPED)
+                _printFlush(ICON_NONE)
         else:
             self.print_queue.append([status, player])
 
@@ -514,8 +514,11 @@ else:
         current_player.previous()
     elif args.command == 'next' and current_player:
         current_player.next()
-    elif args.command == 'status' and current_player:
-        current_player.printStatus()
+    elif args.command == 'status':
+        if current_player:
+            current_player.printStatus()
+        else:
+            _printFlush("No music playing")
     elif args.command == 'list':
         print("\n".join(sorted([
             "{} : {}".format(player.bus_name.split('.')[3], player.status)
