@@ -1,0 +1,15 @@
+# ~/.docker-prompt
+#
+check_conda_env ()
+{
+    if [ ! -z "$CONDA_DEFAULT_ENV" ]; then
+        printf -- "\[\033[0m\](${CONDA_DEFAULT_ENV}) "
+    else
+        printf -- ""
+    fi
+}
+PS1='\n\[\033[1;34m\]\w\[\033[0;35m\] in 🐳 \[\033[1;36m\]\h \n'
+
+PS1+=$(check_conda_env)
+
+PS1+='\[\033[1;36m\]# \[\033[0m\]'
