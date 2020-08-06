@@ -518,7 +518,7 @@ else:
         if current_player:
             current_player.printStatus()
         else:
-            _printFlush("No music playing")
+            _printFlush("No media playing")
     elif args.command == 'list':
         print("\n".join(sorted([
             "{} : {}".format(player.bus_name.split('.')[3], player.status)
