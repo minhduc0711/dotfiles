@@ -142,7 +142,8 @@ function jllocal {
 }
 
 # default text editor
-export EDITOR=vim
+export EDITOR=nvim
+alias vim='nvim'
 
 # starship prompt
 eval "$(starship init zsh)"
