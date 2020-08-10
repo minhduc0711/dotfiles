@@ -157,16 +157,16 @@ bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace number $ws1
-bindsym $mod+Shift+2 move container to workspace number $ws2
-bindsym $mod+Shift+3 move container to workspace number $ws3
-bindsym $mod+Shift+4 move container to workspace number $ws4
-bindsym $mod+Shift+5 move container to workspace number $ws5
-bindsym $mod+Shift+6 move container to workspace number $ws6
-bindsym $mod+Shift+7 move container to workspace number $ws7
-bindsym $mod+Shift+8 move container to workspace number $ws8
-bindsym $mod+Shift+9 move container to workspace number $ws9
-bindsym $mod+Shift+0 move container to workspace number $ws10
+bindsym $mod+Shift+1 move container to workspace number $ws1; workspace $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2; workspace $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3; workspace $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4; workspace $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5; workspace $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6; workspace $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7; workspace $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8; workspace $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9; workspace $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10; workspace $ws10
 
 # move focused workspace between monitors
 bindsym $mod+Shift+greater move workspace to output right
@@ -185,7 +185,7 @@ workspace 9 output HDMI-1 eDP-1
 workspace 10 output HDMI-1 eDP-1
 
 # assign some apps to preferred workspaces
-for_window [class="Spotify"] move to workspace $ws9
+for_window [class="Spotify"] move to workspace $ws9, workspace --no-auto-back-and-forth $ws9
 assign [class="Skype"] 10
 assign [class="Slack"] 10
 assign [class="discord"] 10
@@ -236,6 +236,9 @@ gaps inner 8
 
 # keep chrome logins
 exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets
+
+# need this to show password prompt when requesting root
+exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 
 # ibus
 exec --no-startup-id ibus-daemon --xim -d -r
