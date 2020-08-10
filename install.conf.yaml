@@ -10,9 +10,10 @@
 - clean: ['~']
 
 - link:
-    ~/.vimrc: vim/vimrc
-    ~/.vim/coc-settings.json: vim/coc-settings.json
+    ~/.vimrc: vimrc
     ~/.config/nvim: nvim
+    ~/.vim/coc-settings.json: coc-settings.json
+    ~/.config/nvim/coc-settings.json: coc-settings.json
     ~/.zshrc: zshrc
     ~/.tmux.conf: .tmux/.tmux.conf
     ~/.tmux.conf.local: tmux.conf.local
