@@ -129,14 +129,18 @@ source /usr/share/doc/fzf/examples/key-bindings.zsh
 
 # access jupyter lab instance on remote server
 function jllocal {
-  port=3142
+  jupyter_port=3142
+  tensorboard_port=3003
   remote_username=ducpm
   remote_hostname=ictlab.usth.edu.vn
-  url="http://localhost:$port"
- 
-  ( sleep 2; echo "Opening $url" ; xdg-open "$url") &
 
-  cmd="ssh -p 22222 -CNL localhost:"$port":localhost:"$port" $remote_username@$remote_hostname"
+  jupyter_host="localhost:$jupyter_port"
+  tensorboard_host="localhost:$tensorboard_port"
+  jupyter_url="http://${jupyter_host}"
+ 
+  ( sleep 2; echo "Opening $jupyter_url" ; xdg-open "$jupyter_url") &
+
+  cmd="ssh -p 22222 -CN -L ${jupyter_host}:${jupyter_host} -L ${tensorboard_host}:${tensorboard_host} $remote_username@$remote_hostname"
   echo "Running '$cmd'"
   eval "$cmd"
 }
