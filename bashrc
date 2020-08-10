@@ -113,17 +113,15 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-export TERM=xterm-256color
 source /workspace/.docker-prompt
 
 alias tmux='tmux -u'
-
+alias vim='nvim'
 alias jlremote='jupyter lab --no-browser --ip=0.0.0.0 --port=3142 --allow-root'
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
   #exec tmux
   # if want to use 1 session only
   exec tmux -u new-session -A -s main
 fi
-
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash

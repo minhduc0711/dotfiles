@@ -87,7 +87,6 @@ set conceallevel=0
 
 " Theme
 set background=dark
-set t_Co=256
 colorscheme material
 let g:material_terminal_italics = 1
 let g:material_theme_style = 'ocean'
@@ -120,19 +119,20 @@ function! IBusOn()
   " Khôi phục lại engine
   execute 'silent !' . 'ibus engine ' . g:ibus_prev_engine
 endfunction
-augroup IBusHandler
-    " Khôi phục ibus engine khi tìm kiếm
-    autocmd CmdLineEnter [/?] silent call IBusOn()
-    autocmd CmdLineLeave [/?] silent call IBusOff()
-    autocmd CmdLineEnter \? silent call IBusOn()
-    autocmd CmdLineLeave \? silent call IBusOff()
-    " Khôi phục ibus engine khi vào insert mode
-    autocmd InsertEnter * silent call IBusOn()
-    " Tắt ibus engine khi vào normal mode
-    autocmd InsertLeave * silent call IBusOff()
-augroup END
-
-silent call IBusOff()
+if executable("ibus") == 1
+    augroup IBusHandler
+        " Khôi phục ibus engine khi tìm kiếm
+        autocmd CmdLineEnter [/?] silent call IBusOn()
+        autocmd CmdLineLeave [/?] silent call IBusOff()
+        autocmd CmdLineEnter \? silent call IBusOn()
+        autocmd CmdLineLeave \? silent call IBusOff()
+        " Khôi phục ibus engine khi vào insert mode
+        autocmd InsertEnter * silent call IBusOn()
+        " Tắt ibus engine khi vào normal mode
+        autocmd InsertLeave * silent call IBusOff()
+    augroup END
+    silent call IBusOff()
+endif
 
 " enable mouse
 set mouse=a
@@ -183,6 +183,8 @@ function! OpenInTab(node)
 endfunction 
 " Close NERDTree after opening a file
 let NERDTreeQuitOnOpen=1
+" Show hidden files by default
+let NERDTreeShowHidden=1
 
 " ====== coc.nvim config starts ======
 
@@ -222,6 +224,8 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+" disable warning for old vim versions
+let g:coc_disable_startup_warning = 1
 
 " ====== coc.nvim config ends ======
 
