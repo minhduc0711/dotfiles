@@ -185,7 +185,7 @@ workspace 9 output HDMI-1 eDP-1
 workspace 10 output HDMI-1 eDP-1
 
 # assign some apps to preferred workspaces
-for_window [class="Spotify"] move to workspace $ws9
+for_window [class="Spotify"] move to workspace $ws9, workspace --no-auto-back-and-forth $ws9
 assign [class="Skype"] 10
 assign [class="Slack"] 10
 assign [class="discord"] 10
@@ -236,6 +236,9 @@ gaps inner 8
 
 # keep chrome logins
 exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets
+
+# need this to show password prompt when requesting root
+exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
 
 # ibus
 exec --no-startup-id ibus-daemon --xim -d -r
