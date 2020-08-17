@@ -30,6 +30,7 @@
     ~/.config/multilock: multilock
     ~/.config/xfce4/terminal/terminalrc: xfce4-terminal
     ~/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml: xsettings.xml
+    ~/.xprofile: xprofile
 
 - create:
   - ~/.vim/swapfiles
