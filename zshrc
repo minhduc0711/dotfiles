@@ -120,6 +120,10 @@ unset __conda_setup
 # conda auto activating env when in project dir
 source conda_auto_env
 
+# NodeJS
+export NODEJS_HOME=/opt/node-v12.18.3-linux-x64/bin
+export PATH=$NODEJS_HOME:$PATH
+
 # command_not_found + package suggestions
 source /etc/zsh_command_not_found
 
