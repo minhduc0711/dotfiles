@@ -105,7 +105,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # split in horizontal orientation
-bindsym $mod+semicolon split h
+bindsym $mod+s split h
 
 # split in vertical orientation
 bindsym $mod+v split v
@@ -114,7 +114,7 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+#bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
@@ -225,8 +225,12 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Gaps
-for_window [class=".*"] border pixel 0 # disable window titlebars
-gaps inner 8
+for_window [class=".*"] border pixel 2
+gaps inner 5
+
+# border colors
+# class                 border  backgr. text    indicator
+client.focused          #4c7899 #00b7c2 #ffffff #FF8C00 
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -247,8 +251,8 @@ exec --no-startup-id ibus-daemon --xim -d -r
 exec_always --no-startup-id compton -b
 
 # flashfocus
-exec_always --no-startup-id flashfocus
-bindsym $mod+n exec --no-startup-id flash_window
+#exec_always --no-startup-id flashfocus
+#bindsym $mod+n exec --no-startup-id flash_window
 
 # polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
