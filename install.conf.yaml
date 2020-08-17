@@ -12,8 +12,7 @@
 - link:
     ~/.vimrc: vimrc
     ~/.config/nvim: nvim
-    ~/.vim/coc-settings.json: coc-settings.json
-    ~/.config/nvim/coc-settings.json: coc-settings.json
+    ~/.vim/coc-settings.json: nvim/coc-settings.json
     ~/.zshrc: zshrc
     ~/.tmux.conf: .tmux/.tmux.conf
     ~/.tmux.conf.local: tmux.conf.local
