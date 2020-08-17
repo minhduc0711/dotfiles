@@ -44,8 +44,8 @@ Plug 'google/vim-glaive'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" theme
-Plug 'kaicataldo/material.vim'
+" color themes
+Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 
 " auto detect indent
 Plug 'ciaranm/detectindent'
@@ -85,20 +85,26 @@ set softtabstop=4
 " disable text concealing in Markdown 
 set conceallevel=0
 
-" Theme
-set background=dark
-colorscheme material
+" Color theme 
 let g:material_terminal_italics = 1
-let g:material_theme_style = 'ocean'
-
+let g:material_theme_style = 'darker'
+colorscheme material
+" status bar theme
+let g:airline_theme='material'
+" dark mode go brrr
+set background=dark
 " Transparent background
 hi Normal guibg=NONE ctermbg=NONE
+" highlight current line of cursor
+set cursorline
 
-" This is only necessary if you use "set termguicolors".
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+" enable true color
 if (has("termguicolors"))
-  set termguicolors
+    " fix for tmux
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+    set termguicolors
 endif
 
 " toggle ibus-bamboo
@@ -185,6 +191,8 @@ endfunction
 let NERDTreeQuitOnOpen=1
 " Show hidden files by default
 let NERDTreeShowHidden=1
+" show COC status on status line
+set statusline^=%{coc#status()}
 
 " ====== coc.nvim config starts ======
 
@@ -241,13 +249,20 @@ highlight GitGutterChange guifg=#3681e3 ctermfg=3
 highlight GitGutterDelete ctermfg=1
 highlight GitGutterChangeDelete ctermfg=4
 
-" remove delay when switching to normal mode
-set timeoutlen=1000 ttimeoutlen=0
-
 " integrate powerline font into status bar
 " 1. Font installation: https://powerline.readthedocs.io/en/master/installation/linux.html#patched-font-installation 
 " 2. Link to patched font: https://github.com/powerline/fonts/raw/master/NotoMono/Noto%20Mono%20for%20Powerline.ttf
 let g:airline_powerline_fonts = 1
+" disable all airline extensions
+"let g:airline_extensions = []
+" remove delay when switching to normal mode
+if ! has('gui_running')
+  set ttimeoutlen=10
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+  augroup END
+endif
+
 set encoding=utf-8
-" status bar theme
-let g:airline_theme='material'
