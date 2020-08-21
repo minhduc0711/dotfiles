@@ -225,8 +225,8 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Gaps
-for_window [class=".*"] border pixel 2
-gaps inner 5
+for_window [class=".*"] border pixel 1
+gaps inner 6
 
 # border colors
 # class                 border  backgr. text    indicator
