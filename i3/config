@@ -78,7 +78,7 @@ bindsym $mod+q kill
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 #bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
-bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons -icon-theme Sweet-Purple
+bindsym $mod+d exec --no-startup-id ~/.config/rofi/launch.sh 
 
 # change focus
 bindsym $mod+h focus left
@@ -230,7 +230,7 @@ gaps inner 6
 
 # border colors
 # class                 border  backgr. text    indicator
-client.focused          #4c7899 #00b7c2 #ffffff #FF8C00 
+client.focused          #4c7899 #F652A0 #ffffff #FF8C00 
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)

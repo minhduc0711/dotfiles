@@ -46,6 +46,8 @@ Plug 'junegunn/fzf.vim'
 
 " color themes
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
+Plug 'overcache/NeoSolarized'
+Plug 'morhetz/gruvbox'
 
 " auto detect indent
 Plug 'ciaranm/detectindent'
@@ -85,18 +87,35 @@ set softtabstop=4
 " disable text concealing in Markdown 
 set conceallevel=0
 
-" Color theme 
-let g:material_terminal_italics = 1
-let g:material_theme_style = 'darker'
-colorscheme material
+" Color themes
+syntax enable
+" material
+"let g:material_terminal_italics = 1
+"let g:material_theme_style = 'darker'
+
+" solarized light
+"let g:neosolarized_contrast = 'high'
+"let g:neosolarized_bold = 1
+"let g:neosolarized_underline = 0
+"let g:neosolarized_italic = 1
+"colorscheme NeoSolarized
+
+" gruvbox
+let g:gruvbox_contrast_light = 'hard'
+let g:gruvbox_italic = 1
+let g:gruvbox_underline = 0
+colorscheme gruvbox
+set background=light
+
 " status bar theme
 let g:airline_theme='material'
-" dark mode go brrr
-set background=dark
+
 " Transparent background
-hi Normal guibg=NONE ctermbg=NONE
+"hi Normal guibg=NONE ctermbg=NONE
 " highlight current line of cursor
 set cursorline
+" set line limit indicator
+set colorcolumn=79
 
 " enable true color
 if (has("termguicolors"))

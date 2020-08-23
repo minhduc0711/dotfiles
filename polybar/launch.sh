@@ -1,5 +1,7 @@
 #!/usr/bin/env bash 
 
+source ~/.config/colors.sh
+
 pkill -x monitor_watcher
 ~/.config/polybar/monitor_watcher.o &
 
