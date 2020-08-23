@@ -108,7 +108,7 @@ colorscheme gruvbox
 set background=light
 
 " status bar theme
-let g:airline_theme='material'
+let g:airline_theme='gruvbox'
 
 " Transparent background
 "hi Normal guibg=NONE ctermbg=NONE
