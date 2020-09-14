@@ -1,9 +1,7 @@
-[Settings]
-gtk-theme-name=Sweet-Dark
-gtk-icon-theme-name=Sweet-Purple
-gtk-cursor-theme-name=Sweet-cursors
-gtk-font-name=Ubuntu Regular 10
-gtk-application-prefer-dark-theme=1
+gtk-theme-name="Sweet-Dark"
+gtk-icon-theme-name="Sweet-Purple"
+gtk-font-name="Ubuntu Regular 10"
+gtk-cursor-theme-name="Sweet-cursors"
 gtk-cursor-theme-size=0
 gtk-toolbar-style=GTK_TOOLBAR_BOTH
 gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
@@ -13,4 +11,4 @@ gtk-enable-event-sounds=1
 gtk-enable-input-feedback-sounds=1
 gtk-xft-antialias=1
 gtk-xft-hinting=1
-gtk-xft-hintstyle=hintfull
+gtk-xft-hintstyle="hintfull"

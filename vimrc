@@ -28,6 +28,9 @@ Plug 'vim-airline/vim-airline-themes'
 " autocompletion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
+" commenting code
+Plug 'tpope/vim-commentary'
+
 " Support (syntax, indent...) for many languages
 Plug 'sheerun/vim-polyglot'
 
@@ -103,7 +106,7 @@ syntax enable
 " gruvbox
 let g:gruvbox_contrast_light = 'hard'
 let g:gruvbox_italic = 1
-let g:gruvbox_underline = 0
+let g:gruvbox_underline = 1
 colorscheme gruvbox
 set background=light
 

@@ -334,3 +334,6 @@ set -sg escape-time 0
 
 # move status line to top
 set -g status-position top
+
+# enable italics
+set -g default-terminal "tmux"

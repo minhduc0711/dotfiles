@@ -225,12 +225,12 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Gaps
-for_window [class=".*"] border pixel 1
-gaps inner 6
+for_window [class=".*"] border pixel 0
+gaps inner 8
 
 # border colors
 # class                 border  backgr. text    indicator
-client.focused          #4c7899 #F652A0 #ffffff #FF8C00 
+client.focused          #4c7899 #C50ED2 #ffffff #FF8C00 
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -251,8 +251,8 @@ exec --no-startup-id ibus-daemon --xim -d -r
 exec_always --no-startup-id compton -b
 
 # flashfocus
-#exec_always --no-startup-id flashfocus
-#bindsym $mod+n exec --no-startup-id flash_window
+exec_always --no-startup-id flashfocus
+bindsym $mod+n exec --no-startup-id flash_window
 
 # polybar
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh

@@ -1,4 +1,4 @@
 configuration {
     modi: "window,run,ssh,drun";
+    theme: "~/.config/rofi/sweet-dark.rasi";
 }
-@import "/usr/share/rofi/themes/solarized_alternate.rasi"
