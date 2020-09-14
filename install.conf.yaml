@@ -10,10 +10,14 @@
 - clean: ['~']
 
 - link:
+    ~/.bashrc: bashrc
+    ~/.zshrc: zshrc
     ~/.vimrc: vimrc
+    ~/.inputrc: inputrc
+    ~/.xprofile: xprofile
+    ~/.dircolors: dircolors
     ~/.config/nvim: nvim
     ~/.vim/coc-settings.json: nvim/coc-settings.json
-    ~/.zshrc: zshrc
     ~/.tmux.conf: .tmux/.tmux.conf
     ~/.tmux.conf.local: tmux.conf.local
     ~/.config/kitty: kitty
@@ -29,9 +33,8 @@
     ~/.config/multilock: multilock
     ~/.config/xfce4/terminal/terminalrc: xfce4-terminal
     ~/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml: xsettings.xml
-    ~/.xprofile: xprofile
     ~/.config/colors.sh: colors.sh
-    ~/.dircolors: dircolors
+    ~/.config/starship.toml: starship.toml
 
 - create:
   - ~/.vim/swapfiles
