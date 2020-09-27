@@ -1,5 +1,4 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
 
 " Install vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -13,15 +12,12 @@ endif
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
 
-" File explorer  
-Plug 'preservim/nerdtree' 
-Plug 'Xuyuanp/nerdtree-git-plugin'
-
 " Git commands
 Plug 'tpope/vim-fugitive'
 " Git diff lines
 Plug 'airblade/vim-gitgutter'
-" pretty status bar (including Git)
+
+" pretty status bar
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -49,31 +45,27 @@ Plug 'junegunn/fzf.vim'
 
 " color themes
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
-Plug 'overcache/NeoSolarized'
 Plug 'morhetz/gruvbox'
 
 " auto detect indent
-Plug 'ciaranm/detectindent'
+Plug 'tpope/vim-sleuth'
 
 " tmux + vim navigation
 Plug 'christoomey/vim-tmux-navigator'
 
-" All of your Plugins must be added before the following line
+" rainbow-colored bracket pairs
+Plug 'luochen1990/rainbow'
+
+" multi-line bracket autoexpansion
+Plug 'rstacruz/vim-closer'
+
+" manipulate surrounding quotes, brackets,...
+Plug 'tpope/vim-surround'
+
+" Initialize plugin system
 call plug#end()            " required
-" the glaive#Install() should go after the "call vundle#end()"
+" the glaive#Install() should go after the "call plug#end()"
 call glaive#Install()
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
 
 " show line numbers
 set number
@@ -87,38 +79,64 @@ set listchars=tab:>-
 set expandtab
 set shiftwidth=4
 set softtabstop=4
+
 " disable text concealing in Markdown 
 set conceallevel=0
 
-" Color themes
-syntax enable
-" material
-"let g:material_terminal_italics = 1
-"let g:material_theme_style = 'darker'
+" This setting makes search case-insensitive when all characters in the string
+" being searched are lowercase. However, the search becomes case-sensitive if
+" it contains any capital letters. This makes searching more convenient.
+set ignorecase
+set smartcase
 
-" solarized light
-"let g:neosolarized_contrast = 'high'
-"let g:neosolarized_bold = 1
-"let g:neosolarized_underline = 0
-"let g:neosolarized_italic = 1
-"colorscheme NeoSolarized
+" Enable searching as you type, rather than waiting till you press enter.
+set incsearch
+
+" CUSTOM KEY MAPPINGS
+
+" fzf key binds
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <C-f> :Rg<CR>
+
+" Toggle paste mode
+set pastetoggle=<F3>
+
+" Unbind some useless/annoying default key bindings.
+" 'Q' in normal mode enters Ex mode. You almost never want this.
+nmap Q <NOP> 
+
+" breaking bad habits (hjkl spam)
+noremap h <NOP>
+noremap l <NOP>
+" noremap j <NOP>
+" noremap k <NOP>
+
+" transparent background
+" fix for gruvbox from from https://github.com/morhetz/gruvbox/issues/108#issuecomment-215993544
+au VimEnter * hi Normal ctermbg=NONE guibg=NONE
+
+" material
+" colorscheme material
+" set background=dark
+" let g:airline_theme='material'
 
 " gruvbox
 let g:gruvbox_contrast_light = 'hard'
+let g:gruvbox_contrast_dark = 'hard'
 let g:gruvbox_italic = 1
 let g:gruvbox_underline = 1
 colorscheme gruvbox
-set background=light
+set background=dark
 
-" status bar theme
-let g:airline_theme='gruvbox'
+" visual mode highlight color (currently gruvbox)
+hi Visual guifg=#282828 guibg=#ebdbb2 gui=NONE
 
-" Transparent background
-"hi Normal guibg=NONE ctermbg=NONE
 " highlight current line of cursor
 set cursorline
 " set line limit indicator
 set colorcolumn=79
+
+let g:airline_powerline_fonts = 1
 
 " enable true color
 if (has("termguicolors"))
@@ -147,7 +165,8 @@ function! IBusOn()
   " Khôi phục lại engine
   execute 'silent !' . 'ibus engine ' . g:ibus_prev_engine
 endfunction
-if executable("ibus") == 1
+function IBusSwitchEnable()
+  if executable("ibus") == 1
     augroup IBusHandler
         " Khôi phục ibus engine khi tìm kiếm
         autocmd CmdLineEnter [/?] silent call IBusOn()
@@ -160,24 +179,14 @@ if executable("ibus") == 1
         autocmd InsertLeave * silent call IBusOff()
     augroup END
     silent call IBusOff()
-endif
+  endif
+endfunction
+" Only turn on ibus switch when editing markdown
+" autocmd FileType md, MD call IBusSwitchEnable()
+autocmd BufNewFile,BufRead *.md,*.MD call IBusSwitchEnable()
 
 " enable mouse
 set mouse=a
-
-" Bracket expanding: auto close {
-function! s:CloseBracket()
-    let line = getline('.')
-    if line =~# '^\s*\(struct\|class\|enum\) '
-        return "{\<Enter>};\<Esc>O"
-    elseif searchpair('(', '', ')', 'bmn', '', line('.'))
-        " Probably inside a function call. Close it off.
-        return "{\<Enter>});\<Esc>O"
-    else
-        return "{\<Enter>}\<Esc>O"
-    endif
-endfunction
-inoremap <expr> {<Enter> <SID>CloseBracket()
 
 " disable auto comment insertion
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -192,29 +201,6 @@ set directory=~/.vim/swapfiles/
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
-
-" Toggle paste mode
-set pastetoggle=<F3>
-
-" Open NERDtree when open
-" autocmd vimenter * NERDTree
-" Go to previous (last accessed) window.
-autocmd VimEnter * wincmd p
-" Key to toggle nerdtree
-nmap <F4> :NERDTreeToggle<CR>
-" Single click to open file / expand dir
-let g:NERDTreeMouseMode = 2
-" Open in new tab when click on file
-autocmd VimEnter * call NERDTreeAddKeyMap({ 'key': '<2-LeftMouse>', 'scope': "FileNode", 'callback': "OpenInTab", 'override':1 })
-function! OpenInTab(node)
-    call a:node.activate({'reuse': 'all', 'where': 't'})
-endfunction 
-" Close NERDTree after opening a file
-let NERDTreeQuitOnOpen=1
-" Show hidden files by default
-let NERDTreeShowHidden=1
-" show COC status on status line
-set statusline^=%{coc#status()}
 
 " ====== coc.nvim config starts ======
 
@@ -265,18 +251,12 @@ let g:gitgutter_max_signs = 500 " surpress signs threshold to avoid slowing down
 "let g:gitgutter_map_keys = 0
 " Colors
 let g:gitgutter_override_sign_column_highlight = 0
-highlight clear SignColumn " remove sign column background color
-highlight GitGutterAdd ctermfg=2
-highlight GitGutterChange guifg=#3681e3 ctermfg=3
-highlight GitGutterDelete ctermfg=1
-highlight GitGutterChangeDelete ctermfg=4
+highlight clear SignColumn
+highlight GitGutterAdd          guibg=NONE
+highlight GitGutterChange       guibg=NONE
+highlight GitGutterDelete       guibg=NONE
+highlight GitGutterChangeDelete guibg=NONE
 
-" integrate powerline font into status bar
-" 1. Font installation: https://powerline.readthedocs.io/en/master/installation/linux.html#patched-font-installation 
-" 2. Link to patched font: https://github.com/powerline/fonts/raw/master/NotoMono/Noto%20Mono%20for%20Powerline.ttf
-let g:airline_powerline_fonts = 1
-" disable all airline extensions
-"let g:airline_extensions = []
 " remove delay when switching to normal mode
 if ! has('gui_running')
   set ttimeoutlen=10
@@ -288,3 +268,6 @@ if ! has('gui_running')
 endif
 
 set encoding=utf-8
+
+" ignore file names when finding in files using fzf (Rg)
+command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
