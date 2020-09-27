@@ -134,9 +134,11 @@ function jlremote {
 alias tmux='tmux -u'
 
 # auto activating env when cd into project
-source ~/.autoenv/activate.sh
-export AUTOENV_ENABLE_LEAVE="ya"
-export AUTOENV_ASSUME_YES="ya"
+if [[ -e ~/.autoenv ]]; then
+    source ~/.autoenv/activate.sh
+    export AUTOENV_ENABLE_LEAVE="ya"
+    export AUTOENV_ASSUME_YES="ya"
+fi
 
 export EDITOR='vim'
 export VISUAL='vim'
