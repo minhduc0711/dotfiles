@@ -1,5 +1,31 @@
-# make CapsLock behave like Ctrl:
-setxkbmap -option ctrl:nocaps
+#!/usr/bin/env bash
 
+# relaunch polybar whenever monitor event detected
+~/.config/polybar/monitor_watcher.o &
+
+# wallpaper
+~/.fehbg &
+
+# window compositor
+picom -b &
+
+# Nightlight
+# /usr/lib/geoclue-2.0/demos/agent &
+redshift &
+
+# flashfocus
+flashfocus &
+
+# keep chrome logins
+/usr/bin/gnome-keyring-daemon --start --components=secrets &
+
+# need this to show password prompt when requesting root
+/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
+
+# ibus
+ibus-daemon --xim -d -r &
+
+# make CapsLock behave like Ctrl:
+setxkbmap us -option ctrl:nocaps &
 # make short-pressed Ctrl behave like Escape:
-xcape -e 'Control_L=Escape'
+xcape -t 170 &

@@ -26,9 +26,6 @@ font pango:DejaVu Sans Mono 8
 exec --no-startup-id xss-lock --transfer-sleep-lock -- multilockscreen -l dim -- -c 00000000
 bindsym Scroll_Lock exec multilockscreen -l dim -- -c 00000000
 
-# wallpaper
-exec --no-startup-id ~/.fehbg
-
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
@@ -224,6 +221,9 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# flash focused window
+bindsym $mod+n exec --no-startup-id flash_window
+
 # Gaps
 for_window [class=".*"] border pixel 0
 gaps inner 8
@@ -231,32 +231,3 @@ gaps inner 8
 # border colors
 # class                 border  backgr. text    indicator
 client.focused          #4c7899 #C50ED2 #ffffff #FF8C00 
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
-#        status_command i3status
-#}
-
-# keep chrome logins
-exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets
-
-# need this to show password prompt when requesting root
-exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
-
-# ibus
-exec --no-startup-id ibus-daemon --xim -d -r
-
-# compton
-exec_always --no-startup-id compton -b
-
-# flashfocus
-exec_always --no-startup-id flashfocus
-bindsym $mod+n exec --no-startup-id flash_window
-
-# polybar
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-
-# Nightlight
-exec --no-startup-id /usr/lib/geoclue-2.0/demos/agent
-exec --no-startup-id redshift
