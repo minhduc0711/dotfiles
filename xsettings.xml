@@ -40,6 +40,6 @@
     <property name="WindowScalingFactor" type="empty"/>
   </property>
   <property name="Xfce" type="empty">
-    <property name="LastCustomDPI" type="int" value="120"/>
+    <property name="LastCustomDPI" type="int" value="116"/>
   </property>
 </channel>
