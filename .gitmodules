@@ -2,9 +2,6 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
-[submodule ".tmux"]
-	path = .tmux
-	url = https://github.com/gpakosz/.tmux
 [submodule "prezto"]
 	path = prezto
 	url = git@github.com:minhduc0711/prezto.git
