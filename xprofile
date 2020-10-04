@@ -1,31 +1,27 @@
 #!/usr/bin/env bash
 
-# relaunch polybar whenever monitor event detected
-~/.config/polybar/monitor_watcher.o &
-
-# wallpaper
-~/.fehbg &
-
-# window compositor
-picom -b &
-
-# Nightlight
-# /usr/lib/geoclue-2.0/demos/agent &
-redshift &
-
-# flashfocus
-flashfocus &
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+nm-applet > /dev/null 2>&1 &
 
 # keep chrome logins
 /usr/bin/gnome-keyring-daemon --start --components=secrets &
 
-# need this to show password prompt when requesting root
-/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 &
-
 # ibus
-ibus-daemon --xim -d -r &
+ibus-daemon --xim -d -r
 
-# make CapsLock behave like Ctrl:
-setxkbmap us -option ctrl:nocaps &
-# make short-pressed Ctrl behave like Escape:
-xcape -t 170 &
+# wallpaper
+~/.fehbg
+
+# window compositor
+picom -b
+
+# nightlight
+redshift > /dev/null 2>&1 &
+
+# flash focused window
+flashfocus &
+
+# map short-pressed Caps to esc, long-pressed Caps to Ctrl
+setxkbmap us -option ctrl:nocaps
+xcape -t 170
