@@ -62,6 +62,9 @@ Plug 'rstacruz/vim-closer'
 " manipulate surrounding quotes, brackets,...
 Plug 'tpope/vim-surround'
 
+" live REPL in Vim
+Plug 'jpalardy/vim-slime'
+
 " Initialize plugin system
 call plug#end()            " required
 " the glaive#Install() should go after the "call plug#end()"
@@ -204,7 +207,7 @@ endif
 
 " ====== coc.nvim config starts ======
 
-let g:coc_global_extensions = ['coc-python', 'coc-tsserver', 'coc-json']
+let g:coc_global_extensions = ['coc-python', 'coc-tsserver', 'coc-json', 'coc-syntax']
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -271,3 +274,8 @@ set encoding=utf-8
 
 " ignore file names when finding in files using fzf (Rg)
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+
+" slime configs
+let g:slime_target = "tmux"
+let g:slime_paste_file = tempname()
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
