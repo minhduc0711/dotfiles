@@ -39,7 +39,6 @@
     ~/.config/ranger: ranger
     ~/.config/multilock: multilock
     ~/.config/xfce4/terminal/terminalrc: xfce4-terminal
-    ~/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml: xsettings.xml
     ~/.config/colors.sh: colors.sh
     ~/.config/starship.toml: starship.toml
 
