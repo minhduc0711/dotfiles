@@ -49,6 +49,8 @@ Plug 'morhetz/gruvbox'
 
 " auto detect indent
 Plug 'tpope/vim-sleuth'
+" indent guides
+Plug 'Yggdroot/indentLine'
 
 " tmux + vim navigation
 Plug 'christoomey/vim-tmux-navigator'
@@ -84,7 +86,7 @@ set shiftwidth=4
 set softtabstop=4
 
 " disable text concealing in Markdown 
-set conceallevel=0
+set conceallevel=1
 
 " This setting makes search case-insensitive when all characters in the string
 " being searched are lowercase. However, the search becomes case-sensitive if
@@ -109,8 +111,8 @@ set pastetoggle=<F3>
 nmap Q <NOP> 
 
 " breaking bad habits (hjkl spam)
-noremap h <NOP>
-noremap l <NOP>
+" noremap h <NOP>
+" noremap l <NOP>
 " noremap j <NOP>
 " noremap k <NOP>
 
@@ -261,14 +263,7 @@ highlight GitGutterDelete       guibg=NONE
 highlight GitGutterChangeDelete guibg=NONE
 
 " remove delay when switching to normal mode
-if ! has('gui_running')
-  set ttimeoutlen=10
-  augroup FastEscape
-    autocmd!
-    au InsertEnter * set timeoutlen=0
-    au InsertLeave * set timeoutlen=1000
-  augroup END
-endif
+set timeoutlen=1000 ttimeoutlen=5
 
 set encoding=utf-8
 
@@ -279,3 +274,7 @@ command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-hea
 let g:slime_target = "tmux"
 let g:slime_paste_file = tempname()
 let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
+
+" indentLine
+let g:indentLine_setConceal = 0
+let g:indentLine_char = '▏'
