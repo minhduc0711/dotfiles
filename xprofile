@@ -14,7 +14,7 @@ ibus-daemon --xim -d -r
 ~/.fehbg
 
 # window compositor
-picom -b
+picom -b > /dev/null 2>&1 &
 
 # nightlight
 redshift > /dev/null 2>&1 &
@@ -22,6 +22,5 @@ redshift > /dev/null 2>&1 &
 # flash focused window
 flashfocus &
 
-# map short-pressed Caps to esc, long-pressed Caps to Ctrl
-setxkbmap us -option ctrl:nocaps
+# map short-pressed Caps to esc
 xcape -t 170
