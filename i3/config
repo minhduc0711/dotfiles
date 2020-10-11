@@ -22,8 +22,10 @@ font pango:DejaVu Sans Mono 9
 # ===== i3 RELATED STARTUP PROGRAMS =====
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-exec --no-startup-id xss-lock --transfer-sleep-lock -- multilockscreen -l dim -- -c 00000000
-bindsym Scroll_Lock exec multilockscreen -l dim -- -c 00000000
+# screen before suspend. Use loginctl lock-session to lock your screen.
+exec --no-startup-id xss-lock --transfer-sleep-lock -- \
+        multilockscreen -l -- -c 00000000 
+bindsym Scroll_Lock exec multilockscreen -l -- -c 00000000
 
 # program to relaunch polybar whenever monitor change detected
 exec --no-startup-id $HOME/.config/polybar/monitor_watcher.o
@@ -226,7 +228,6 @@ bindsym $mod+r mode "resize"
 # Gaps
 for_window [class=".*"] border pixel 0
 gaps inner 10
-gaps top 23
 
 # border colors
 # class                 border  backgr. text    indicator
