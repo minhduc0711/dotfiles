@@ -145,7 +145,3 @@ export VISUAL='vim'
 export LC_ALL=C
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-# fancy prompt
-export PATH=/storage/ducpm/bin/:$PATH
-eval "$(starship init bash)"

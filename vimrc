@@ -28,7 +28,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-commentary'
 
 " Support (syntax, indent...) for many languages
-Plug 'sheerun/vim-polyglot'
+" Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-markdown'
 
 " Code formatting
 " Add maktaba and codefmt to the runtimepath.
@@ -63,6 +64,9 @@ Plug 'rstacruz/vim-closer'
 
 " manipulate surrounding quotes, brackets,...
 Plug 'tpope/vim-surround'
+
+" jumping around with two characters
+Plug 'justinmk/vim-sneak'
 
 " live REPL in Vim
 Plug 'jpalardy/vim-slime'
@@ -267,7 +271,7 @@ set timeoutlen=1000 ttimeoutlen=5
 
 set encoding=utf-8
 
-" ignore file names when finding in files using fzf (Rg)
+" fzf (Rg): ignore file names when searching in files' content 
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 " slime configs
