@@ -1,0 +1,25 @@
+" Emulated plugins
+set surround
+set commentary
+
+" show line numbers
+set number
+set relativenumber
+
+" make tabs visible
+set list
+set listchars=tab:>-
+
+" This setting makes search case-insensitive when all characters in the string
+" being searched are lowercase. However, the search becomes case-sensitive if
+" it contains any capital letters. This makes searching more convenient.
+set ignorecase
+set smartcase
+
+" Enable searching as you type, rather than waiting till you press enter.
+set incsearch
+
+" Unbind some useless/annoying default key bindings.
+" 'Q' in normal mode enters Ex mode. You almost never want this.
+nmap Q <NOP> 
+nmap <C-p> <NOP>

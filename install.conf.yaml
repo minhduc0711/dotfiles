@@ -19,6 +19,7 @@
     ~/.zshenv: prezto/runcoms/zshenv
     ~/.zshrc: prezto/runcoms/zshrc
     ~/.vimrc: vimrc
+    ~/.ideavimrc: ideavimrc
     ~/.inputrc: inputrc
     ~/.xprofile: xprofile
     ~/.dircolors: dircolors
