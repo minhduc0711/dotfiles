@@ -6,7 +6,7 @@
 
 - link:
     /etc/systemd/logind.conf: logind.conf
+    /etc/X11/xorg.conf.d/00-keyboard.conf: 00-keyboard.conf
     /etc/X11/xorg.conf.d/90-touchpad.conf: 90-touchpad.conf
     /etc/tlp.conf: tlp.conf
-    /etc/default/keyboard: keyboard
     /usr/share/ibus/component/simple.xml: ibus/simple.xml
