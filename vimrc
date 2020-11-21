@@ -1,3 +1,4 @@
+let g:polyglot_disabled = ['markdown', 'python', 'sensible']
 set nocompatible              " be iMproved, required
 
 " Install vim-plug
@@ -27,9 +28,10 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " commenting code
 Plug 'tpope/vim-commentary'
 
-" Support (syntax, indent...) for many languages
-" Plug 'sheerun/vim-polyglot'
+" Syntax highlighting
+Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-markdown'
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " python
 
 " Code formatting
 " Add maktaba and codefmt to the runtimepath.
@@ -49,7 +51,7 @@ Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 Plug 'morhetz/gruvbox'
 
 " auto detect indent
-Plug 'tpope/vim-sleuth'
+" Plug 'tpope/vim-sleuth'
 " indent guides
 Plug 'Yggdroot/indentLine'
 
@@ -60,7 +62,7 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'luochen1990/rainbow'
 
 " multi-line bracket autoexpansion
-Plug 'rstacruz/vim-closer'
+" Plug 'rstacruz/vim-closer'
 
 " manipulate surrounding quotes, brackets,...
 Plug 'tpope/vim-surround'
@@ -123,6 +125,24 @@ nmap Q <NOP>
 " transparent background
 " fix for gruvbox from from https://github.com/morhetz/gruvbox/issues/108#issuecomment-215993544
 au VimEnter * hi Normal ctermbg=NONE guibg=NONE
+
+function MyCustomHighlights()
+  " Use Gruvbox colors for python semshi semantic highlighter
+  hi semshiLocal           ctermfg=209 guifg=#ff875f
+  hi semshiGlobal          ctermfg=167 guifg=#fb4934
+  hi semshiImported        ctermfg=214 guifg=#d79921 cterm=bold gui=bold
+  hi semshiParameter       ctermfg=142  guifg=#98971a
+  hi semshiParameterUnused ctermfg=106 guifg=#665c54
+  hi semshiBuiltin         ctermfg=208 guifg=#fe8019
+  hi semshiAttribute       ctermfg=108  guifg=fg
+  hi semshiSelf            ctermfg=109 guifg=#85a598
+  hi semshiUnresolved      ctermfg=226 guifg=#fabd2f cterm=underline gui=underline
+  hi semshiSelected        ctermfg=231 guifg=#EBDBB2 ctermbg=161 guibg=#8B3D60
+  hi semshiErrorSign       ctermfg=231 guifg=#EBDBB2 ctermbg=160 guibg=#CC241D
+  hi semshiErrorChar       ctermfg=231 guifg=#EBDBB2 ctermbg=160 guibg=#CC241D
+endfunction
+
+autocmd ColorScheme * call MyCustomHighlights()
 
 " material
 " colorscheme material
