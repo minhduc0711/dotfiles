@@ -5,9 +5,9 @@
       force: true
 
 - link:
-    # /etc/systemd/logind.conf: logind.conf
     # /etc/X11/xorg.conf.d/00-keyboard.conf: 00-keyboard.conf
     # /etc/X11/xorg.conf.d/90-touchpad.conf: 90-touchpad.conf
+    /etc/systemd/logind.conf: logind.conf
     /etc/tlp.conf: tlp.conf
     /etc/udevmon.yaml: caps2esc/udevmon.yaml
     /usr/lib/systemd/user/flashfocus.service: flashfocus/flashfocus.service
