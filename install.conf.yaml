@@ -3,6 +3,7 @@
       relink: true
       create: true
       force: true
+      glob: true
     shell:
       stdout: true
       stderr: true
@@ -27,6 +28,7 @@
     ~/.vim/coc-settings.json: nvim/coc-settings.json
     ~/.tmux.conf: tmux/tmux.conf
     ~/.tmux.conf.local: tmux/tmux.conf.local
+    ~/.pam_environment: pam_environment
     ~/.config/kitty: kitty
     ~/.config/i3: i3
     ~/.config/dunst: dunst
@@ -42,6 +44,14 @@
     ~/.config/xfce4/terminal/terminalrc: xfce4-terminal
     ~/.config/colors.sh: colors.sh
     ~/.config/starship.toml: starship.toml
+    ~/.config/sway: sway
+    ~/.config/systemd/user/sway-session.target: sway/sway-session.target
+    ~/.config/waybar: waybar
+    ~/.config/kanshi/config: kanshi
+    ~/.config/alacritty/alacritty.yml: alacritty.yml
+    ~/.config/mako/config: mako
+    ~/.p10k.zsh: p10k.zsh
+    ~/.local/bin/: scripts/*
 
 - create:
   - ~/.vim/swapfiles

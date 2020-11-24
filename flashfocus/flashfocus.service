@@ -1,0 +1,10 @@
+[Unit]
+Description=Perform windows animations on focus
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+ExecStart=/home/minhduc0711/miniconda3/bin/flashfocus
+
+[Install]
+WantedBy=graphical-session.target
