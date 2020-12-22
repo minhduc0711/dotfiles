@@ -1,6 +1,6 @@
 #!/bin/sh
 # chỉnh bộ gõ ở đây {{{ #
-engines="xkb:us::eng, Bamboo, xkb:fr:us:fra"
+engines="xkb:us::eng, Bamboo"
 # }}} chỉnh bộ gõ ở đây #
 
 

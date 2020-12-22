@@ -310,8 +310,8 @@ unbind C-b
 set -g prefix C-a
 bind C-a send-prefix
 
-bind-key v split-window -h
-bind-key s split-window -v
+bind-key s split-window -h
+bind-key v split-window -v
 
 bind-key J resize-pane -D 5
 bind-key K resize-pane -U 5

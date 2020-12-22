@@ -1,0 +1,3 @@
+term=alacritty
+insensitive=true
+run-always_parse_args=true

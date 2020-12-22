@@ -16,7 +16,7 @@ cmd = screenclip_cmd if args.rect else screenshot_cmd
 if args.clipboard:
     cmd += " - | wl-copy"
 else:
-    os.makedirs(screenshot_dir, exist_ok=True)
+    os.makedirs(os.path.expanduser(screenshot_dir), exist_ok=True)
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     cmd += f" {screenshot_dir}/{current_time}"
 os.system(cmd)

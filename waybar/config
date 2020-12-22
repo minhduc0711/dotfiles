@@ -2,50 +2,24 @@
   "layer": "top",
   "modules-left": [
     "sway/workspaces",
-    "custom/right-arrow-dark",
-
-    "custom/right-arrow-light",
     "cpu",
-    "custom/right-arrow-dark",
-
-    "custom/right-arrow-light",
     "memory",
-    "custom/right-arrow-dark",
-
-    "custom/right-arrow-light",
+    "disk",
     "temperature",
-    "custom/right-arrow-dark",
-
-    "custom/right-arrow-light",
     "network",
-    "custom/right-arrow-dark"
   ],
   "modules-center": [
-    "custom/left-arrow-dark",
     "clock",
-    "custom/right-arrow-dark"
   ],
   "modules-right": [
-    "custom/left-arrow-dark",
     "custom/mpris",
     "custom/mpris_prev",
     "custom/mpris_play_pause",
     "custom/mpris_next",
-    "custom/left-arrow-light",
 
-    "custom/left-arrow-dark",
     "pulseaudio",
-    "custom/left-arrow-light",
-
-    "custom/left-arrow-dark",
     "battery",
-    "custom/left-arrow-light",
-
-    "custom/left-arrow-dark",
     "idle_inhibitor",
-    "custom/left-arrow-light",
-
-    "custom/left-arrow-dark",
     "tray"
   ],
   "custom/left-arrow-dark": {
@@ -89,7 +63,7 @@
   },
   "memory": {
     "interval": 5,
-    "format": " {}%"
+    "format": " {used:0.1f} GB"
   },
   "cpu": {
     "interval": 5,

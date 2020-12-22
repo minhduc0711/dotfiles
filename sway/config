@@ -1,7 +1,7 @@
 ### STARTUP PROGRAMS
 #
 # hot plug monitor support
-exec_always --no-startup-id 'killall kanshi; kanshi'
+exec_always "killall kanshi; exec kanshi"
 # fix GTK apps slow startup
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec hash dbus-update-activation-environment 2>/dev/null && \
@@ -11,11 +11,11 @@ exec "XDG_CURRENT_DESKTOP=KDE ibus-daemon -drx"
 # network manager applet
 exec nm-applet --indicator
 # nightlight
-exec gammastep
+exec gammastep -t 5700:3500
 # notification daemon
 exec mako
 # keyring (needed for skype and chromium logins)
-exec /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
+# exec /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 # gtk themes workaround for wayland
 exec_always ~/.local/bin/import-gsettings.sh \
     gtk-theme:gtk-theme-name \
@@ -48,11 +48,11 @@ set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu wofi --show drun --insensitive --term=alacritty | xargs swaymsg exec --
+set $menu wofi --show "drun,dmenu" | xargs swaymsg exec --
 
 # screenlock
-set $lock swaylock --daemonize --clock \
-        -i Pictures/Wallpapers/roberto_gatto/39lsr8.png
+set $lock swaylock --daemonize --clock --datestr "%b %d %Y"\
+        -i ~/Pictures/Wallpapers/get_your_wish.png
 
 # ibus switch command
 set $switch_ibus_engine "~/.local/bin/switch_ibus_engine.sh"
@@ -69,12 +69,16 @@ input "1267:12384:ELAN0501:01_04F3:3060_Touchpad" {
     natural_scroll enabled
     middle_emulation enabled
 }
+input "type:keyboard" {
+    xkb_layout fr
+    xkb_variant us
+}
 
 ### OUTPUT CONFIGURATION
 #
 # monitors
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg ~/Pictures/Wallpapers/forest-mikael-gustafsson.jpg fill
+output * bg ~/Pictures/Wallpapers/alena-aenami-horizon-1k.jpg fill
 
 ### Idle configuration
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -225,11 +229,13 @@ workspace 8 output HDMI-A-1 eDP-1
 workspace 9 output HDMI-A-1 eDP-1
 workspace 10 output HDMI-A-1 eDP-1
 
+for_window [class="MATLAB R2020b - academic use"] floating enable
 # assign some apps to preferred workspaces
 for_window [class="Spotify"] move window to workspace $ws9
 assign [class="Skype"] 10
 assign [class="Slack"] 10
 assign [class="discord"] 10
+assign [class="Ferdi"] 10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -274,7 +280,7 @@ gaps inner 10
 # class                 border  backgr. text    indicator
 client.focused          #4c7899 #C50ED2 #ffffff #FF8C00 
 
-bindsym $mod+n exec flash_window
+bindsym $mod+n exec "~/miniconda3/bin/flash_window"
 
 default_border none
 
