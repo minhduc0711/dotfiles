@@ -155,7 +155,7 @@ let g:gruvbox_contrast_dark = 'hard'
 let g:gruvbox_italic = 1
 let g:gruvbox_underline = 1
 colorscheme gruvbox
-set background=dark
+set background=light
 
 " visual mode highlight color (currently gruvbox)
 hi Visual guifg=#282828 guibg=#ebdbb2 gui=NONE
