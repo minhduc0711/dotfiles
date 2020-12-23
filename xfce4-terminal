@@ -1,5 +1,6 @@
 [Configuration]
-FontName=MesloLGS NF Regular 11
+FontName=MesloLGS NF Regular 13
+ColorBoldIsBright=FALSE
 MiscAlwaysShowTabs=FALSE
 MiscBell=FALSE
 MiscBellUrgent=FALSE
@@ -28,18 +29,10 @@ MiscNewTabAdjacent=FALSE
 MiscSearchDialogOpacity=100
 MiscShowUnsafePasteDialog=FALSE
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
-
-BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
-BackgroundDarkness=0.8
-
-ColorCursor=#ebdbb2
-ColorCursorForeground=#282828
+BackgroundDarkness=0.800000
+ColorCursor=#3c3836
+ColorCursorForeground=#fbf1c7
 ColorCursorUseDefault=FALSE
-ColorSelection=#282828
-ColorSelectionBackground=#ebdbb2
-ColorSelectionUseDefault=FALSE
-
-ColorForeground=#ebdbb2
-ColorBackground=#1d2021
-ColorPalette=#282828;#cc241d;#98971a;#d79921;#458588;#8b3d60;#689d6a;#a89984;#928374;#fb4934;#b8bb26;#fabd2f;#83a598;#d3869b;#8ec07c;#ebdbb2
-TabActivityColor=#bf4040
+ColorPalette=#fbf1c7;#cc241d;#98971a;#d79921;#458588;#cf95af;#689D6A;#7c6f64;#928374;#9d0006;#79740e;#b57614;#076678;#8f3f71;#427b58;#3c3836
+ColorForeground=#3c3836
+ColorBackground=#f9f5d7
