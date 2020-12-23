@@ -26,8 +26,8 @@
     ~/.dircolors: dircolors
     ~/.config/nvim: nvim
     ~/.vim/coc-settings.json: nvim/coc-settings.json
-    ~/.tmux.conf: tmux/tmux.conf
-    ~/.tmux.conf.local: tmux/tmux.conf.local
+    ~/.tmux.conf: tmux/.tmux.conf
+    ~/.tmux.conf.local: tmux/.tmux.conf.local
     ~/.pam_environment: pam_environment
     ~/.config/kitty: kitty
     ~/.config/i3: i3
