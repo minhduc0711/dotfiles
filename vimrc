@@ -51,18 +51,15 @@ Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 Plug 'morhetz/gruvbox'
 
 " auto detect indent
-" Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-sleuth'
 " indent guides
 Plug 'Yggdroot/indentLine'
 
 " tmux + vim navigation
 Plug 'christoomey/vim-tmux-navigator'
 
-" rainbow-colored bracket pairs
-Plug 'luochen1990/rainbow'
-
-" multi-line bracket autoexpansion
-" Plug 'rstacruz/vim-closer'
+" auto close pairs (brackets, quotes...)
+Plug 'Raimondi/delimitMate'
 
 " manipulate surrounding quotes, brackets,...
 Plug 'tpope/vim-surround'
@@ -87,9 +84,9 @@ set list
 set listchars=tab:>-
 
 " default indent settings
-set expandtab
-set shiftwidth=4
-set softtabstop=4
+" set expandtab
+" set shiftwidth=4
+" set softtabstop=4
 
 " disable text concealing in Markdown 
 set conceallevel=1
@@ -126,23 +123,25 @@ nmap Q <NOP>
 " fix for gruvbox from from https://github.com/morhetz/gruvbox/issues/108#issuecomment-215993544
 au VimEnter * hi Normal ctermbg=NONE guibg=NONE
 
-function MyCustomHighlights()
+function GruvboxSemshiHighlights()
   " Use Gruvbox colors for python semshi semantic highlighter
   hi semshiLocal           ctermfg=209 guifg=#ff875f
-  hi semshiGlobal          ctermfg=167 guifg=#fb4934
+  hi semshiGlobal          ctermfg=167 guifg=#cc241d
   hi semshiImported        ctermfg=214 guifg=#d79921 cterm=bold gui=bold
-  hi semshiParameter       ctermfg=142  guifg=#98971a
-  hi semshiParameterUnused ctermfg=106 guifg=#665c54
-  hi semshiBuiltin         ctermfg=208 guifg=#fe8019
-  hi semshiAttribute       ctermfg=108  guifg=fg
+  hi semshiParameter       ctermfg=142 guifg=#458588
+  hi semshiParameterUnused ctermfg=106 guifg=#665c54 cterm=underline gui=underline
+  hi semshiFree            ctermfg=218 guifg=#ffafd7
+  hi semshiBuiltin         ctermfg=208 guifg=#b16286
+  hi semshiAttribute       ctermfg=108 guifg=#689d6a
   hi semshiSelf            ctermfg=109 guifg=#85a598
-  hi semshiUnresolved      ctermfg=226 guifg=#fabd2f cterm=underline gui=underline
+  hi semshiUnresolved      ctermfg=226 guifg=#d79921 cterm=underline gui=underline
   hi semshiSelected        ctermfg=231 guifg=#EBDBB2 ctermbg=161 guibg=#8B3D60
+
   hi semshiErrorSign       ctermfg=231 guifg=#EBDBB2 ctermbg=160 guibg=#CC241D
   hi semshiErrorChar       ctermfg=231 guifg=#EBDBB2 ctermbg=160 guibg=#CC241D
 endfunction
 
-autocmd ColorScheme * call MyCustomHighlights()
+autocmd ColorScheme * call GruvboxSemshiHighlights()
 
 " material
 " colorscheme material
@@ -184,6 +183,7 @@ function! IBusOff()
   " Chuyển sang engine tiếng Anh
   execute 'silent !ibus engine xkb:us::eng'
 endfunction
+
 function! IBusOn()
   let l:current_engine = system('ibus engine')
   " nếu engine được set trong normal mode thì
@@ -194,6 +194,7 @@ function! IBusOn()
   " Khôi phục lại engine
   execute 'silent !' . 'ibus engine ' . g:ibus_prev_engine
 endfunction
+
 function IBusSwitchEnable()
   if executable("ibus") == 1
     augroup IBusHandler
@@ -210,6 +211,7 @@ function IBusSwitchEnable()
     silent call IBusOff()
   endif
 endfunction
+
 " Only turn on ibus switch when editing markdown
 " autocmd FileType md, MD call IBusSwitchEnable()
 autocmd BufNewFile,BufRead *.md,*.MD call IBusSwitchEnable()
@@ -302,3 +304,7 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 " indentLine
 let g:indentLine_setConceal = 0
 let g:indentLine_char = '▏'
+
+" delimitMate configs
+let delimitMate_autoclose = 1
+let delimitMate_expand_cr = 1
