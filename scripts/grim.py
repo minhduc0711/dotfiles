@@ -18,5 +18,5 @@ if args.clipboard:
 else:
     os.makedirs(os.path.expanduser(screenshot_dir), exist_ok=True)
     current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    cmd += f" {screenshot_dir}/{current_time}"
+    cmd += f" {screenshot_dir}/{current_time}.png"
 os.system(cmd)

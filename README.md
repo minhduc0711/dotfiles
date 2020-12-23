@@ -1,4 +1,4 @@
 # dotfiles
-Configs for my normie Ubuntu setup.
+I usE arCh btw
 
-![](imgs/screenshot.png)
+![](imgs/arch_sway.png)
