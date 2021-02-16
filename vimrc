@@ -181,7 +181,7 @@ function! IBusOff()
   " Lưu engine hiện tại
   let g:ibus_prev_engine = system('ibus engine')
   " Chuyển sang engine tiếng Anh
-  execute 'silent !ibus engine xkb:us::eng'
+  silent! execute '!ibus engine xkb:us::eng'
 endfunction
 
 function! IBusOn()
@@ -192,25 +192,21 @@ function! IBusOn()
     let g:ibus_prev_engine = l:current_engine
   endif
   " Khôi phục lại engine
-  execute 'silent !' . 'ibus engine ' . g:ibus_prev_engine
+  silent! execute '!ibus engine ' . g:ibus_prev_engine
 endfunction
 
-function IBusSwitchEnable()
-  if executable("ibus") == 1
-    augroup IBusHandler
-        " Khôi phục ibus engine khi tìm kiếm
-        autocmd CmdLineEnter [/?] silent call IBusOn()
-        autocmd CmdLineLeave [/?] silent call IBusOff()
-        autocmd CmdLineEnter \? silent call IBusOn()
-        autocmd CmdLineLeave \? silent call IBusOff()
-        " Khôi phục ibus engine khi vào insert mode
-        autocmd InsertEnter * silent call IBusOn()
-        " Tắt ibus engine khi vào normal mode
-        autocmd InsertLeave * silent call IBusOff()
-    augroup END
-    silent call IBusOff()
-  endif
-endfunction
+augroup IBusHandler
+    " Khôi phục ibus engine khi tìm kiếm
+    autocmd CmdLineEnter [/?] silent call IBusOn()
+    autocmd CmdLineLeave [/?] silent call IBusOff()
+    autocmd CmdLineEnter \? silent call IBusOn()
+    autocmd CmdLineLeave \? silent call IBusOff()
+    " Khôi phục ibus engine khi vào insert mode
+    autocmd InsertEnter * silent call IBusOn()
+    " Tắt ibus engine khi vào normal mode
+    autocmd InsertLeave * silent call IBusOff()
+augroup END
+silent call IBusOff()
 
 " Only turn on ibus switch when editing markdown
 " autocmd FileType md, MD call IBusSwitchEnable()

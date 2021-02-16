@@ -1,5 +1,5 @@
 [Configuration]
-FontName=MesloLGS NF Regular 13
+FontName=Source Code Pro Regular 13
 ColorBoldIsBright=FALSE
 MiscAlwaysShowTabs=FALSE
 MiscBell=FALSE
@@ -31,8 +31,6 @@ MiscShowUnsafePasteDialog=FALSE
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
 BackgroundDarkness=0.800000
 ColorCursor=#3c3836
-ColorCursorForeground=#fbf1c7
-ColorCursorUseDefault=FALSE
 ColorPalette=#fbf1c7;#cc241d;#98971a;#d79921;#458588;#cf95af;#689D6A;#7c6f64;#928374;#9d0006;#79740e;#b57614;#076678;#8f3f71;#427b58;#3c3836
 ColorForeground=#3c3836
 ColorBackground=#f9f5d7
