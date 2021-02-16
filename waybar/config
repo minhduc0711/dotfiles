@@ -1,5 +1,6 @@
 {
   "layer": "top",
+  "height": 23,
   "modules-left": [
     "sway/workspaces",
     "cpu",
