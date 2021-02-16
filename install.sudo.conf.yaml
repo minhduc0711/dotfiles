@@ -9,5 +9,9 @@
     # /etc/X11/xorg.conf.d/90-touchpad.conf: 90-touchpad.conf
     /etc/systemd/logind.conf: logind.conf
     /etc/tlp.conf: tlp.conf
-    /etc/udevmon.yaml: caps2esc/udevmon.yaml
+    /etc/interception/udevmon.yaml: caps2esc/udevmon.yaml
+    /etc/interception/keyboard.yaml: caps2esc/keyboard.yaml
+    /etc/polkit-1/rules.d/50-udiskie.rules: polkit/50-udiskie.rules
+    /etc/polkit-1/rules.d/50-org.freedesktop.NetworkManager.rules: polkit/50-org.freedesktop.NetworkManager.rules
+    /etc/wireguard/wgcf-profile.conf: wgcf-profile.conf
     /usr/lib/systemd/user/flashfocus.service: flashfocus/flashfocus.service

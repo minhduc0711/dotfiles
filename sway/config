@@ -2,25 +2,38 @@
 #
 # hot plug monitor support
 exec_always "killall kanshi; exec kanshi"
+
 # fix GTK apps slow startup
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec hash dbus-update-activation-environment 2>/dev/null && \
     dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK
+
 # ibus
 exec "XDG_CURRENT_DESKTOP=KDE ibus-daemon -drx"
+
 # network manager applet
 exec nm-applet --indicator
+
 # nightlight
 exec gammastep-indicator -t 5700:3500
+
 # notification daemon
 exec mako
+
 # keyring (needed for skype and chromium logins)
 # exec /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
+
 # gtk themes workaround for wayland
 exec_always ~/.local/bin/import-gsettings.sh \
     gtk-theme:gtk-theme-name \
     icon-theme:gtk-icon-theme-name \
     cursor-theme:gtk-cursor-theme-name
+
+# polkit (used for authentication)
+exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+
+# automount usb devices
+exec udiskie
 
 ### FONTS
 #
@@ -43,7 +56,7 @@ set $up k
 set $right l
 
 # Your preferred terminal emulator
-set $term xfce4-terminal
+set $term alacritty
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
@@ -52,7 +65,7 @@ set $menu wofi --show "drun,dmenu" | xargs swaymsg exec --
 
 # screenlock
 set $lock swaylock --daemonize --clock --datestr "%b %d %Y"\
-        -i ~/Pictures/Wallpapers/get_your_wish.png
+        -i ~/Pictures/Wallpapers/sunset-2560x1600-tree-breeze-artwork-hd-17296.jpg
 
 # ibus switch command
 set $switch_ibus_engine "~/.local/bin/switch_ibus_engine.sh"
@@ -78,7 +91,7 @@ input "type:keyboard" {
 #
 # monitors
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg ~/Pictures/Wallpapers/alena-aenami-horizon-1k.jpg fill
+output * bg ~/Pictures/Wallpapers/cloudy_sky_purple.png fill
 
 ### Idle configuration
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -230,6 +243,7 @@ workspace 9 output HDMI-A-1 eDP-1
 workspace 10 output HDMI-A-1 eDP-1
 
 for_window [class="MATLAB R2020b - academic use"] floating enable
+for_window [title="Firefox — Sharing Indicator"] kill
 # assign some apps to preferred workspaces
 for_window [class="Spotify"] move window to workspace $ws9
 assign [class="Skype"] 10
