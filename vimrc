@@ -33,15 +33,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-markdown'
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " python
 
-" Code formatting
-" Add maktaba and codefmt to the runtimepath.
-" (The latter must be installed before it can be used.)
-Plug 'google/vim-maktaba'
-Plug 'google/vim-codefmt'
-" Also add Glaive, which is used to configure codefmt's maktaba flags. See
-" `:help :Glaive` for usage.
-Plug 'google/vim-glaive'
-
 " fzf fuzzy search
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -58,8 +49,9 @@ Plug 'Yggdroot/indentLine'
 " tmux + vim navigation
 Plug 'christoomey/vim-tmux-navigator'
 
-" auto close pairs (brackets, quotes...)
-Plug 'Raimondi/delimitMate'
+" auto expand pairs on <CR>
+Plug 'tpope/vim-endwise'
+Plug 'minhduc0711/vim-closer'
 
 " manipulate surrounding quotes, brackets,...
 Plug 'tpope/vim-surround'
@@ -72,8 +64,12 @@ Plug 'jpalardy/vim-slime'
 
 " Initialize plugin system
 call plug#end()            " required
-" the glaive#Install() should go after the "call plug#end()"
-call glaive#Install()
+
+" Automatically install missing plugins on startup
+autocmd VimEnter *
+  \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \|   PlugInstall --sync | q
+  \| endif
 
 " show line numbers
 set number
@@ -81,7 +77,8 @@ set relativenumber
 
 " make tabs visible
 set list
-set listchars=tab:>-
+set listchars=tab:!·,trail:·
+set tabstop=4
 
 " default indent settings
 " set expandtab
@@ -195,7 +192,8 @@ function! IBusOn()
   silent! execute '!ibus engine ' . g:ibus_prev_engine
 endfunction
 
-augroup IBusHandler
+function EnableIBusSwitch()
+  augroup IBusHandler
     " Khôi phục ibus engine khi tìm kiếm
     autocmd CmdLineEnter [/?] silent call IBusOn()
     autocmd CmdLineLeave [/?] silent call IBusOff()
@@ -205,12 +203,12 @@ augroup IBusHandler
     autocmd InsertEnter * silent call IBusOn()
     " Tắt ibus engine khi vào normal mode
     autocmd InsertLeave * silent call IBusOff()
-augroup END
-silent call IBusOff()
+  augroup END
+  silent call IBusOff()
+endfunction
 
 " Only turn on ibus switch when editing markdown
-" autocmd FileType md, MD call IBusSwitchEnable()
-autocmd BufNewFile,BufRead *.md,*.MD call IBusSwitchEnable()
+autocmd BufNewFile,BufRead *.md,*.MD call EnableIBusSwitch()
 
 " enable mouse
 set mouse=a
@@ -231,7 +229,7 @@ endif
 
 " ====== coc.nvim config starts ======
 
-let g:coc_global_extensions = ['coc-python', 'coc-tsserver', 'coc-json', 'coc-syntax']
+let g:coc_global_extensions = ['coc-pyright', 'coc-java', 'coc-tsserver', 'coc-json', 'coc-clangd']
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -257,6 +255,17 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
@@ -267,6 +276,18 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
+
+
+" Remap <C-g> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-g> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-g> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-g> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+
 " disable warning for old vim versions
 let g:coc_disable_startup_warning = 1
 
@@ -300,7 +321,3 @@ let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
 " indentLine
 let g:indentLine_setConceal = 0
 let g:indentLine_char = '▏'
-
-" delimitMate configs
-let delimitMate_autoclose = 1
-let delimitMate_expand_cr = 1
