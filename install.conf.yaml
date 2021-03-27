@@ -54,9 +54,10 @@
     ~/.p10k.zsh: p10k.zsh
     ~/.local/bin/: scripts/*
     ~/.config/systemd/user/kanshi.service: kanshi/kanshi.service
+    ~/.config/gammastep/config.ini: gammastep
 
 - create:
   - ~/.vim/swapfiles
 
-- shell:
-    - gcc ~/.config/polybar/monitor_watcher.c -o ~/.config/polybar/monitor_watcher.o -lxcb -lxcb-randr
+# - shell:
+#     - gcc ~/.config/polybar/monitor_watcher.c -o ~/.config/polybar/monitor_watcher.o -lxcb -lxcb-randr
