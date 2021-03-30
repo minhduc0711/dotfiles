@@ -52,11 +52,13 @@
     "format-bluetooth": "{icon}  {volume}%",
     "format-muted": " Muted",
     "format-icons": {
-      "headphones": "",
-      "default": [
-        "",
-        ""
-      ]
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
     },
     "scroll-step": 5,
     "on-click": "pulsemixer --toggle-mute",
