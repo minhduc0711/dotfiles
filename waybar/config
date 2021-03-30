@@ -77,13 +77,10 @@
       "critical": 15
     },
     "format": "{icon} {capacity}%",
-    "format-icons": [
-      "",
-      "",
-      "",
-      "",
-      ""
-    ]
+    "format-alt": "{icon} {time}",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-icons": ["", "", "", "", ""]
   },
   "disk": {
     "interval": 5,
