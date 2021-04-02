@@ -1,0 +1,9 @@
+[Unit]
+Description=Powertop tunings
+
+[Service]
+Type=oneshot
+ExecStart=/home/minhduc0711/.local/bin/powertop.sh
+
+[Install]
+WantedBy=multi-user.target

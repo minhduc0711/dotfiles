@@ -8,6 +8,7 @@
     # /etc/X11/xorg.conf.d/00-keyboard.conf: 00-keyboard.conf
     # /etc/X11/xorg.conf.d/90-touchpad.conf: 90-touchpad.conf
     /etc/systemd/logind.conf: logind.conf
+    /etc/systemd/system/powertop.service: services/powertop.service
     /etc/tlp.conf: tlp.conf
     /etc/interception/udevmon.yaml: caps2esc/udevmon.yaml
     /etc/interception/keyboard.yaml: caps2esc/keyboard.yaml
