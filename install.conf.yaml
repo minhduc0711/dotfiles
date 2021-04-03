@@ -25,7 +25,7 @@
     ~/.xprofile: xprofile
     ~/.dircolors: dircolors
     ~/.config/nvim: nvim
-    ~/.vim/coc-settings.json: nvim/coc-settings.json
+    ~/.vim/: vim/*
     ~/.tmux.conf: tmux/.tmux.conf
     ~/.tmux.conf.local: tmux/.tmux.conf.local
     ~/.pam_environment: pam_environment

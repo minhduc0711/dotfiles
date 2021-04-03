@@ -1,12 +1,11 @@
 {
-  "python.jediEnabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.linting.flake8Args": [
     "--max-line-length=160"
   ],
   "python.linting.enabled": true,
-
+  
   "languageserver": {
     "bash": {
       "command": "bash-language-server",
@@ -14,5 +13,15 @@
       "filetypes": ["sh"],
       "ignoredRootPaths": ["~"]
     }
+  },
+  
+  "codeLens.enable": true,
+  "java.referencesCodeLens.enabled": true,
+  //"java.jdt.ls.vmargs": "-javaagent:/usr/local/share/lombok.jar"
+
+  "list.normalMappings": {
+    "t": "action:tabe",
+    "v": "action:vsplit",
+    "x": "action:split"
   }
 }
