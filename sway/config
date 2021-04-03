@@ -50,10 +50,14 @@ font pango:DejaVu Sans Mono 9
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
 # Home row direction keys, like vim
+# set $left h
+# set $down j
+# set $up k
+# set $right l
 set $left h
-set $down j
-set $up k
-set $right l
+set $down n
+set $up e
+set $right i
 
 # Your preferred terminal emulator
 set $term alacritty
@@ -65,7 +69,7 @@ set $menu wofi --show "drun,dmenu" | xargs swaymsg exec --
 
 # screenlock
 set $lock swaylock --daemonize --clock --datestr "%b %d %Y"\
-        -i ~/Pictures/Wallpapers/sunset-2560x1600-tree-breeze-artwork-hd-17296.jpg
+        -i ~/Pictures/Wallpapers/neon_shallows.png
 
 # ibus switch command
 set $switch_ibus_engine "~/.local/bin/switch_ibus_engine.sh"
@@ -83,15 +87,16 @@ input "1267:12384:ELAN0501:01_04F3:3060_Touchpad" {
     middle_emulation enabled
 }
 input "type:keyboard" {
-    xkb_layout fr
-    xkb_variant us
+    xkb_layout us,fr
+    xkb_variant colemak,us
+    xkb_options grp:rctrl_rshift_toggle
 }
 
 ### OUTPUT CONFIGURATION
 #
 # monitors
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg ~/Pictures/Wallpapers/cloudy_sky_purple.png fill
+output * bg ~/Pictures/Wallpapers/purple_mountains.jpg fill
 
 ### Idle configuration
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -139,28 +144,16 @@ bindsym $mod+q kill
 bindsym $mod+d exec $menu
 
 # change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+$left  focus left
+bindsym $mod+$down  focus down
+bindsym $mod+$up    focus up
+bindsym $mod+$right focus right
 
 # move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
-
-# alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+$left  move left
+bindsym $mod+Shift+$down  move down
+bindsym $mod+Shift+$up    move up
+bindsym $mod+Shift+$right move right
 
 # split in horizontal orientation
 bindsym $mod+v split h
@@ -169,12 +162,12 @@ bindsym $mod+v split h
 bindsym $mod+x split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $mod+j fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+f layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -254,7 +247,7 @@ assign [class="Ferdi"] 10
 # reload the configuration file
 bindsym $mod+Shift+c reload
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+#bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -264,10 +257,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym j resize grow height 10 px or 10 ppt
-        bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
+        bindsym $left  resize shrink width 10 px or 10 ppt
+        bindsym $down  resize grow height 10 px or 10 ppt
+        bindsym $up    resize shrink height 10 px or 10 ppt
+        bindsym $right resize grow width 10 px or 10 ppt
 
         # same bindings, but for the arrow keys
         bindsym Left resize shrink width 10 px or 10 ppt
@@ -292,13 +285,15 @@ gaps inner 10
 # class                 border  backgr. text    indicator
 client.focused          #4c7899 #C50ED2 #ffffff #FF8C00 
 
-bindsym $mod+n exec "~/miniconda3/bin/flash_window"
+bindsym $mod+k exec "~/miniconda3/bin/flash_window"
 
 default_border none
 
+# kill mpris player scripts
+exec_always "killall zscroll; killall player-mpris-ta"
 bar {
     swaybar_command waybar
-} 
+}
 
 # need this to use flashfocus as systemd service
-exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"

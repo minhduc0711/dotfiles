@@ -15,4 +15,5 @@
     /etc/polkit-1/rules.d/50-udiskie.rules: polkit/50-udiskie.rules
     /etc/polkit-1/rules.d/50-org.freedesktop.NetworkManager.rules: polkit/50-org.freedesktop.NetworkManager.rules
     /etc/wireguard/wgcf-profile.conf: wgcf-profile.conf
+    /etc/vconsole.conf: keyboard/vconsole.conf
     /usr/lib/systemd/user/flashfocus.service: flashfocus/flashfocus.service
