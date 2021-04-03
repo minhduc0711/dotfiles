@@ -29,6 +29,8 @@
     ~/.tmux.conf: tmux/.tmux.conf
     ~/.tmux.conf.local: tmux/.tmux.conf.local
     ~/.pam_environment: pam_environment
+    ~/.gitconfig: git/gitconfig
+    ~/.gitignore_global: git/gitignore_global
     ~/.config/kitty: kitty
     ~/.config/i3: i3
     ~/.config/dunst: dunst

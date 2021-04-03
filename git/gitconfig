@@ -1,0 +1,9 @@
+[user]
+	email = phamminhduc0711@gmail.com
+	name = minhduc0711
+[pull]
+	rebase = false
+[core]
+	excludesfile = /home/minhduc0711/.gitignore_global
+[alias]
+	graph = log --all --graph --oneline
