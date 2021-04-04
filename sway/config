@@ -262,20 +262,15 @@ mode "resize" {
         bindsym $up    resize shrink height 10 px or 10 ppt
         bindsym $right resize grow width 10 px or 10 ppt
 
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
-
         # back to normal: Enter or Escape or $mod+r
         bindsym Return mode "default"
         bindsym Escape mode "default"
         bindsym $mod+r mode "default"
 }
-
 bindsym $mod+r mode "resize"
+
 bindsym $mod+space exec $switch_ibus_engine 
+bindsym $mod+k exec "~/miniconda3/bin/flash_window"
 
 # Gaps
 for_window [class=".*"] border pixel 0
@@ -284,13 +279,8 @@ gaps inner 10
 # border colors
 # class                 border  backgr. text    indicator
 client.focused          #4c7899 #C50ED2 #ffffff #FF8C00 
-
-bindsym $mod+k exec "~/miniconda3/bin/flash_window"
-
 default_border none
 
-# kill mpris player scripts
-exec_always "killall zscroll; killall player-mpris-ta"
 bar {
     swaybar_command waybar
 }
