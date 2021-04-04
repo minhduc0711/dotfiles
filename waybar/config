@@ -13,11 +13,10 @@
         "clock",
     ],
     "modules-right": [
-        "custom/mpris",
+        "custom/mpris_metadata",
         "custom/mpris_prev",
         "custom/mpris_play_pause",
         "custom/mpris_next",
-
         "pulseaudio",
         "battery",
         "idle_inhibitor",
@@ -74,7 +73,6 @@
     },
     "battery": {
         "states": {
-            "good": 95,
             "warning": 30,
             "critical": 15
         },
@@ -114,27 +112,39 @@
         ],
         "interval": 3
     },
-    "custom/mpris": {
-        "format": " {}",
-        "exec": "$HOME/.local/bin/player-mpris-scroll-wrapper.sh",
+    "custom/mpris_metadata": {
+        "format": "{icon} {}",
+        "format-icons": "",
+        "max-length": 35,
+        "exec": "$HOME/miniconda3/bin/zscroll -d 0.5 -l 25 -u true 'playerctl metadata --format \"{{title}} - {{artist}}\"'",
         "tooltip": false
     },
     "custom/mpris_play_pause": {
-        "format": "{}",
-        "exec": "$HOME/.local/bin/player-mpris-tail.py --icon-playing  --icon-paused  --icon-stopped  -f '{icon-reversed}'",
-        "on-click": "$HOME/.local/bin/player-mpris-tail.py play-pause",
+        "format": "{icon}",
+        "format-icons": {
+            "Playing": "",
+            "Paused": "",
+        },
+        "return-type": "json",
+        "exec": "playerctl metadata --format '{\"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
+        "exec-if": "playerctl status",
+        "on-click": "playerctl play-pause",
         "tooltip": false
     },
     "custom/mpris_prev": {
-        "format": "{}",
-        "exec": "$HOME/.local/bin/player-mpris-tail.py -f ''",
-        "on-click": "$HOME/.local/bin/player-mpris-tail.py previous",
+        "format": "{icon}",
+        "format-icons": "",
+        "exec": "playerctl status -F",
+        "exec-if": "playerctl status",
+        "on-click": "playerctl previous",
         "tooltip": false
     },
     "custom/mpris_next": {
-        "format": "{}",
-        "exec": "$HOME/.local/bin/player-mpris-tail.py -f ''",
-        "on-click": "$HOME/.local/bin/player-mpris-tail.py next",
+        "format": "{icon}",
+        "format-icons": "",
+        "exec": "playerctl status -F",
+        "exec-if": "playerctl status",
+        "on-click": "playerctl next",
         "tooltip": false
     }
 }

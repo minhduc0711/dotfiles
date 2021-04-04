@@ -21,7 +21,7 @@ window#waybar {
 
 #workspaces,
 #tray,
-#custom-mpris,
+#custom-mpris_metadata,
 #custom-mpris_prev,
 #custom-mpris_play_pause,
 #custom-mpris_next {
@@ -50,7 +50,7 @@ window#waybar {
   margin-left: 3px;
 }
 
-#custom-mpris {
+#custom-mpris_metadata {
   margin-left: 3px;
   padding-left: 5px;
 }
@@ -118,7 +118,7 @@ window#waybar {
   color: #268bd2;
 }
 
-#custom-mpris,
+#custom-mpris_metadata,
 #custom-mpris_prev,
 #custom-mpris_play_pause,
 #custom-mpris_next {
