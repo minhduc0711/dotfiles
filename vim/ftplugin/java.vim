@@ -1,3 +1,5 @@
+let b:coc_enabled = 0
+
 nmap <buffer> <silent> gd :JavaSearch -x declarations<CR>
 nmap <buffer> <silent> gi :JavaSearch -x implementors<CR>
 nmap <buffer> <silent> gr :JavaSearch -x references<CR>
@@ -10,4 +12,3 @@ endif
 let g:neocomplcache_force_omni_patterns.java = '\k\.\k*'
 let g:EclimJavaSearchSingleResult = "tabnew"
 NeoComplCacheEnable
-" let g:neocomplcache_enable_at_startup = 1

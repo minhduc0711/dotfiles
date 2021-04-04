@@ -29,8 +29,8 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tpope/vim-commentary'
 
 " Syntax highlighting
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-markdown'
+" Plug 'sheerun/vim-polyglot'
+" Plug 'tpope/vim-markdown'
 Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'} " python
 
 " fzf fuzzy search
@@ -48,6 +48,12 @@ Plug 'Yggdroot/indentLine'
 
 " tmux + vim navigation
 Plug 'christoomey/vim-tmux-navigator'
+" colemak remap
+let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <M-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <M-n> :TmuxNavigateDown<cr>
+nnoremap <silent> <M-e> :TmuxNavigateUp<cr>
+nnoremap <silent> <M-i> :TmuxNavigateRight<cr>
 
 " auto expand pairs on <CR>
 Plug 'tpope/vim-endwise'
@@ -57,10 +63,28 @@ Plug 'minhduc0711/vim-closer'
 Plug 'tpope/vim-surround'
 
 " jumping around with two characters
-Plug 'justinmk/vim-sneak'
+" Plug 'justinmk/vim-sneak'
 
 " live REPL in Vim
 Plug 'jpalardy/vim-slime'
+
+" better search highlighting
+Plug 'romainl/vim-cool'
+
+" stuffs for eclim code completion
+" Plug 'ervandew/supertab'
+" let g:SuperTabDefaultCompletionType = 'context'
+Plug 'Shougo/neocomplcache.vim'
+
+" Open windows from quickfix list
+Plug 'yssl/QFEnter'
+let g:qfenter_keymap = {}
+let g:qfenter_keymap.vopen = ['<C-v>']
+let g:qfenter_keymap.hopen = ['<C-x>']
+let g:qfenter_keymap.topen = ['<C-t>']
+
+" java syntax highlighting
+Plug 'uiiaoo/java-syntax.vim'
 
 " Initialize plugin system
 call plug#end()            " required
@@ -80,10 +104,17 @@ set list
 set listchars=tab:!·,trail:·
 set tabstop=4
 
-" default indent settings
-" set expandtab
-" set shiftwidth=4
-" set softtabstop=4
+" Indenting defaults (does not override vim-sleuth's indenting detection)
+" Defaults to 4 spaces for most filetypes
+if get(g:, '_has_set_default_indent_settings', 0) == 0
+  " Set the indenting level to 2 spaces for the following file types.
+  autocmd FileType typescript,javascript,jsx,tsx,css,html,ruby,elixir,kotlin,vim,plantuml
+        \ setlocal expandtab tabstop=2 shiftwidth=2
+  set expandtab
+  set tabstop=4
+  set shiftwidth=4
+  let g:_has_set_default_indent_settings = 1
+endif
 
 " disable text concealing in Markdown 
 set conceallevel=1
@@ -108,13 +139,22 @@ set pastetoggle=<F3>
 
 " Unbind some useless/annoying default key bindings.
 " 'Q' in normal mode enters Ex mode. You almost never want this.
-nmap Q <NOP> 
+nmap Q <NOP>
 
-" breaking bad habits (hjkl spam)
-" noremap h <NOP>
-" noremap l <NOP>
-" noremap j <NOP>
-" noremap k <NOP>
+" colemak hjkl remap
+nnoremap s <NOP>
+nnoremap sh h
+nnoremap sn j
+nnoremap se k
+nnoremap si l
+vnoremap sh h
+vnoremap sn j
+vnoremap se k
+vnoremap si l
+
+" switch between tabs
+nnoremap H gT
+nnoremap I gt
 
 " transparent background
 " fix for gruvbox from from https://github.com/morhetz/gruvbox/issues/108#issuecomment-215993544
@@ -191,7 +231,7 @@ endif
 
 " ====== coc.nvim config starts ======
 
-let g:coc_global_extensions = ['coc-pyright', 'coc-java', 'coc-tsserver', 'coc-json', 'coc-clangd']
+let g:coc_global_extensions = ['coc-pyright', 'coc-tsserver', 'coc-json', 'coc-clangd']
 " TextEdit might fail if hidden is not set.
 set hidden
 
@@ -257,6 +297,7 @@ let g:coc_disable_startup_warning = 1
 
 " Git Gutter
 let g:gitgutter_max_signs = 500 " surpress signs threshold to avoid slowing down UI
+let g:gitgutter_sign_priority = 1
 " No key mapping
 "let g:gitgutter_map_keys = 0
 " Colors

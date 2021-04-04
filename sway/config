@@ -280,6 +280,8 @@ gaps inner 10
 # class                 border  backgr. text    indicator
 client.focused          #4c7899 #C50ED2 #ffffff #FF8C00 
 default_border none
+titlebar_border_thickness 1
+titlebar_padding 5 1
 
 bar {
     swaybar_command waybar
