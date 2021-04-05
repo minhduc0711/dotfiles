@@ -10,5 +10,5 @@ if !exists('g:neocomplcache_force_omni_patterns')
   let g:neocomplcache_force_omni_patterns = {}
 endif
 let g:neocomplcache_force_omni_patterns.java = '\k\.\k*'
-let g:EclimJavaSearchSingleResult = "tabnew"
+let g:EclimJavaSearchSingleResult = "edit"
 NeoComplCacheEnable
