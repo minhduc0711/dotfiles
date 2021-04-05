@@ -116,7 +116,7 @@
         "format": "{icon} {}",
         "format-icons": "",
         "max-length": 35,
-        "exec": "$HOME/miniconda3/bin/zscroll -d 0.5 -l 25 -u true 'playerctl metadata --format \"{{title}} - {{artist}}\"'",
+        "exec": "$HOME/miniconda3/bin/zscroll -d 0.5 -l 25 -u true 'playerctl metadata --format \"{{title}} - {{artist}}\"' 2> /dev/null",
         "tooltip": false
     },
     "custom/mpris_play_pause": {
