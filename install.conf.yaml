@@ -57,6 +57,7 @@
     ~/.local/bin/: scripts/*
     ~/.config/systemd/user/kanshi.service: kanshi/kanshi.service
     ~/.config/gammastep/config.ini: gammastep
+    ~/.config/spicetify/: spicetify/*
 
 - create:
   - ~/.vim/swapfiles
