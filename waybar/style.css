@@ -4,7 +4,7 @@
 }
 
 window#waybar {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.8);
   color: #ffffff;
 }
 
@@ -16,7 +16,7 @@ window#waybar {
 #custom-right-arrow-light,
 #custom-left-arrow-light {
   color: rgba(0, 0, 0, 0.9);
-  background: #1a1a1a;
+  /* background: #1a1a1a; */
 }
 
 #workspaces,
@@ -25,7 +25,7 @@ window#waybar {
 #custom-mpris_prev,
 #custom-mpris_play_pause,
 #custom-mpris_next {
-  background: #1a1a1a;
+  /* background: #1a1a1a; */
 }
 
 #clock,
@@ -37,7 +37,7 @@ window#waybar {
 #network,
 #temperature,
 #idle_inhibitor {
-  background: #1a1a1a;
+  /* background: #1a1a1a; */
   margin: 0 3px;
   padding: 0 5px;
 }
