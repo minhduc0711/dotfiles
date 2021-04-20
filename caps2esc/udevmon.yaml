@@ -1,5 +1,5 @@
 - CMD: mux -c caps2esc
-- JOB: mux -i caps2esc | caps2esc | uinput -c /etc/interception/keyboard.yaml
+- JOB: mux -i caps2esc | caps2esc -m 1 | uinput -c /etc/interception/keyboard.yaml
 - JOB: intercept -g $DEVNODE | mux -o caps2esc
   DEVICE:
     EVENTS:
