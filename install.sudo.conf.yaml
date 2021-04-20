@@ -17,3 +17,4 @@
     /etc/wireguard/wgcf-profile.conf: wgcf-profile.conf
     /etc/vconsole.conf: keyboard/vconsole.conf
     /usr/lib/systemd/user/flashfocus.service: flashfocus/flashfocus.service
+    /etc/security/faillock.conf: faillock.conf
