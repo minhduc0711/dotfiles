@@ -1,0 +1,8 @@
+daemonize
+show-failed-attempts
+image=$HOME/Pictures/Wallpapers/lionhearted.jpg
+font=MesloLGS NF
+font-size=30
+indicator-radius=100
+clock
+datestr=%b %d %Y

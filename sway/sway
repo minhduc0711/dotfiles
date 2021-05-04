@@ -67,10 +67,6 @@ set $term alacritty
 # on the original workspace that the command was run on.
 set $menu wofi --show "drun,dmenu" | xargs swaymsg exec --
 
-# screenlock
-set $lock swaylock --daemonize --clock --datestr "%b %d %Y"\
-        -i ~/Pictures/Wallpapers/neon_shallows.png
-
 # ibus switch command
 set $switch_ibus_engine "~/.local/bin/switch_ibus_engine.sh"
 
@@ -96,12 +92,13 @@ input "type:keyboard" {
 #
 # monitors
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg ~/Pictures/Wallpapers/purple_mountains.jpg fill
+output * bg ~/Pictures/Wallpapers/dreams.png fill
 
 ### Idle configuration
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 120 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
+set $lock swaylock
 exec swayidle -w \
          timeout 300 '$lock' \
          timeout 420 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
@@ -269,11 +266,12 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-bindsym $mod+space exec $switch_ibus_engine 
+bindsym $mod+space exec $switch_ibus_engine
 bindsym $mod+k exec "~/miniconda3/bin/flash_window"
 
 # Gaps
 for_window [class=".*"] border pixel 0
+smart_gaps on
 gaps inner 10
 
 # border colors

@@ -46,8 +46,9 @@
     ~/.config/xfce4/terminal/terminalrc: xfce4-terminal
     ~/.config/colors.sh: colors.sh
     ~/.config/starship.toml: starship.toml
-    ~/.config/sway: sway
+    ~/.config/sway/config: sway/sway
     ~/.config/systemd/user/sway-session.target: sway/sway-session.target
+    ~/.config/swaylock/config: sway/swaylock
     ~/.config/waybar: waybar
     ~/.config/kanshi/config: kanshi/config
     ~/.config/alacritty/alacritty.yml: alacritty.yml
