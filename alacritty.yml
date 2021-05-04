@@ -99,3 +99,6 @@ url_launcher:
   program: /usr/bin/firefox
   args:
     - --new-tab
+
+selection:
+  save_to_clipboard: true
