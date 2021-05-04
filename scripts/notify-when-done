@@ -1,0 +1,6 @@
+#!/bin/sh
+cmd="$@"
+title="Task completed"
+$cmd
+message="Return: $?\nCommand: $cmd"
+notify-send "$title" "$message"
