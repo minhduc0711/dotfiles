@@ -18,3 +18,4 @@
     /etc/vconsole.conf: keyboard/vconsole.conf
     /usr/lib/systemd/user/flashfocus.service: flashfocus/flashfocus.service
     /etc/security/faillock.conf: faillock.conf
+    /etc/ly/config.ini: ly.ini
