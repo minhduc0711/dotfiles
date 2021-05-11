@@ -59,6 +59,7 @@
     ~/.config/systemd/user/kanshi.service: kanshi/kanshi.service
     ~/.config/gammastep/config.ini: gammastep
     ~/.config/spicetify/: spicetify/*
+    ~/.config/xdg-desktop-portal-wlr/config: xdg-desktop-portal-wlr
 
 - create:
   - ~/.vim/swapfiles
