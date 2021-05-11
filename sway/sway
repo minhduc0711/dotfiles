@@ -3,6 +3,9 @@
 # hot plug monitor support
 exec_always "killall kanshi; exec kanshi"
 
+# Fix flashfocus stop working after logging out of WM
+exec "killall flashfocus; flashfocus"
+
 # fix GTK apps slow startup
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec hash dbus-update-activation-environment 2>/dev/null && \
@@ -285,5 +288,4 @@ bar {
     swaybar_command waybar
 }
 
-# need this to use flashfocus as systemd service
-exec_always "systemctl --user import-environment; systemctl --user start sway-session.target"
+include @sysconfdir@/sway/config.d/*
