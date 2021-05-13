@@ -95,6 +95,9 @@ autocmd VimEnter *
   \|   PlugInstall --sync | q
   \| endif
 
+" Python executable's path for pynvim
+let g:python3_host_prog = "/sbin/python3"
+
 " show line numbers
 set number
 set relativenumber
@@ -116,7 +119,7 @@ if get(g:, '_has_set_default_indent_settings', 0) == 0
   let g:_has_set_default_indent_settings = 1
 endif
 
-" disable text concealing in Markdown 
+" disable text concealing in Markdown
 set conceallevel=1
 
 " This setting makes search case-insensitive when all characters in the string
@@ -127,6 +130,8 @@ set smartcase
 
 " Enable searching as you type, rather than waiting till you press enter.
 set incsearch
+" Similarly for replace
+set inccommand=nosplit
 
 " CUSTOM KEY MAPPINGS
 
@@ -313,7 +318,7 @@ set timeoutlen=1000 ttimeoutlen=5
 
 set encoding=utf-8
 
-" fzf (Rg): ignore file names when searching in files' content 
+" fzf (Rg): ignore file names when searching in files' content
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 " slime configs
