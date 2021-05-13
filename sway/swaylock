@@ -1,8 +1,8 @@
 daemonize
 show-failed-attempts
-image=$HOME/Pictures/Wallpapers/lionhearted.jpg
+image=$HOME/Pictures/Wallpapers/sad_samurai_doge.jpg
 font=MesloLGS NF
 font-size=30
-indicator-radius=100
+indicator-radius=110
 clock
 datestr=%b %d %Y
