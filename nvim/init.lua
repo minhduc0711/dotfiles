@@ -46,8 +46,15 @@ opt('o', 'smartcase', true)
 opt('o', 'incsearch', true)
 opt('o', 'inccommand', 'nosplit')
 
+-- Open new splits to the right and bottom
+opt('o', 'splitright', true)
+opt('o', 'splitbelow', true)
+
 -- Needed for fast refresh in GitGutter?
 opt('o', 'updatetime', 300)
+
+-- Python executable's path for pynvim
+vim.g.python3_host_prog = "/sbin/python3"
 
 -- Disable auto comment insertion
 cmd 'autocmd BufNewFile,BufRead,FileType,OptionSet * setlocal formatoptions-=cro'
@@ -70,6 +77,16 @@ map('n', 'Q', '<NOP>')
 map('n', 'H', 'gT')
 map('n', 'I', 'gt')
 
+-- LSP commands
+map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', {silent=true})
+map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', {silent=true})
+map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', {silent=true})
+map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', {silent=true})
+map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', {silent=true})
+map('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', {silent=true})
+-- map('n', '<C-n>', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', {silent=true})
+-- map('n', '<C-p>', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', {silent=true})
+
 ---------- PLUGINS AND THEIR CONFIGS
 -- Auto install paq-nvim
 install_path = vim.fn.stdpath("data") .. "/site/pack/paqs/opt/paq-nvim"
@@ -81,10 +98,26 @@ cmd 'packadd paq-nvim'               -- load the package manager
 local paq = require('paq-nvim').paq  -- a convenient alias
 paq {'savq/paq-nvim', opt = true}    -- paq-nvim manages itself
 
+-- Built-in LSP diagnostic
+vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    underline = true,
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+  }
+)
+-- Workaround for https://github.com/neovim/neovim/issues/12579
+cmd 'autocmd ColorScheme * call v:lua.vim.lsp.diagnostic._define_default_signs_and_highlights()'
+
 -- Syntax highlighting
 paq {'nvim-treesitter/nvim-treesitter'}
 local ts = require 'nvim-treesitter.configs'
-ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
+ts.setup {
+  ensure_installed = {'python', 'java', 'scala', 'lua', 'bash', 'comment'},
+  highlight = { enable = true },
+  indent = { enable = true }
+}
 
 -- Auto completion
 paq {'hrsh7th/nvim-compe'}
@@ -102,7 +135,6 @@ require'compe'.setup {
   max_kind_width = 100;
   max_menu_width = 100;
   documentation = true;
-
   source = {
     path = true;
     buffer = true;
@@ -113,7 +145,6 @@ require'compe'.setup {
     ultisnips = true;
   };
 }
-
 -- Navigate auto completion menu with <TAB>
 cmd [[inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"]]
 cmd [[inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"]]
@@ -143,28 +174,55 @@ setup_servers()
 -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
 require'lspinstall'.post_install_hook = function ()
   setup_servers() -- reload installed servers
-  vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
+  cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
 end
 
 -- Fuzzy finder
--- paq {'nvim-lua/popup.nvim'}
--- paq {'nvim-telescope/telescope.nvim'}
--- map('n', '<C-p>',[[<cmd>lua require('telescope.builtin').find_files()<CR>]], {silent = true})
--- map('n', '<C-f>',[[<cmd>lua require('telescope.builtin').live_grep()<CR>]], {silent = true})
 paq {'junegunn/fzf', run = fn['fzf#install']}
 paq {'junegunn/fzf.vim'}
+map('n', '<C-p>', ':Files<CR>', {silent = true})
+map('n', '<C-f>', ':Rg<CR>' , {silent = true})
+
+-- Display results from LSP client using fzf
 paq {'ojroques/nvim-lspfuzzy'}
 local lspfuzzy = require 'lspfuzzy'
 lspfuzzy.setup {}
-map('n', '<C-p>', ':Files<CR>', {silent = true})
-map('n', '<C-f>', ':Rg<CR>' , {silent = true})
 
 -- Code commenting
 paq {'tpope/vim-commentary'}
 
+-- Better search highlighting
+paq {'romainl/vim-cool'}
+
+-- Auto close pairs
+-- paq {'tpope/vim-endwise'}  -- DOES NOT WORK PROPERLY
+paq {'minhduc0711/vim-closer'}  -- INSERTS EXTRA INDENT IN PYTHON
+
+-- Manipulate surrounding pairs
+paq {'tpope/vim-surround'}
+
+-- TODO: this is unnecessary since there is treesitter?
+-- -- Auto detect indent
+-- paq {'tpope/vim-sleuth'}
+-- -- Indenting defaults (does not override vim-sleuth's indenting detection)
+-- -- Set the indenting level to 2 spaces for the following file types.
+-- if g._has_set_default_indent_settings == nil then
+--   cmd 'autocmd FileType typescript,javascript,jsx,tsx,css,html,ruby,elixir,kotlin,vim,plantuml setlocal expandtab tabstop=2 shiftwidth=2'
+--   -- Defaults to 4 spaces for most filetypes
+--   opt('b', 'expandtab', true)
+--   opt('b', 'tabstop', 4)
+--   opt('b', 'shiftwidth', 4)
+--   g._has_set_default_indent_settings = 1
+-- end
+
+-- Indent lines
+-- TODO: this is messing with the display of tabs and trailings
+-- paq {'lukas-reineke/indent-blankline.nvim', branch='lua'}
+-- vim.g.indentLine_char = '▏'
+
 -- tmux + vim navigation
 paq {'christoomey/vim-tmux-navigator'}
-vim.g.tmux_navigator_no_mappings = 1
+g.tmux_navigator_no_mappings = 1
 map('n', '<M-h>', ':TmuxNavigateLeft<cr>', {silent = true})
 map('n', '<M-n>', ':TmuxNavigateDown<cr>', {silent = true})
 map('n', '<M-e>', ':TmuxNavigateUp<cr>', {silent = true})
@@ -174,21 +232,20 @@ map('n', '<M-i>', ':TmuxNavigateRight<cr>', {silent = true})
 opt('o', 'termguicolors', true)
 opt('o', 'background', 'light')
 paq {'morhetz/gruvbox'}
-vim.g.gruvbox_contrast_light = 'hard'
-vim.g.gruvbox_italic = 1
-vim.g.gruvbox_underline = 1
+g.gruvbox_contrast_light = 'hard'
+g.gruvbox_italic = 1
+g.gruvbox_underline = 1
+g.gruvbox_sign_column = 'bg0'
+g.gruvbox_invert_selection = "off"
 cmd 'colorscheme gruvbox'
 
 -- Pretty status bar
 paq {'vim-airline/vim-airline'}
 paq {'vim-airline/vim-airline-themes'}
-vim.g.airline_powerline_fonts = 1
-vim.g.airline_theme = 'gruvbox'
+g.airline_powerline_fonts = 1
+g.airline_theme = 'gruvbox'
 
--- Display git signs
+-- Git commands
+paq {'tpope/vim-fugitive'}
+-- Display Git signs
 paq {'airblade/vim-gitgutter'}
-cmd 'highlight clear SignColumn'
-cmd 'highlight GitGutterAdd          guibg=NONE'
-cmd 'highlight GitGutterChange       guibg=NONE'
-cmd 'highlight GitGutterDelete       guibg=NONE'
-cmd 'highlight GitGutterChangeDelete guibg=NONE'
