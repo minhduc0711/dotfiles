@@ -35,6 +35,8 @@ opt('w', 'colorcolumn', '79')
 -- Make tabs and trailing spaces visible
 opt('w', 'list', true)
 opt('w', 'listchars', 'tab:!·,trail:·')
+-- Tab length
+opt('b', 'tabstop', 4)
 
 -- This setting makes search case-insensitive when all characters in the string
 -- being searched are lowercase. However, the search becomes case-sensitive if
@@ -54,7 +56,7 @@ opt('o', 'splitbelow', true)
 opt('o', 'updatetime', 300)
 
 -- Python executable's path for pynvim
-vim.g.python3_host_prog = "/sbin/python3"
+g.python3_host_prog = "/sbin/python3"
 
 -- Disable auto comment insertion
 cmd 'autocmd BufNewFile,BufRead,FileType,OptionSet * setlocal formatoptions-=cro'
@@ -249,3 +251,17 @@ g.airline_theme = 'gruvbox'
 paq {'tpope/vim-fugitive'}
 -- Display Git signs
 paq {'airblade/vim-gitgutter'}
+
+-- Eclim stuffs
+-- Easily install eclim in vim
+paq {'starcraftman/vim-eclim'}
+-- Eclim code completion
+paq {'Shougo/neocomplcache.vim'}
+-- Open buffers from quickfix lists
+paq {'yssl/QFEnter'}
+g.qfenter_keymap = {
+  open = {'<CR>', '<2-LeftMouse>'},
+  vopen = {'<C-v>'},
+  hopen = {'<C-x>'},
+  topen = {'<C-t>'}
+}
