@@ -55,6 +55,9 @@ opt('o', 'splitbelow', true)
 -- Needed for fast refresh in GitGutter?
 opt('o', 'updatetime', 300)
 
+-- Make command autocompletion similar to the shell
+opt('o', 'wildmode', 'longest:full,full')
+
 -- Python executable's path for pynvim
 g.python3_host_prog = "/sbin/python3"
 
@@ -64,8 +67,8 @@ cmd 'autocmd BufNewFile,BufRead,FileType,OptionSet * setlocal formatoptions-=cro
 -- Remember cursor position when opening a file next time
 cmd [[ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif ]]
 
--- Make command autocompletion similar to the shell
-opt('o', 'wildmode', 'longest:full,full')
+-- Highlight on yank
+cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
 
 ---------- KEY MAPPINGS
 -- Toggle paste mode
@@ -91,7 +94,7 @@ map('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', {silent=true})
 
 ---------- PLUGINS AND THEIR CONFIGS
 -- Auto install paq-nvim
-install_path = vim.fn.stdpath("data") .. "/site/pack/paqs/opt/paq-nvim"
+local install_path = vim.fn.stdpath("data") .. "/site/pack/paqs/opt/paq-nvim"
 if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   cmd("!git clone https://github.com/savq/paq-nvim.git " .. install_path)
 end
@@ -110,7 +113,22 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   }
 )
 -- Workaround for https://github.com/neovim/neovim/issues/12579
-cmd 'autocmd ColorScheme * call v:lua.vim.lsp.diagnostic._define_default_signs_and_highlights()'
+-- cmd 'autocmd ColorScheme * call v:lua.vim.lsp.diagnostic._define_default_signs_and_highlights()'
+-- Make LSP diagnostic colors consistent with color scheme
+cmd 'au ColorScheme * hi link LspDiagnosticsDefaultError CocDiagnosticsError'
+cmd 'au ColorScheme * hi link LspDiagnosticsDefaultWarning CocDiagnosticsWarning'
+cmd 'au ColorScheme * hi link LspDiagnosticsDefaultInformation CocDiagnosticsInfo'
+cmd 'au ColorScheme * hi link LspDiagnosticsDefaultHint CocDiagnosticsHint'
+-- For underlines as well
+cmd 'au ColorScheme * hi link LspDiagnosticsUnderlineError CocErrorHighlight'
+cmd 'au ColorScheme * hi link LspDiagnosticsUnderlineWarning CocWarningHighlight'
+cmd 'au ColorScheme * hi link LspDiagnosticsUnderlineInformation CocInfoHighlight'
+cmd 'au ColorScheme * hi link LspDiagnosticsUnderlineHint CocHintHighlight'
+-- Custom gutter signs
+cmd 'sign define LspDiagnosticsSignError text=? texthl=CocErrorSign numhl=CocErrorSign'
+cmd 'sign define LspDiagnosticsSignWarning text=! texthl=CocWarningSign numhl=CocWarningSign'
+cmd 'sign define LspDiagnosticsSignInformation text=> texthl=CocInfoSign numhl=CocInfoSign'
+cmd 'sign define LspDiagnosticsSignHint text=> texthl=CocHintSign numhl=CocHintSign'
 
 -- Syntax highlighting
 paq {'nvim-treesitter/nvim-treesitter'}
@@ -118,7 +136,7 @@ local ts = require 'nvim-treesitter.configs'
 ts.setup {
   ensure_installed = {'python', 'java', 'scala', 'lua', 'bash', 'comment'},
   highlight = { enable = true },
-  indent = { enable = true }
+  indent = { enable = false }  -- not working properly for now
 }
 
 -- Auto completion
@@ -145,6 +163,7 @@ require'compe'.setup {
     nvim_lua = true;
     vsnip = true;
     ultisnips = true;
+    omni = false;
   };
 }
 -- Navigate auto completion menu with <TAB>
@@ -153,6 +172,9 @@ cmd [[inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"]]
 
 -- LSP servers
 paq {'neovim/nvim-lspconfig'}
+-- Better LSP for Scala
+-- TODO: enable this when you start learning Scala again
+-- paq {'scalameta/nvim-metals'}
 
 -- Easily install LSPs
 paq {'kabouzeid/nvim-lspinstall'}
@@ -184,6 +206,8 @@ paq {'junegunn/fzf', run = fn['fzf#install']}
 paq {'junegunn/fzf.vim'}
 map('n', '<C-p>', ':Files<CR>', {silent = true})
 map('n', '<C-f>', ':Rg<CR>' , {silent = true})
+-- Make fzf (Rg) ignore file names when searching in files' content
+cmd [[command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)]]
 
 -- Display results from LSP client using fzf
 paq {'ojroques/nvim-lspfuzzy'}
@@ -198,24 +222,24 @@ paq {'romainl/vim-cool'}
 
 -- Auto close pairs
 -- paq {'tpope/vim-endwise'}  -- DOES NOT WORK PROPERLY
-paq {'minhduc0711/vim-closer'}  -- INSERTS EXTRA INDENT IN PYTHON
+paq {'minhduc0711/vim-closer'}
 
 -- Manipulate surrounding pairs
 paq {'tpope/vim-surround'}
 
--- TODO: this is unnecessary since there is treesitter?
--- -- Auto detect indent
--- paq {'tpope/vim-sleuth'}
--- -- Indenting defaults (does not override vim-sleuth's indenting detection)
--- -- Set the indenting level to 2 spaces for the following file types.
--- if g._has_set_default_indent_settings == nil then
---   cmd 'autocmd FileType typescript,javascript,jsx,tsx,css,html,ruby,elixir,kotlin,vim,plantuml setlocal expandtab tabstop=2 shiftwidth=2'
---   -- Defaults to 4 spaces for most filetypes
---   opt('b', 'expandtab', true)
---   opt('b', 'tabstop', 4)
---   opt('b', 'shiftwidth', 4)
---   g._has_set_default_indent_settings = 1
--- end
+-- TODO: maybe this is unnecessary since there is treesitter? EDIT: perhaps not
+-- Auto detect indent
+paq {'tpope/vim-sleuth'}
+-- Indenting defaults (does not override vim-sleuth's indenting detection)
+-- Set the indenting level to 2 spaces for the following file types.
+if g._has_set_default_indent_settings == nil then
+  cmd 'autocmd FileType typescript,javascript,jsx,tsx,css,html,ruby,elixir,kotlin,vim,plantuml setlocal expandtab tabstop=2 shiftwidth=2'
+  -- Defaults to 4 spaces for most filetypes
+  opt('b', 'expandtab', true)
+  opt('b', 'tabstop', 4)
+  opt('b', 'shiftwidth', 4)
+  g._has_set_default_indent_settings = 1
+end
 
 -- Indent lines
 -- TODO: this is messing with the display of tabs and trailings
@@ -238,7 +262,7 @@ g.gruvbox_contrast_light = 'hard'
 g.gruvbox_italic = 1
 g.gruvbox_underline = 1
 g.gruvbox_sign_column = 'bg0'
-g.gruvbox_invert_selection = "off"
+g.gruvbox_invert_selection = 0
 cmd 'colorscheme gruvbox'
 
 -- Pretty status bar
@@ -250,13 +274,34 @@ g.airline_theme = 'gruvbox'
 -- Git commands
 paq {'tpope/vim-fugitive'}
 -- Display Git signs
-paq {'airblade/vim-gitgutter'}
+paq {'nvim-lua/plenary.nvim'}
+paq {'lewis6991/gitsigns.nvim'}
+require('gitsigns').setup {
+  signs = {
+    add          = {hl = 'GitGutterAdd',          text = '+',  numhl='GitGutterAdd'},
+    change       = {hl = 'GitGutterChange',       text = '~',  numhl='GitGutterChange'},
+    delete       = {hl = 'GitGutterDelete',       text = '_',  numhl='GitGutterDelete'},
+    topdelete    = {hl = 'GitGutterDelete',       text = '‾',  numhl='GitGutterDelete'},
+    changedelete = {hl = 'GitGutterChangeDelete', text = '~_', numhl='GitGutterChangeDelete'},
+  },
+  numhl = true
+}
+
+-- Live REPL
+paq {'jpalardy/vim-slime'}
+g.slime_target = "tmux"
+g.slime_paste_file = vim.fn.tempname()
+g.slime_default_config = {
+  socket_name = "default",
+  target_pane = "{last}"
+}
 
 -- Eclim stuffs
 -- Easily install eclim in vim
 paq {'starcraftman/vim-eclim'}
--- Eclim code completion
-paq {'Shougo/neocomplcache.vim'}
+g.EclimCompletionMethod = 'omnifunc'
+g.EclimJavaSearchSingleResult = "edit"
+
 -- Open buffers from quickfix lists
 paq {'yssl/QFEnter'}
 g.qfenter_keymap = {
