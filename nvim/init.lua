@@ -103,7 +103,7 @@ cmd 'packadd paq-nvim'               -- load the package manager
 local paq = require('paq-nvim').paq  -- a convenient alias
 paq {'savq/paq-nvim', opt = true}    -- paq-nvim manages itself
 
--- Built-in LSP diagnostic
+-- Built-in LSP diagnostics
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
     underline = true,
@@ -112,20 +112,9 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
     update_in_insert = false,
   }
 )
--- Workaround for https://github.com/neovim/neovim/issues/12579
--- cmd 'autocmd ColorScheme * call v:lua.vim.lsp.diagnostic._define_default_signs_and_highlights()'
--- Make LSP diagnostic colors consistent with color scheme
-cmd 'au ColorScheme * hi link LspDiagnosticsDefaultError CocDiagnosticsError'
-cmd 'au ColorScheme * hi link LspDiagnosticsDefaultWarning CocDiagnosticsWarning'
-cmd 'au ColorScheme * hi link LspDiagnosticsDefaultInformation CocDiagnosticsInfo'
-cmd 'au ColorScheme * hi link LspDiagnosticsDefaultHint CocDiagnosticsHint'
--- For underlines as well
-cmd 'au ColorScheme * hi link LspDiagnosticsUnderlineError CocErrorHighlight'
-cmd 'au ColorScheme * hi link LspDiagnosticsUnderlineWarning CocWarningHighlight'
-cmd 'au ColorScheme * hi link LspDiagnosticsUnderlineInformation CocInfoHighlight'
-cmd 'au ColorScheme * hi link LspDiagnosticsUnderlineHint CocHintHighlight'
+
 -- Custom gutter signs
-cmd 'sign define LspDiagnosticsSignError text=? texthl=CocErrorSign numhl=CocErrorSign'
+cmd 'sign define LspDiagnosticsSignError text=x texthl=CocErrorSign numhl=CocErrorSign'
 cmd 'sign define LspDiagnosticsSignWarning text=! texthl=CocWarningSign numhl=CocWarningSign'
 cmd 'sign define LspDiagnosticsSignInformation text=> texthl=CocInfoSign numhl=CocInfoSign'
 cmd 'sign define LspDiagnosticsSignHint text=> texthl=CocHintSign numhl=CocHintSign'
@@ -267,6 +256,10 @@ g.gruvbox_sign_column = 'bg0'
 g.gruvbox_invert_selection = 0
 cmd 'colorscheme gruvbox'
 
+-- Create missing highlight groups for LSP diagnostics
+-- More details: https://github.com/neovim/neovim/issues/12579
+paq {'folke/lsp-colors.nvim'}
+
 -- Pretty status bar
 paq {'vim-airline/vim-airline'}
 paq {'vim-airline/vim-airline-themes'}
@@ -292,7 +285,7 @@ require('gitsigns').setup {
 -- Live REPL
 paq {'jpalardy/vim-slime'}
 g.slime_target = "tmux"
-g.slime_paste_file = vim.fn.tempname()
+g.slime_paste_file = fn.tempname()
 g.slime_default_config = {
   socket_name = "default",
   target_pane = "{last}"
