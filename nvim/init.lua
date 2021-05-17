@@ -172,6 +172,8 @@ cmd [[inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"]]
 
 -- LSP servers
 paq {'neovim/nvim-lspconfig'}
+-- Eclipse Java LSP
+paq {'mfussenegger/nvim-jdtls'}
 -- Better LSP for Scala
 -- TODO: enable this when you start learning Scala again
 -- paq {'scalameta/nvim-metals'}
@@ -295,12 +297,6 @@ g.slime_default_config = {
   socket_name = "default",
   target_pane = "{last}"
 }
-
--- Eclim stuffs
--- Easily install eclim in vim
-paq {'starcraftman/vim-eclim'}
-g.EclimCompletionMethod = 'omnifunc'
-g.EclimJavaSearchSingleResult = "edit"
 
 -- Open buffers from quickfix lists
 paq {'yssl/QFEnter'}
