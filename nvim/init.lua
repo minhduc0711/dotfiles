@@ -147,11 +147,11 @@ require'compe'.setup {
   source = {
     path = true;
     buffer = true;
-    calc = true;
+    calc = false;
     nvim_lsp = true;
     nvim_lua = true;
-    vsnip = true;
-    ultisnips = true;
+    vsnip = false;
+    ultisnips = false;
     omni = false;
   };
 }
@@ -237,35 +237,6 @@ end
 -- paq {'lukas-reineke/indent-blankline.nvim', branch='lua'}
 -- vim.g.indentLine_char = '▏'
 
--- tmux + vim navigation
-paq {'christoomey/vim-tmux-navigator'}
-g.tmux_navigator_no_mappings = 1
-map('n', '<M-h>', ':TmuxNavigateLeft<cr>', {silent = true})
-map('n', '<M-n>', ':TmuxNavigateDown<cr>', {silent = true})
-map('n', '<M-e>', ':TmuxNavigateUp<cr>', {silent = true})
-map('n', '<M-i>', ':TmuxNavigateRight<cr>', {silent = true})
-
--- Colorscheme
-opt('o', 'termguicolors', true)
-opt('o', 'background', 'light')
-paq {'morhetz/gruvbox'}
-g.gruvbox_contrast_light = 'hard'
-g.gruvbox_italic = 1
-g.gruvbox_underline = 1
-g.gruvbox_sign_column = 'bg0'
-g.gruvbox_invert_selection = 0
-cmd 'colorscheme gruvbox'
-
--- Create missing highlight groups for LSP diagnostics
--- More details: https://github.com/neovim/neovim/issues/12579
-paq {'folke/lsp-colors.nvim'}
-
--- Pretty status bar
-paq {'vim-airline/vim-airline'}
-paq {'vim-airline/vim-airline-themes'}
-g.airline_powerline_fonts = 1
-g.airline_theme = 'gruvbox'
-
 -- Git commands
 paq {'tpope/vim-fugitive'}
 -- Display Git signs
@@ -281,6 +252,14 @@ require('gitsigns').setup {
   },
   numhl = true
 }
+
+-- tmux + vim navigation
+paq {'christoomey/vim-tmux-navigator'}
+g.tmux_navigator_no_mappings = 1
+map('n', '<M-h>', ':TmuxNavigateLeft<cr>', {silent = true})
+map('n', '<M-n>', ':TmuxNavigateDown<cr>', {silent = true})
+map('n', '<M-e>', ':TmuxNavigateUp<cr>', {silent = true})
+map('n', '<M-i>', ':TmuxNavigateRight<cr>', {silent = true})
 
 -- Live REPL
 paq {'jpalardy/vim-slime'}
@@ -298,4 +277,50 @@ g.qfenter_keymap = {
   vopen = {'<C-v>'},
   hopen = {'<C-x>'},
   topen = {'<C-t>'}
+}
+
+-- Colorscheme
+opt('o', 'termguicolors', true)
+opt('o', 'background', 'light')
+paq {'morhetz/gruvbox'}
+g.gruvbox_contrast_light = 'hard'
+g.gruvbox_italic = 1
+g.gruvbox_underline = 1
+g.gruvbox_sign_column = 'bg0'
+g.gruvbox_invert_selection = 0
+vim.env.BAT_THEME='gruvbox-light' -- for fzf preview
+cmd 'colorscheme gruvbox'
+
+-- Create missing highlight groups for LSP diagnostics
+-- More details: https://github.com/neovim/neovim/issues/12579
+paq {'folke/lsp-colors.nvim'}
+
+-- Pretty statusline
+paq {'hoob3rt/lualine.nvim'}
+local lualine_sections = {
+  lualine_a = {'mode'},
+  lualine_b = {'branch', 'diff'},
+  lualine_c = {
+    'filename',
+    {'diagnostics',
+      sources = {'nvim_lsp'},
+      symbols = {error = 'E:', warn = 'W:', info = 'I:'}
+    }
+  },
+  lualine_x = {'encoding', 'fileformat', 'filetype'},
+  lualine_y = {'progress', 'location'},
+  lualine_z = {}
+}
+require'lualine'.setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = {'', ''},
+    section_separators = {'', ''},
+    disabled_filetypes = {}
+  },
+  sections = lualine_sections,
+  inactive_sections = vim.deepcopy(lualine_sections),
+  tabline = {},
+  extensions = {}
 }
