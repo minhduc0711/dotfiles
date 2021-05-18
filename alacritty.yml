@@ -87,8 +87,8 @@ colors: *gruvbox_light
 
 window:
   dimensions:
-    columns: 40
-    lines: 12
+    columns: 80
+    lines: 24
 
 scale_with_dpi: true
 
