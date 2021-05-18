@@ -307,14 +307,14 @@ local lualine_sections = {
       symbols = {error = 'E:', warn = 'W:', info = 'I:'}
     }
   },
-  lualine_x = {'encoding', 'fileformat', 'filetype'},
-  lualine_y = {'progress', 'location'},
-  lualine_z = {}
+  lualine_x = {'filetype'},
+  lualine_y = {'fileformat', 'encoding'},
+  lualine_z = {'progress', 'location'},
 }
 require'lualine'.setup {
   options = {
     icons_enabled = true,
-    theme = 'auto',
+    theme = 'gruvbox_light',
     component_separators = {'', ''},
     section_separators = {'', ''},
     disabled_filetypes = {}
