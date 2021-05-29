@@ -2,14 +2,7 @@
 local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
 local fn = vim.fn    -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g      -- a table to access global variables
-
--- Setting options
--- Simpler interface (WIP): https://github.com/neovim/neovim/pull/13479
-local scopes = {o = vim.o, b = vim.bo, w = vim.wo}
-local function opt(scope, key, value)
-  scopes[scope][key] = value
-  if scope ~= 'o' then scopes['o'][key] = value end
-end
+local opt = vim.opt
 
 -- Helper function for setting mappings
 local function map(mode, lhs, rhs, opts)
@@ -20,8 +13,11 @@ end
 
 ---------- KEY MAPPINGS ----------
 
+-- Merge 0 and ^
+map('n', '0', "getline('.')[0 : col('.') - 2] =~# '^\\s\\+$' ? '0' : '^'", {silent = true, expr = true})
+
 -- Toggle paste mode
-opt('o', 'pastetoggle', '<F3>')
+opt.pastetoggle = '<F3>'
 
 -- Unbind some useless/annoying default key bindings.
 -- 'Q' in normal mode enters Ex mode. You almost never want this.
@@ -48,41 +44,41 @@ map('n', '<C-l>', '<cmd>lua require"jdtls".code_action()<CR>', {silent=true})
 ---------- GENERAL OPTIONS ----------
 
 -- Enable mouse
-opt('o', 'mouse', 'a')
+opt.mouse = 'a'
 
 -- Show line numbers
-opt('w', 'number', true)
-opt('w', 'relativenumber', true)
+opt.number = true
+opt.relativenumber = true
 
 -- Highlight cursor line
-opt('w', 'cursorline', true)
+opt.cursorline = true
 
 -- Character limit indicator
-opt('w', 'colorcolumn', '79')
+opt.colorcolumn = '79'
 
 -- Make tabs and trailing spaces visible
-opt('w', 'list', true)
-opt('w', 'listchars', 'tab:!·,trail:·')
+opt.list = true
+opt.listchars = {tab = '!·', trail = '·'}
 
 -- This setting makes search case-insensitive when all characters in the string
 -- being searched are lowercase. However, the search becomes case-sensitive if
 -- it contains any capital letters. This makes searching more convenient.
-opt('o', 'ignorecase', true)
-opt('o', 'smartcase', true)
+opt.ignorecase = true
+opt.smartcase = true
 
 -- Enable searching and replacing as we type
-opt('o', 'incsearch', true)
-opt('o', 'inccommand', 'nosplit')
+opt.incsearch = true
+opt.inccommand = 'nosplit'
 
 -- Open new splits to the right and bottom
-opt('o', 'splitright', true)
-opt('o', 'splitbelow', true)
+opt.splitright = true
+opt.splitbelow = true
 
 -- Needed for fast refresh in GitGutter?
-opt('o', 'updatetime', 300)
+opt.updatetime = 300
 
 -- Make command autocompletion similar to the shell
-opt('o', 'wildmode', 'longest:full,full')
+opt.wildmode = 'longest:full,full'
 
 -- Disable auto comment insertion
 cmd 'autocmd BufNewFile,BufRead,FileType,OptionSet * setlocal formatoptions-=cro'
@@ -280,13 +276,21 @@ if g._has_set_default_indent_settings == nil then
   -- Set the indent level to 2 spaces for the following file types.
   cmd 'autocmd FileType lua,typescript,javascript,jsx,tsx,css,html,ruby,elixir,kotlin,vim,plantuml setlocal expandtab tabstop=2 shiftwidth=2'
   -- Defaults to 4 spaces for the rest
-  opt('b', 'expandtab', true)
-  opt('b', 'tabstop', 4)
-  opt('b', 'shiftwidth', 4)
+  opt.expandtab = true
+  opt.tabstop = 4
+  opt.shiftwidth = 4
   g._has_set_default_indent_settings = 1
 end
 
 -- Gitsigns
+local function format_status(status)
+  local added, changed, removed = status.added, status.changed, status.removed
+  local status_txt = {}
+  table.insert(status_txt, '+'..(added == nil and 0 or added))
+  table.insert(status_txt, '~'..(changed == nil and 0 or changed))
+  table.insert(status_txt, '-'..(removed == nil and 0 or removed))
+  return table.concat(status_txt, ' ')
+end
 require('gitsigns').setup {
   signs = {
     add          = {hl = 'GitGutterAdd',          text = '+',  numhl='GitGutterAdd'},
@@ -295,7 +299,8 @@ require('gitsigns').setup {
     topdelete    = {hl = 'GitGutterDelete',       text = '‾',  numhl='GitGutterDelete'},
     changedelete = {hl = 'GitGutterChangeDelete', text = '~_', numhl='GitGutterChangeDelete'},
   },
-  numhl = true
+  numhl = true,
+  status_formatter=format_status
 }
 
 -- tmux + vim navigation
@@ -322,8 +327,8 @@ g.qfenter_keymap = {
 }
 
 -- Colorscheme
-opt('o', 'termguicolors', true)
-opt('o', 'background', 'light')
+opt.termguicolors = true
+opt.background = 'light'
 g.gruvbox_contrast_light = 'hard'
 g.gruvbox_italic = 1
 g.gruvbox_underline = 1
@@ -335,12 +340,12 @@ cmd 'colorscheme gruvbox'
 -- Lualine
 local lualine_sections = {
   lualine_a = {'mode'},
-  lualine_b = {'branch', 'diff'},
+  lualine_b = {'branch', 'b:gitsigns_status'},
   lualine_c = {
     'filename',
     {'diagnostics',
       sources = {'nvim_lsp'},
-      symbols = {error = 'E:', warn = 'W:', info = 'I:'}
+      symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'}
     }
   },
   lualine_x = {'filetype'},
@@ -351,8 +356,8 @@ require'lualine'.setup {
   options = {
     icons_enabled = true,
     theme = 'gruvbox_light',
-    component_separators = {'', ''},
-    section_separators = {'', ''},
+    component_separators = '|',
+    section_separators = '',
     disabled_filetypes = {}
   },
   sections = lualine_sections,
