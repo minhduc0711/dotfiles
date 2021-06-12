@@ -10,7 +10,7 @@ endfunction
 function! IBusOn()
   let l:current_engine = system('ibus engine')
   " nếu engine được set trong normal mode thì
-  " lúc vào insert mode duùn luôn engine đó
+  " lúc vào insert mode dùng luôn engine đó
   if l:current_engine !~? 'xkb:us::eng'
     let g:ibus_prev_engine = l:current_engine
   endif
@@ -21,15 +21,10 @@ endfunction
 " TODO: there is probably a more correct way
 augroup IBusHandler
   " Khôi phục ibus engine khi tìm kiếm
-  autocmd CmdLineEnter [/?] silent call IBusOn()
-  autocmd CmdLineLeave [/?] silent call IBusOff()
-  autocmd CmdLineEnter \? silent call IBusOn()
-  autocmd CmdLineLeave \? silent call IBusOff()
+  autocmd CmdLineEnter <buffer> silent call IBusOn()
+  autocmd CmdLineLeave <buffer> silent call IBusOff()
   " Khôi phục ibus engine khi vào insert mode
-  autocmd InsertEnter * silent call IBusOn()
+  autocmd InsertEnter <buffer> silent call IBusOn()
   " Tắt ibus engine khi vào normal mode
-  autocmd InsertLeave * silent call IBusOff()
+  autocmd InsertLeave <buffer> silent call IBusOff()
 augroup END
-silent call IBusOff()
-
-nmap k <C-p>
