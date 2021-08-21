@@ -73,10 +73,6 @@ set $menu wofi --show "drun,dmenu" | xargs swaymsg exec --
 # ibus switch command
 set $switch_ibus_engine "~/.local/bin/switch_ibus_engine.sh"
 
-# screenshots
-set $screenshot_output grim -o $(swaymsg -t get_outputs | jq -r '.[] | select(.focused) | .name') 
-
-
 ### INPUT CONFIGURATION
 #
 input "1267:12384:ELAN0501:01_04F3:3060_Touchpad" {
@@ -127,11 +123,12 @@ bindsym XF86MonBrightnessUp exec light -A 10
 bindsym XF86MonBrightnessDown exec light -U 10
 
 # Screenshots
-bindsym --release Print exec               ~/.local/bin/grim.py
-bindsym --release Control+Print exec       ~/.local/bin/grim.py --clipboard
-bindsym --release Shift+Print exec         ~/.local/bin/grim.py --rect
-bindsym --release Control+Shift+Print exec ~/.local/bin/grim.py --rect --clipboard
-        
+set $screenshot_path ~/Pictures/screenshots/$(date -u +"%Y-%m-%d_%H-%M-%S").png
+bindsym --release Print               exec grimshot save output $screenshot_path
+bindsym --release Control+Print       exec grimshot copy output
+bindsym --release Shift+Print         exec grimshot save window $screenshot_path
+bindsym --release Control+Shift+Print exec grimshot copy window
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
