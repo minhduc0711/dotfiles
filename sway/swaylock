@@ -1,8 +1,10 @@
 daemonize
 show-failed-attempts
-image=$HOME/Pictures/Wallpapers/sad_samurai_doge.jpg
+image=$HOME/Pictures/Wallpapers/cozy_town.png
+effect-blur=5x3
+fade-in=0.1
 font=MesloLGS NF
-font-size=30
+font-size=40
 indicator-radius=110
 clock
 datestr=%b %d %Y

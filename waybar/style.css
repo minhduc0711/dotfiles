@@ -71,12 +71,17 @@ window#waybar {
 }
 
 #workspaces button {
+  min-width: 16px;
   padding: 0 2px;
   color: #fdf6e3;
 }
 
 #workspaces button.focused {
   color: #268bd2;
+}
+
+#workspaces button.urgent {
+  color: #cc241d;
 }
 
 #workspaces button:hover {
@@ -87,7 +92,7 @@ window#waybar {
 #workspaces button:hover {
   background: #1a1a1a;
   border: #1a1a1a;
-  padding: 0 3px;
+  padding: 0 2px;
 }
 
 #pulseaudio {
