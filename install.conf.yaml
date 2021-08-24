@@ -60,6 +60,7 @@
     ~/.config/gammastep/config.ini: gammastep
     ~/.config/spicetify/: spicetify/*
     ~/.config/xdg-desktop-portal-wlr/config: xdg-desktop-portal-wlr
+    ~/.config/systemd/user/noisetorch.service: noisetorch/noisetorch.service
 
 - create:
   - ~/.vim/swapfiles
