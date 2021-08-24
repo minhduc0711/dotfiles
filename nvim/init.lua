@@ -39,7 +39,7 @@ map('n', '<leader>l', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', {silent=t
 map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', {silent=true})
 map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', {silent=true})
 -- Java specific
-map('n', '<C-l>', '<cmd>lua require"jdtls".code_action()<CR>', {silent=true})
+map('n', '<leader>ca', '<cmd>lua require"jdtls".code_action()<CR>', {silent=true})
 
 ---------- GENERAL OPTIONS ----------
 
@@ -81,7 +81,7 @@ opt.updatetime = 300
 opt.wildmode = 'longest:full,full'
 
 -- Disable auto comment insertion
-cmd 'autocmd BufNewFile,BufRead,FileType,OptionSet * setlocal formatoptions-=cro'
+-- cmd 'autocmd BufNewFile,BufRead,FileType,OptionSet * setlocal formatoptions-=cro'
 
 -- Remember cursor position when opening a file next time
 cmd [[ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif ]]
@@ -92,9 +92,10 @@ cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
 ---------- PLUGINS ----------
 
 -- Auto install paq-nvim
-local install_path = vim.fn.stdpath("data") .. "/site/pack/paqs/opt/paq-nvim"
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  cmd("!git clone https://github.com/savq/paq-nvim.git " .. install_path)
+local fn = vim.fn
+local install_path = fn.stdpath('data') .. '/site/pack/paqs/start/paq-nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  fn.system({'git', 'clone', '--depth=1', 'https://github.com/savq/paq-nvim.git', install_path})
 end
 
 cmd 'packadd paq-nvim'               -- load the package manager
@@ -103,10 +104,15 @@ paq {'savq/paq-nvim', opt = true}    -- paq-nvim manages itself
 -- Fast & accurate syntax highlighting
 paq {'nvim-treesitter/nvim-treesitter'}
 paq {'nvim-treesitter/playground'}
+-- Freeze context
+-- paq {'romgrk/nvim-treesitter-context'}
 -- LSP servers
 paq {'neovim/nvim-lspconfig'}
 -- Eclipse Java LSP
 paq {'mfussenegger/nvim-jdtls'}
+-- Java w/ Eclipse
+paq {'starcraftman/vim-eclim'}
+
 -- Better LSP for Scala
 -- TODO: enable this when you start learning Scala again
 -- paq {'scalameta/nvim-metals'}
@@ -115,10 +121,12 @@ paq {'kabouzeid/nvim-lspinstall'}
 -- Auto completion
 paq {'hrsh7th/nvim-compe'}
 -- Fuzzy finder
-paq {'junegunn/fzf', run = fn['fzf#install']}
-paq {'junegunn/fzf.vim'}
--- Display results from LSP client using fzf
-paq {'ojroques/nvim-lspfuzzy'}
+-- paq {'junegunn/fzf', run = fn['fzf#install']}
+-- paq {'junegunn/fzf.vim'}
+-- paq {'ojroques/nvim-lspfuzzy'} -- Display results from LSP client using fzf
+paq {'nvim-lua/popup.nvim'}
+paq {'nvim-lua/plenary.nvim'}
+paq {'nvim-telescope/telescope.nvim'}
 -- Code commenting
 paq {'tpope/vim-commentary'}
 -- Remove highlighting right when searching is done
@@ -206,20 +214,21 @@ cmd 'sign define LspDiagnosticsSignHint text=H texthl=CocHintSign numhl=CocHintS
 
 -- Treesitter
 local ts = require 'nvim-treesitter.configs'
+-- NOTE: input lag with commment (https://github.com/nvim-treesitter/nvim-treesitter/issues/1267)
 ts.setup {
-  ensure_installed = {'python', 'java', 'scala', 'lua', 'bash', 'comment', 'latex'},
+  ensure_installed = {'python', 'java', 'scala', 'lua', 'bash', 'latex'},
   highlight = { enable = true },
   indent = { enable = false }  -- not working properly for Python
 }
 
 -- Autocompletion with nvim-compe
-vim.o.completeopt = "menuone,noselect"
+opt.completeopt = "menuone,noselect"
 require'compe'.setup {
   enabled = true;
   autocomplete = true;
   debug = false;
   min_length = 1;
-  preselect = 'enable';
+  preselect = 'disable';
   throttle_time = 80;
   source_timeout = 200;
   incomplete_delay = 400;
@@ -229,7 +238,7 @@ require'compe'.setup {
   documentation = true;
   source = {
     path = true;
-    buffer = true;
+    buffer = false;  -- slow on big files
     calc = false;
     nvim_lsp = true;
     nvim_lua = true;
@@ -241,6 +250,8 @@ require'compe'.setup {
 -- Navigate auto completion menu with <TAB>
 cmd [[inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"]]
 cmd [[inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"]]
+-- Confirm completion
+map('i', '<C-t>', 'compe#confirm("<C-t>")', {expr = true})
 
 -- LSPinstall
 require'lspinstall'.setup() -- important
@@ -262,14 +273,61 @@ require'lspinstall'.post_install_hook = function ()
   cmd("bufdo e") -- this triggers the FileType autocmd that starts the server
 end
 
--- fuzzy search with fzf
-map('n', '<C-p>', ':Files<CR>', {silent = true})
-map('n', '<C-f>', ':Rg<CR>' , {silent = true})
--- Make fzf (Rg) ignore file names when searching in files' content
-cmd [[command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)]]
--- Integrate fzf with LSP
-local lspfuzzy = require 'lspfuzzy'
-lspfuzzy.setup {}
+require'jdtls.setup'.add_commands()
+
+-- Telescope
+require('telescope').setup{
+  defaults = {
+    path_display = {
+      'shorten',
+      'absolute',
+    },
+  }
+}
+map('n', '<C-p>', ':Telescope find_files<CR>', {silent = true})
+map('n', '<C-f>', ':Telescope live_grep<CR>' , {silent = true})
+map('n', '<C-e>', ':Telescope lsp_document_diagnostics<CR>' , {silent = true})
+-- Use Telescope for Java code actions
+local finders = require'telescope.finders'
+local sorters = require'telescope.sorters'
+local actions = require'telescope.actions'
+local pickers = require'telescope.pickers'
+require('jdtls.ui').pick_one_async = function(items, prompt, label_fn, cb)
+  local opts = {}
+  pickers.new(opts, {
+    prompt_title = prompt,
+    finder    = finders.new_table {
+      results = items,
+      entry_maker = function(entry)
+        return {
+          value = entry,
+          display = label_fn(entry),
+          ordinal = label_fn(entry),
+        }
+      end,
+    },
+    sorter = sorters.get_generic_fuzzy_sorter(),
+    attach_mappings = function(prompt_bufnr)
+      actions.select_default:replace(function()
+        local selection = actions.get_selected_entry(prompt_bufnr)
+        actions.close(prompt_bufnr)
+
+        cb(selection.value)
+      end)
+
+      return true
+    end,
+  }):find()
+end
+
+-- -- fuzzy search with fzf
+-- map('n', '<C-p>', ':Files<CR>', {silent = true})
+-- map('n', '<C-f>', ':Rg<CR>' , {silent = true})
+-- -- Make fzf (Rg) ignore file names when searching in files' content
+-- cmd [[command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)]]
+-- -- Integrate fzf with LSP
+-- local lspfuzzy = require 'lspfuzzy'
+-- lspfuzzy.setup {}
 
 -- Indent defaults (does not override vim-sleuth's indent detection)
 if g._has_set_default_indent_settings == nil then

@@ -1,9 +1,26 @@
 lua << EOF
-  local root_markers = {'gradlew', '.git'}
+  local root_markers = {'.git', 'gradlew'}
   local root_dir = require('jdtls.setup').find_root(root_markers)
   local home = os.getenv('HOME')
   local workspace_folder = home .. "/.local/share/eclipse/" .. vim.fn.fnamemodify(root_dir, ":p:h:t")
-  require('jdtls').start_or_attach({
-    cmd = {'java-lsp', workspace_folder}
-  })
+  local config = {
+    cmd = {'java-lsp', workspace_folder},
+    settings = {
+      java = {
+        autobuild = {
+          enabled = false
+        }
+      }
+    }
+  }
+  require('jdtls').start_or_attach(config)
 EOF
+
+" Temp switch to Eclim for more stability
+" Enable completion
+" let g:EclimCompletionMethod = 'omnifunc'
+" " Mappings
+" nmap <buffer> <silent> gd :JavaSearch -x declarations<CR>
+" nmap <buffer> <silent> gi :JavaSearch -x implementors<CR>
+" nmap <buffer> <silent> gr :JavaSearch -x references<CR>
+" nmap <buffer> <silent> <C-l> :JavaImportOrganize<CR>
