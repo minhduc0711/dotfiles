@@ -91,79 +91,83 @@ cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
 
 ---------- PLUGINS ----------
 
--- Auto install paq-nvim
-local fn = vim.fn
-local install_path = fn.stdpath('data') .. '/site/pack/paqs/start/paq-nvim'
+-- Auto install packer.nvim
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
 if fn.empty(fn.glob(install_path)) > 0 then
-  fn.system({'git', 'clone', '--depth=1', 'https://github.com/savq/paq-nvim.git', install_path})
+  fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
+  cmd 'packadd packer.nvim'
 end
 
-cmd 'packadd paq-nvim'               -- load the package manager
-local paq = require('paq-nvim').paq  -- a convenient alias
-paq {'savq/paq-nvim', opt = true}    -- paq-nvim manages itself
--- Fast & accurate syntax highlighting
-paq {'nvim-treesitter/nvim-treesitter'}
-paq {'nvim-treesitter/playground'}
--- Freeze context
--- paq {'romgrk/nvim-treesitter-context'}
--- LSP servers
-paq {'neovim/nvim-lspconfig'}
--- Eclipse Java LSP
-paq {'mfussenegger/nvim-jdtls'}
--- Java w/ Eclipse
-paq {'starcraftman/vim-eclim'}
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use {'wbthomason/packer.nvim'}
+  -- Fast & accurate syntax highlighting
+  use {'nvim-treesitter/nvim-treesitter'}
+  use {'nvim-treesitter/playground'}
+  -- Freeze context
+  -- use {'romgrk/nvim-treesitter-context'}
+  -- LSP servers
+  use {'neovim/nvim-lspconfig'}
+  -- Eclipse Java LSP
+  use {'mfussenegger/nvim-jdtls'}
+  -- Java w/ Eclipse
+  use {'starcraftman/vim-eclim'}
 
--- Better LSP for Scala
--- TODO: enable this when you start learning Scala again
--- paq {'scalameta/nvim-metals'}
--- Easily install LSPs
-paq {'kabouzeid/nvim-lspinstall'}
--- Auto completion
-paq {'hrsh7th/nvim-compe'}
--- Fuzzy finder
--- paq {'junegunn/fzf', run = fn['fzf#install']}
--- paq {'junegunn/fzf.vim'}
--- paq {'ojroques/nvim-lspfuzzy'} -- Display results from LSP client using fzf
-paq {'nvim-lua/popup.nvim'}
-paq {'nvim-lua/plenary.nvim'}
-paq {'nvim-telescope/telescope.nvim'}
--- Code commenting
-paq {'tpope/vim-commentary'}
--- Remove highlighting right when searching is done
-paq {'romainl/vim-cool'}
--- Auto close pairs
--- paq {'tpope/vim-endwise'}  -- DOES NOT WORK PROPERLY
-paq {'minhduc0711/vim-closer'}
--- paq {'windwp/nvim-autopairs'}
--- Manipulate surrounding pairs
-paq {'tpope/vim-surround'}
--- Auto detect indent
--- TODO: maybe this is unnecessary since there is treesitter? EDIT: perhaps not
-paq {'tpope/vim-sleuth'}
--- Indent lines
--- TODO: this is messing with the display of tabs and trailings
--- paq {'lukas-reineke/indent-blankline.nvim', branch='lua'}
--- vim.g.indentLine_char = '▏'
--- Git commands
-paq {'tpope/vim-fugitive'}
--- Display Git signs
-paq {'nvim-lua/plenary.nvim'}
-paq {'lewis6991/gitsigns.nvim'}
--- tmux + vim navigation
-paq {'christoomey/vim-tmux-navigator'}
--- Live REPL
-paq {'jpalardy/vim-slime'}
--- Open buffers from quickfix lists
-paq {'yssl/QFEnter'}
--- Colorscheme
-paq {'morhetz/gruvbox'}
--- Create missing highlight groups for LSP diagnostics
--- More details: https://github.com/neovim/neovim/issues/12579
-paq {'folke/lsp-colors.nvim'}
--- Pretty statusline
-paq {'hoob3rt/lualine.nvim'}
-
-cmd 'PaqInstall'
+  -- Better LSP for Scala
+  -- TODO: enable this when you start learning Scala again
+  -- use {'scalameta/nvim-metals'}
+  -- Easily install LSPs
+  use {'kabouzeid/nvim-lspinstall'}
+  -- Auto completion
+  use {'hrsh7th/nvim-compe'}
+  -- Fuzzy finder
+  -- use {'junegunn/fzf', run = fn['fzf#install']}
+  -- use {'junegunn/fzf.vim'}
+  -- use {'ojroques/nvim-lspfuzzy'} -- Display results from LSP client using fzf
+  use {'nvim-lua/popup.nvim'}
+  use {'nvim-lua/plenary.nvim'}
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
+  -- Code commenting
+  use {'tpope/vim-commentary'}
+  -- Remove highlighting right when searching is done
+  use {'romainl/vim-cool'}
+  -- Auto close pairs
+  -- use {'tpope/vim-endwise'}  -- DOES NOT WORK PROPERLY
+  use {'minhduc0711/vim-closer'}
+  -- use {'windwp/nvim-autopairs'}
+  -- Manipulate surrounding pairs
+  use {'tpope/vim-surround'}
+  -- Auto detect indent
+  -- TODO: maybe this is unnecessary since there is treesitter? EDIT: perhaps not
+  use {'tpope/vim-sleuth'}
+  -- Indent lines
+  -- TODO: this is messing with the display of tabs and trailings
+  -- use {'lukas-reineke/indent-blankline.nvim', branch='lua'}
+  -- vim.g.indentLine_char = '▏'
+  -- Git commands
+  use {'tpope/vim-fugitive'}
+  -- Display Git signs
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
+  -- tmux + vim navigation
+  use {'christoomey/vim-tmux-navigator'}
+  -- Live REPL
+  use {'jpalardy/vim-slime'}
+  -- Open buffers from quickfix lists
+  use {'yssl/QFEnter'}
+  -- Colorscheme
+  use {'morhetz/gruvbox'}
+  -- Create missing highlight groups for LSP diagnostics
+  -- More details: https://github.com/neovim/neovim/issues/12579
+  use {'folke/lsp-colors.nvim'}
+  -- Pretty statusline
+  use {'hoob3rt/lualine.nvim'}
+end)
 
 ---------- MORE SPECIFIC CONFIGURATIONS ----------
 
