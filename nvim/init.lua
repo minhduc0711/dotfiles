@@ -98,7 +98,9 @@ if fn.empty(fn.glob(install_path)) > 0 then
   cmd 'packadd packer.nvim'
 end
 
-require('packer').startup(function(use)
+local packer = require('packer')
+packer.init { compile_path = fn.stdpath('data') .. '/plugin/packer_compiled.lua' }
+packer.startup(function(use)
   -- Packer can manage itself
   use {'wbthomason/packer.nvim'}
   -- Fast & accurate syntax highlighting
