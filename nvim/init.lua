@@ -282,10 +282,12 @@ require'jdtls.setup'.add_commands()
 -- Telescope
 require('telescope').setup{
   defaults = {
-    path_display = {
-      'shorten',
-      'absolute',
-    },
+    layout_strategy = "horizontal",
+    layout_config = {
+      width = 0.9,
+      height = 0.9
+    }
+    -- path_display = { "shorten" },
   }
 }
 map('n', '<C-p>', ':Telescope find_files<CR>', {silent = true})
