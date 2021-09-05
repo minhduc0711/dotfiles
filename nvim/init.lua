@@ -58,7 +58,7 @@ opt.colorcolumn = '79'
 
 -- Make tabs and trailing spaces visible
 opt.list = true
-opt.listchars = {tab = '!·', trail = '·'}
+opt.listchars = {tab='!·', trail='·', extends='>', precedes='<'}
 
 -- This setting makes search case-insensitive when all characters in the string
 -- being searched are lowercase. However, the search becomes case-sensitive if
@@ -147,8 +147,7 @@ packer.startup(function(use)
   use {'tpope/vim-sleuth'}
   -- Indent lines
   -- TODO: this is messing with the display of tabs and trailings
-  -- use {'lukas-reineke/indent-blankline.nvim', branch='lua'}
-  -- vim.g.indentLine_char = '▏'
+  use {'lukas-reineke/indent-blankline.nvim'}
   -- Git commands
   use {'tpope/vim-fugitive'}
   -- Display Git signs
@@ -437,3 +436,6 @@ require'lualine'.setup {
   tabline = {},
   extensions = {}
 }
+
+-- Indent lines
+vim.g.indentLine_char = '▏'
