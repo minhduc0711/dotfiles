@@ -22,22 +22,6 @@
         "idle_inhibitor",
         "tray"
     ],
-    "custom/left-arrow-dark": {
-        "format": "",
-        "tooltip": false
-    },
-    "custom/left-arrow-light": {
-        "format": "",
-        "tooltip": false
-    },
-    "custom/right-arrow-dark": {
-        "format": "",
-        "tooltip": false
-    },
-    "custom/right-arrow-light": {
-        "format": "",
-        "tooltip": false
-    },
     "sway/workspaces": {
         "disable-scroll": true,
         "format": "{name}"
