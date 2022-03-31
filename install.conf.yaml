@@ -11,7 +11,8 @@
 - clean: ['~']
 
 - link:
-    ~/.bashrc: bashrc
+    # don't want to override bashrc on other machines
+    # ~/.bashrc: bashrc
     ~/.zprezto: prezto
     ~/.zlogin: prezto/runcoms/zlogin
     ~/.zlogout: prezto/runcoms/zlogout
@@ -31,6 +32,7 @@
     ~/.pam_environment: pam_environment
     ~/.gitconfig: git/gitconfig
     ~/.gitignore_global: git/gitignore_global
+    ~/.config/foot/foot.ini: foot.ini
     ~/.config/kitty: kitty
     ~/.config/i3: i3
     ~/.config/dunst: dunst
@@ -51,6 +53,7 @@
     ~/.config/swaylock/config: sway/swaylock
     ~/.config/waybar: waybar
     ~/.config/kanshi/config: kanshi/config
+    ~/.config/way-displays/cfg.yaml: way-displays.yaml
     ~/.config/alacritty/alacritty.yml: alacritty.yml
     ~/.config/mako/config: mako
     ~/.config/wofi/config: wofi/config

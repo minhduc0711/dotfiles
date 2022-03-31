@@ -1,10 +1,9 @@
 daemonize
-show-failed-attempts
-image=$HOME/Pictures/Wallpapers/cozy_town.png
-effect-blur=5x3
-fade-in=0.1
-font=MesloLGS NF
-font-size=40
+font=JetBrains Mono NL
 indicator-radius=110
+image=$HOME/Pictures/Wallpapers/The_cat_at_play_Henriette_Ronner.jpg
+show-failed-attempts
 clock
 datestr=%b %d %Y
+effect-blur=5x3
+fade-in=0.1

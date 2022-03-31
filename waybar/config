@@ -1,6 +1,6 @@
 {
-    "layer": "top",
-    "height": 24,
+    "layer": "bottom",
+    "height": 30,
     "modules-left": [
         "sway/workspaces",
         "cpu",
@@ -27,7 +27,7 @@
         "format": "{name}"
     },
     "clock": {
-        "format": "{:%H:%M - %a, %b %-d}",
+        "format": "{:%H:%M - %a, %b %d}",
         "tooltip": false
     },
     "pulseaudio": {
@@ -49,7 +49,11 @@
     },
     "memory": {
         "interval": 5,
-        "format": " {used:0.1f} GB"
+        "format": " {used:0.1f} GB",
+        "states": {
+            "warning": 75,
+            "critical": 90
+        },
     },
     "cpu": {
         "interval": 5,
@@ -69,10 +73,14 @@
     "disk": {
         "interval": 5,
         "format": " {percentage_used:2}%",
-        "path": "/"
+        "path": "/",
+        "states": {
+            "warning": 80,
+            "critical": 95
+        }
     },
     "tray": {
-        "icon-size": 20
+        "icon-size": 25
     },
     "network": {
         "interface": "wlp3s0",
@@ -100,7 +108,7 @@
         "format": "{icon} {}",
         "format-icons": "",
         "max-length": 35,
-        "exec": "zscroll -d 0.5 -l 25 -u true 'playerctl metadata --format \"{{title}} - {{artist}}\"' 2> /dev/null",
+        "exec": "zscroll -d 0.5 -l 24 -u true 'playerctl metadata --format \"{{title}} - {{artist}}\"' 2> /dev/null",
         "escape": true,
         "tooltip": false
     },

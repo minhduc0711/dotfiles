@@ -1,6 +1,6 @@
 * {
-  font-size: 15.5px;
-  font-family: Iosevka, "Font Awesome 5 Free";
+  font-size: 19;
+  font-family:  "Sarasa Mono J", "Font Awesome 6 Free";
 }
 
 window#waybar {
@@ -36,15 +36,14 @@ window#waybar {
 
 #custom-mpris_prev {
   padding-left: 5px;
-  padding-right: 2px;
 }
 
 #custom-mpris_play_pause {
-  padding: 0 2px;
+  padding-left: 5px;
 }
 
 #custom-mpris_next {
-  padding-left: 2px;
+  padding-left: 5px;
   padding-right: 5px;
   margin-right: 3px;
 }
@@ -70,6 +69,14 @@ window#waybar {
 #memory {
   color: #2aa198;
 }
+#memory.warning {
+  color: #000000;
+  background: #fabd2f;
+}
+#memory.critical {
+  color: #ffffff;
+  background: #cc241d;
+}
 
 #cpu {
   color: #6c71c4;
@@ -78,9 +85,25 @@ window#waybar {
 #battery {
   color: #859900;
 }
+#battery.warning {
+  color: #000000;
+  background: #fabd2f;
+}
+#battery.critical {
+  color: #ffffff;
+  background: #cc241d;
+}
 
 #disk {
   color: #b16286;
+}
+#disk.warning {
+  color: #000000;
+  background: #fabd2f;
+}
+#disk.critical {
+  color: #ffffff;
+  background: #cc241d;
 }
 
 #temperature {

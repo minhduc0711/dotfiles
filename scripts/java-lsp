@@ -15,7 +15,7 @@ GRADLE_HOME=/usr/share/java/gradle/ /usr/lib/jvm/java-11-adoptopenjdk/bin/java \
   -Dlog.protocol=true \
   -Dlog.level=ALL \
   -Xms1g \
-  -Xmx2500M \
+  -Xmx2G \
   -jar $(echo "$JAR") \
   -configuration "/usr/share/java/jdtls/config_linux" \
   -data "${1:-$HOME/.local/share/eclipse/some-workspace}" \

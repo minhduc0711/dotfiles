@@ -10,8 +10,8 @@ After=pipewire.service
 Type=simple
 RemainAfterExit=yes
 ExecStartPre=sleep 10
-ExecStart=%h/.local/bin/noisetorch -i -s alsa_input.pci-0000_00_1f.3.analog-stereo -t 90
-ExecStop=%h/.local/bin/noisetorch -u
+ExecStart=/usr/bin/noisetorch -i -s alsa_input.pci-0000_00_1f.3.analog-stereo -t 90
+ExecStop=/usr/bin/noisetorch -u
 
 [Install]
 WantedBy=default.target

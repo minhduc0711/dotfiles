@@ -7,3 +7,5 @@
 	excludesfile = /home/minhduc0711/.gitignore_global
 [alias]
 	graph = log --all --graph --oneline
+[init]
+	defaultBranch = main

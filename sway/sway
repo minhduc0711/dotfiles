@@ -1,7 +1,7 @@
 ### STARTUP PROGRAMS
 #
 # hot plug monitor support
-# exec_always "killall kanshi; exec kanshi"
+exec way-displays > /tmp/way-displays.${XDG_VTNR}.${USER}.log 2>&1
 
 # Fix flashfocus stop working after logging out of WM
 exec "killall flashfocus; flashfocus"
@@ -19,7 +19,7 @@ exec nm-applet --indicator
 
 # nightlight
 # exec gammastep-indicator -t 5700:3500
-exec wlsunset -t 3500 -T 6500 -l 21 -L 105.8
+exec wlsunset -t 3500 -T 5900 -l 43.6415 -L 7.0092
 
 # notification daemon
 exec mako
@@ -27,27 +27,38 @@ exec mako
 # keyring (needed for skype and chromium logins)
 # exec /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 
+set $cursor_size 40
+# exec_always ~/.local/bin/import-gsettings.sh \
+#     gtk-theme:gtk-theme-name \
+#     icon-theme:gtk-icon-theme-name \
+#     cursor-theme:gtk-cursor-theme-name
 # gtk themes workaround for wayland
-exec_always ~/.local/bin/import-gsettings.sh \
-    gtk-theme:gtk-theme-name \
-    icon-theme:gtk-icon-theme-name \
-    cursor-theme:gtk-cursor-theme-name
+exec_always {
+    gsettings set $gnome-schema gtk-theme 'Yaru-Purple'
+    gsettings set $gnome-schema icon-theme 'Yaru-Purple'
+    gsettings set org.gnome.desktop.interface text-scaling-factor 1.4
+    gsettings set org.gnome.desktop.interface cursor-size $cursor_size
+}
+
+# Mouse
+seat seat0 xcursor_theme Adwaita $cursor_size
 
 # polkit (used for authentication)
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # automount usb devices
-exec udiskie
+# exec udiskie
+
+# Misc. apps
+exec qbittorrent
+# exec sudo torguard
+exec keepassxc
 
 ### FONTS
 #
-# Font for window titles. Will also be used by the bar unless a different font
-# is used in the bar {} block below.
-font pango:monospace 12
-
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-font pango:DejaVu Sans Mono 9
+font pango:DejaVu Sans Mono 11
 
 ### VARIABLES
 #
@@ -69,7 +80,13 @@ set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu wofi --show "drun,dmenu" | xargs swaymsg exec --
+set $bemenu_fg '#41c6c8'
+set $bemenu bemenu -i -H 30 --hf \\$bemenu_fg --tf \\$bemenu_fg --nf '#ffffff' \
+    --fn 'Sarasa Mono J 15' -m $(swaymsg -r -t get_outputs | jq -r '. [] | select (.focused == true) | .name')
+set $menu j4-dmenu-desktop --dmenu="$bemenu" \
+    --usage-log ~/.appmenu_history \
+    --no-generic --no-exec \
+    | xargs swaymsg exec --
 
 # ibus switch command
 set $switch_ibus_engine "~/.local/bin/switch_ibus_engine.sh"
@@ -90,12 +107,13 @@ input "type:keyboard" {
 
 ### OUTPUT CONFIGURATION
 #
+# NOTE: now managed by way-displays
 # monitors
-output eDP-1 enable mode 1920x1080 position 0,0 scale 1.4117647
-output "Dell Inc. DELL P2319H 3447NM2" mode 1920x1080 position 1360,0 scale 1
+# output eDP-1 enable mode 1920x1080 position 0,0 scale 1.4117647
+# output "Dell Inc. DELL P2319H 3447NM2" mode 1920x1080 position 1360,0 scale 1
 
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg ~/Pictures/Wallpapers/cozy_town.png fill
+output * bg ~/Pictures/Wallpapers/The_cat_at_play_Henriette_Ronner.jpg fill
 
 ### Idle configuration
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -185,16 +203,16 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
+set $ws1 1
+set $ws2 2
+set $ws3 3
+set $ws4 4
+set $ws5 5
+set $ws6 6
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
 
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
@@ -236,14 +254,19 @@ workspace $ws8 output HDMI-A-1 eDP-1
 workspace $ws9 output HDMI-A-1 eDP-1
 workspace $ws10 output HDMI-A-1 eDP-1
 
+# starting workspace
+workspace $ws6
+
 for_window [class="MATLAB R2020b - academic use"] floating enable
 for_window [title="Firefox — Sharing Indicator"] kill
 # assign some apps to preferred workspaces
 for_window [class="Spotify"] move window to workspace $ws9
-assign [class="Skype"] 10
-assign [class="Slack"] 10
-assign [class="discord"] 10
-assign [class="Ferdi"] 10
+assign [class="TorGuard"] $ws5
+assign [title="^Passwords\.kdbx.*$"] $ws5
+assign [class="Skype"] $ws10
+assign [class="Slack"] $ws10
+assign [class="discord"] $ws10
+assign [class="Ferdi"] $ws10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -252,26 +275,26 @@ bindsym $mod+Shift+c reload
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+    # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym $left  resize shrink width 10 px or 10 ppt
-        bindsym $down  resize grow height 10 px or 10 ppt
-        bindsym $up    resize shrink height 10 px or 10 ppt
-        bindsym $right resize grow width 10 px or 10 ppt
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym $left  resize shrink width 30 px or 30 ppt
+    bindsym $down  resize grow height 30 px or 30 ppt
+    bindsym $up    resize shrink height 30 px or 30 ppt
+    bindsym $right resize grow width 30 px or 30 ppt
 
-        # back to normal: Enter or Escape or $mod+r
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+    # back to normal: Enter or Escape or $mod+r
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
 }
 bindsym $mod+r mode "resize"
 
 bindsym $mod+space exec $switch_ibus_engine
-bindsym $mod+k exec "~/miniconda3/bin/flash_window"
+bindsym $mod+k exec flash_window
 
 # Gaps
 for_window [class=".*"] border pixel 0
@@ -280,9 +303,9 @@ gaps inner 10
 
 # border colors
 # class                 border  backgr. text    indicator
-client.focused          #4c7899 #C50ED2 #ffffff #FF8C00 
+client.focused          #4c7899 #924d8b #ffffff #ff8c00
 default_border none
-titlebar_border_thickness 1
+titlebar_border_thickness 0
 titlebar_padding 5 1
 
 bar {

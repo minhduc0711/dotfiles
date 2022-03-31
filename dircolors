@@ -32,6 +32,7 @@ TERM tmux*
 TERM vt100
 TERM xterm*
 TERM alacritty
+TERM foot*
 # Below are the color init strings for the basic file types. A color init
 # string consists of one or more of the following numeric codes:
 # Attribute codes:
