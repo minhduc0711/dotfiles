@@ -37,7 +37,6 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>l', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   -- Java specific
@@ -49,8 +48,8 @@ end
 map('n', '<C-p>', ':Files<CR>', {silent = true})
 map('n', '<C-f>', ':Rg<CR>' , {silent = true})
 -- map('n', '<C-p>', ':Telescope find_files<CR>', {silent = true})
--- map('n', '<C-f>', ':Telescope live_grep<CR>' , {silent = true})
-map('n', '<C-e>', ':Telescope lsp_document_diagnostics<CR>' , {silent = true})
+-- map('n', '<C-f>', ':Telescope grep_string search=<CR>' , {silent = true})
+vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 -- Seamless navigation between tmux & vim
 g.tmux_navigator_no_mappings = 1
@@ -76,7 +75,7 @@ opt.colorcolumn = '79'
 
 -- Make tabs and trailing spaces visible
 opt.list = true
-opt.listchars = {tab='!·', trail='·', extends='>', precedes='<'}
+opt.listchars = {tab='<->', trail='·', extends='>', precedes='<'}
 
 -- This setting makes search case-insensitive when all characters in the string
 -- being searched are lowercase. However, the search becomes case-sensitive if
@@ -107,6 +106,9 @@ cmd [[ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "no
 -- Highlight on yank
 cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
 
+-- Some custom aliases
+cmd [[ command ClearTrailing %s/\s\+$//e ]]
+
 ---------- PLUGINS ----------
 
 -- Auto install packer.nvim
@@ -121,22 +123,26 @@ packer.init { compile_path = fn.stdpath('data') .. '/plugin/packer_compiled.lua'
 packer.startup(function(use)
   -- Packer can manage itself
   use {'wbthomason/packer.nvim'}
+
   -- Fast & accurate syntax highlighting
   use {'nvim-treesitter/nvim-treesitter'}
   use {'nvim-treesitter/playground'}
-  -- Freeze context
-  -- use {'romgrk/nvim-treesitter-context'}
+  -- Better indent module than the built-in one in treesitter
+  use({ "yioneko/nvim-yati", tag = "*", requires = "nvim-treesitter/nvim-treesitter" })
+
   -- LSP servers
   use {'neovim/nvim-lspconfig'}
   -- Eclipse Java LSP
   use {'mfussenegger/nvim-jdtls'}
 
   -- Better LSP for Scala
-  -- TODO: enable this when you start learning Scala again
   use {
     'scalameta/nvim-metals',
     requires= {'nvim-lua/plenary.nvim'}
   }
+
+  -- Turn nvim into RStudio
+  use {'jalvesaq/Nvim-R', branch = 'stable'}
 
   -- Auto completion
   use {
@@ -148,7 +154,6 @@ packer.startup(function(use)
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-buffer",
-      -- "minhduc0711/cmp-eclim",
     }
   }
 
@@ -164,43 +169,54 @@ packer.startup(function(use)
 
   -- Code commenting
   use {'tpope/vim-commentary'}
+
   -- Remove highlighting right when searching is done
   use {'romainl/vim-cool'}
+
   -- Auto close pairs
-  -- use {'tpope/vim-endwise'}  -- DOES NOT WORK PROPERLY
   use {'minhduc0711/vim-closer'}
-  -- use {'windwp/nvim-autopairs'}
+
   -- Manipulate surrounding pairs
   use {'tpope/vim-surround'}
+
   -- Auto detect indent
-  -- TODO: maybe this is unnecessary since there is treesitter? EDIT: perhaps not
-  use {'tpope/vim-sleuth'}
+  use {'nmac427/guess-indent.nvim'}
+
   -- Indent lines
-  -- TODO: this is messing with the display of tabs and trailings
   use {'lukas-reineke/indent-blankline.nvim'}
+
   -- Git commands
   use {'tpope/vim-fugitive'}
+
   -- Display Git signs
   use {
     'lewis6991/gitsigns.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
+
   -- tmux + vim navigation
   use {'christoomey/vim-tmux-navigator'}
+
   -- Live REPL
   use {'jpalardy/vim-slime'}
+
   -- Open buffers from quickfix lists
   use {'yssl/QFEnter'}
+
   -- Colorscheme
-  use {'morhetz/gruvbox'}
-  -- Create missing highlight groups for LSP diagnostics
-  -- More details: https://github.com/neovim/neovim/issues/12579
-  use {'folke/lsp-colors.nvim'}
+  use {'minhduc0711/gruvbox'}
+
   -- Pretty statusline
   use {'nvim-lualine/lualine.nvim'}
 
   -- Display colors in CSS
   use {'ap/vim-css-color'}
+
+  -- Partial diff
+  use {'rickhowe/spotdiff.vim'}
+
+  -- Display CSV columns in different colors
+  use {'mechatroner/rainbow_csv'}
 end)
 
 ---------- MORE SPECIFIC CONFIGURATIONS ----------
@@ -218,11 +234,10 @@ cmd 'au BufRead,BufNewFile *.gaml setlocal filetype=gaml'
 local lspconfig = require 'lspconfig'
 
 -- nvim-cmp supports additional completion capabilities
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Enable the following language servers
-local servers = { 'clangd', 'pyright', 'texlab' }
+local servers = { 'clangd', 'pyright', 'texlab', 'r_language_server' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
@@ -235,6 +250,9 @@ lspconfig.sumneko_lua.setup {
   capabilities = capabilities,
   settings = {
     Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
       diagnostics = {
         globals = { 'vim' }
       }
@@ -246,15 +264,21 @@ lspconfig.sumneko_lua.setup {
 -- require'jdtls.setup'.add_commands()
 
 -- Enable metals for Scala files
-cmd [[augroup lsp]]
-cmd [[au!]]
-cmd [[au FileType scala,sbt lua require("metals").initialize_or_attach(Metals_config)]]
-cmd [[augroup end]]
-
-Metals_config = require("metals").bare_config()
-Metals_config.init_options.statusBarProvider = "on"
-Metals_config.capabilities = capabilities
-Metals_config.on_attach = on_attach
+local metals_config = require("metals").bare_config()
+metals_config.init_options.statusBarProvider = "on"
+metals_config.capabilities = capabilities
+metals_config.on_attach = on_attach
+metals_config.settings = {
+  fallbackScalaVersion = '3.1.0'
+}
+local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "scala", "sbt" },
+  callback = function()
+    require("metals").initialize_or_attach(metals_config)
+  end,
+  group = nvim_metals_group,
+})
 
 -- Enable help messages for nvim-metals
 vim.opt_global.shortmess:remove("F")
@@ -269,19 +293,30 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   }
 )
 
--- Custom gutter signs
-cmd 'sign define DiagnosticSignError text=x texthl=CocErrorSign numhl=CocErrorSign'
-cmd 'sign define DiagnosticSignWarn text=! texthl=CocWarningSign numhl=CocWarningSign'
-cmd 'sign define DiagnosticSignInfo text=I texthl=CocInfoSign numhl=CocInfoSign'
-cmd 'sign define DiagnosticSignHint text=H texthl=CocHintSign numhl=CocHintSign'
-
 -- Treesitter
 local ts = require 'nvim-treesitter.configs'
 -- NOTE: input lag with commment (https://github.com/nvim-treesitter/nvim-treesitter/issues/1267)
 ts.setup {
   ensure_installed = {'python', 'java', 'scala', 'lua', 'bash', 'latex'},
   highlight = { enable = true },
-  indent = { enable = false }  -- not working properly for Python
+  indent = {
+    enable = true,
+    -- not working properly for Python https://github.com/nvim-treesitter/nvim-treesitter/issues/1136
+    disable = { "python" }
+  },
+  yati = {  -- workaround for Python
+    enable = true,
+    -- Disable by languages, see `Supported languages`
+    disable = { "lua", "c" },
+    -- Whether to enable lazy mode (recommend to enable this if bad indent happens frequently)
+    default_lazy = true,
+    -- Determine the fallback method used when we cannot calculate indent by tree-sitter
+    --   "auto": fallback to vim auto indent
+    --   "asis": use current indent as-is
+    --   "cindent": see `:h cindent()`
+    -- Or a custom function return the final indent result.
+    default_fallback = "auto"
+  },
 }
 
 -- Autocompletion with nvim-cmp
@@ -300,8 +335,6 @@ cmp.setup {
     { name = 'nvim_lsp'},
     { name = 'nvim_lua'},
     { name = 'path'},
-    { name = 'eclim', keyword_length = 3 },
-    -- { name = 'buffer'}
   },
   mapping = {
     ['<C-t>'] = cmp.mapping.confirm {
@@ -333,7 +366,6 @@ cmp.setup {
       nvim_lsp = "[LSP]",
       luasnip = "[LuaSnip]",
       nvim_lua = "[Lua]",
-      eclim = "[Eclim]",
     })}),
   },
   snippet = {
@@ -348,8 +380,8 @@ require('telescope').setup{
   defaults = {
     layout_strategy = "horizontal",
     layout_config = {
-      width = 0.9,
-      height = 0.9
+      width = 0.95,
+      height = 0.95
     },
     mappings = {
       i = {
@@ -412,16 +444,11 @@ cmd [[command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, f
 -- Make fzf (Rg) ignore file names when searching in files' content
 cmd [[command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]]
 
--- Indent defaults (does not override vim-sleuth's indent detection)
-if g._has_set_default_indent_settings == nil then
-  -- Set the indent level to 2 spaces for the following file types.
-  cmd 'autocmd FileType lua,typescript,javascript,jsx,tsx,css,html,ruby,elixir,kotlin,vim,plantuml,scheme setlocal expandtab tabstop=2 shiftwidth=2'
-  -- Defaults to 4 spaces for the rest
-  opt.expandtab = true
-  opt.tabstop = 4
-  opt.shiftwidth = 4
-  g._has_set_default_indent_settings = 1
-end
+-- Auto detect indent settings
+require('guess-indent').setup {}
+-- Defaults (does not override w/ guess-indent I think)
+opt.tabstop = 4
+opt.shiftwidth = 4
 
 -- Gitsigns
 local function format_status(status)
@@ -533,3 +560,8 @@ require'lualine'.setup {
 
 -- Indent lines
 vim.g.indentLine_char = '▏'
+
+-- nvim-R options
+vim.g.rout_follow_colorscheme = 1
+vim.g.R_assign = 0
+vim.g.R_auto_start = 2

@@ -36,10 +36,10 @@
 
 " Temp switch to Eclim for more stability
 " Mappings
-nmap <buffer> <silent> gd :JavaSearch -x declarations<CR>
-nmap <buffer> <silent> gi :JavaSearch -x implementors<CR>
-nmap <buffer> <silent> gr :JavaSearch -x references<CR>
-nmap <buffer> <silent> <C-l> :JavaImportOrganize<CR>
-nmap <buffer> <silent> <C-e> :lopen<CR>
+" nmap <buffer> <silent> gd :JavaSearch -x declarations<CR>
+" nmap <buffer> <silent> gi :JavaSearch -x implementors<CR>
+" nmap <buffer> <silent> gr :JavaSearch -x references<CR>
+" nmap <buffer> <silent> <C-l> :JavaImportOrganize<CR>
+" nmap <buffer> <silent> <C-e> :lopen<CR>
 
-let g:SuperTabDefaultCompletionType = 'context'
+" let g:SuperTabDefaultCompletionType = 'context'
