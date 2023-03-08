@@ -128,7 +128,11 @@ packer.startup(function(use)
   use {'nvim-treesitter/nvim-treesitter'}
   use {'nvim-treesitter/playground'}
   -- Better indent module than the built-in one in treesitter
-  use({ "yioneko/nvim-yati", tag = "*", requires = "nvim-treesitter/nvim-treesitter" })
+  -- use({ "yioneko/nvim-yati", tag = "*", requires = "nvim-treesitter/nvim-treesitter" })
+  use {'Vimjas/vim-python-pep8-indent'}
+
+  -- Debug with breakpoints
+  use 'mfussenegger/nvim-dap'
 
   -- LSP servers
   use {'neovim/nvim-lspconfig'}
@@ -175,12 +179,14 @@ packer.startup(function(use)
 
   -- Auto close pairs
   use {'minhduc0711/vim-closer'}
+  use {'windwp/nvim-ts-autotag'}
 
   -- Manipulate surrounding pairs
   use {'tpope/vim-surround'}
 
   -- Auto detect indent
   use {'nmac427/guess-indent.nvim'}
+  use {'Darazaki/indent-o-matic'}
 
   -- Indent lines
   use {'lukas-reineke/indent-blankline.nvim'}
@@ -217,6 +223,12 @@ packer.startup(function(use)
 
   -- Display CSV columns in different colors
   use {'mechatroner/rainbow_csv'}
+
+  -- Auto switch ibus input methods between vim's cmd and insert mode
+  use {'rlue/vim-barbaric'}
+
+  -- Fun
+  use {'eandrju/cellular-automaton.nvim'}
 end)
 
 ---------- MORE SPECIFIC CONFIGURATIONS ----------
@@ -263,6 +275,14 @@ lspconfig.sumneko_lua.setup {
 -- -- Custom vim commands for jdtls
 -- require'jdtls.setup'.add_commands()
 
+-- Always detect *.sc as Scala source files
+local filetype_detect_group = vim.api.nvim_create_augroup('filetypedetect', {clear = true})
+vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+  group = filetype_detect_group,
+  pattern = {"*.sc", "*.scala"},
+  command = [[setfiletype scala]]
+})
+ 
 -- Enable metals for Scala files
 local metals_config = require("metals").bare_config()
 metals_config.init_options.statusBarProvider = "on"
@@ -304,19 +324,26 @@ ts.setup {
     -- not working properly for Python https://github.com/nvim-treesitter/nvim-treesitter/issues/1136
     disable = { "python" }
   },
-  yati = {  -- workaround for Python
+  -- yati = {  -- workaround for Python
+  --   enable = true,
+  --   -- Disable by languages, see `Supported languages`
+  --   disable = { "lua", "c" },
+  --   -- Whether to enable lazy mode (recommend to enable this if bad indent happens frequently)
+  --   default_lazy = true,
+  --   -- Determine the fallback method used when we cannot calculate indent by tree-sitter
+  --   --   "auto": fallback to vim auto indent
+  --   --   "asis": use current indent as-is
+  --   --   "cindent": see `:h cindent()`
+  --   -- Or a custom function return the final indent result.
+  --   default_fallback = "auto"
+  -- },
+  autotag = {
     enable = true,
-    -- Disable by languages, see `Supported languages`
-    disable = { "lua", "c" },
-    -- Whether to enable lazy mode (recommend to enable this if bad indent happens frequently)
-    default_lazy = true,
-    -- Determine the fallback method used when we cannot calculate indent by tree-sitter
-    --   "auto": fallback to vim auto indent
-    --   "asis": use current indent as-is
-    --   "cindent": see `:h cindent()`
-    -- Or a custom function return the final indent result.
-    default_fallback = "auto"
-  },
+    filetypes = {
+      'html',
+      'markdown'
+    }
+  }
 }
 
 -- Autocompletion with nvim-cmp
@@ -445,10 +472,19 @@ cmd [[command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, f
 cmd [[command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]]
 
 -- Auto detect indent settings
-require('guess-indent').setup {}
+-- require('guess-indent').setup {}
 -- Defaults (does not override w/ guess-indent I think)
-opt.tabstop = 4
-opt.shiftwidth = 4
+-- opt.tabstop = 4
+-- opt.shiftwidth = 4
+
+require('indent-o-matic').setup {
+  -- Number of lines without indentation before giving up (use -1 for infinite)
+  max_lines = 2048,
+  -- Space indentations that should be detected
+  standard_widths = { 2, 4, 8 },
+  -- Skip multi-line comments and strings (more accurate detection but less performant)
+  skip_multiline = true,
+}
 
 -- Gitsigns
 local function format_status(status)
