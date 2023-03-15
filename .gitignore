@@ -1,3 +1,4 @@
 *.o
 bookmarks
 accels.scm
+/nvim/plugin/packer_compiled.lua

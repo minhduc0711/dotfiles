@@ -11,115 +11,20 @@ local function map(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
----------- KEY MAPPINGS ----------
-
--- Merge 0 and ^
-map('n', '0', "getline('.')[0 : col('.') - 2] =~# '^\\s\\+$' ? '0' : '^'", {silent = true, expr = true})
-
--- Toggle paste mode
-opt.pastetoggle = '<F3>'
-
--- Unbind some useless/annoying default key bindings.
--- 'Q' in normal mode enters Ex mode. You almost never want this.
-map('n', 'Q', '<NOP>')
-
--- Navigate between tabs
-map('n', 'H', 'gT')
-map('n', 'I', 'gt')
-
--- LSP
-local on_attach = function(_, bufnr)
-  local opts = { noremap = true, silent = true }
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua require"telescope.builtin".lsp_definitions{}<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua require"telescope.builtin".lsp_references{}<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  -- Java specific
-  -- map('n', '<leader>ca', '<cmd>lua require"jdtls".code_action()<CR>', {silent=true})
-end
-
--- Searching
--- fzf is still better for fuzzy search
-map('n', '<C-p>', ':Files<CR>', {silent = true})
-map('n', '<C-f>', ':Rg<CR>' , {silent = true})
--- map('n', '<C-p>', ':Telescope find_files<CR>', {silent = true})
--- map('n', '<C-f>', ':Telescope grep_string search=<CR>' , {silent = true})
-vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-
--- Seamless navigation between tmux & vim
-g.tmux_navigator_no_mappings = 1
-map('n', '<M-h>', ':TmuxNavigateLeft<cr>', {silent = true})
-map('n', '<M-n>', ':TmuxNavigateDown<cr>', {silent = true})
-map('n', '<M-e>', ':TmuxNavigateUp<cr>', {silent = true})
-map('n', '<M-i>', ':TmuxNavigateRight<cr>', {silent = true})
-
----------- GENERAL OPTIONS ----------
-
--- Enable mouse
-opt.mouse = 'a'
-
--- Show line numbers
-opt.number = true
-opt.relativenumber = true
-
--- Highlight cursor line
-opt.cursorline = true
-
--- Character limit indicator
-opt.colorcolumn = '79'
-
--- Make tabs and trailing spaces visible
-opt.list = true
-opt.listchars = {tab='<->', trail='·', extends='>', precedes='<'}
-
--- This setting makes search case-insensitive when all characters in the string
--- being searched are lowercase. However, the search becomes case-sensitive if
--- it contains any capital letters. This makes searching more convenient.
-opt.ignorecase = true
-opt.smartcase = true
-
--- Enable searching and replacing as we type
-opt.incsearch = true
-opt.inccommand = 'nosplit'
-
--- Open new splits to the right and bottom
-opt.splitright = true
-opt.splitbelow = true
-
--- Needed for fast refresh in GitGutter?
-opt.updatetime = 300
-
--- Make command autocompletion similar to the shell
-opt.wildmode = 'longest:full,full'
-
--- Disable auto comment insertion
--- cmd 'autocmd BufNewFile,BufRead,FileType,OptionSet * setlocal formatoptions-=cro'
-
--- Remember cursor position when opening a file next time
-cmd [[ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif ]]
-
--- Highlight on yank
-cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
-
--- Some custom aliases
-cmd [[ command ClearTrailing %s/\s\+$//e ]]
-
 ---------- PLUGINS ----------
-
 -- Auto install packer.nvim
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  fn.system({'git', 'clone', 'https://github.com/wbthomason/packer.nvim', install_path})
-  cmd 'packadd packer.nvim'
+local ensure_packer = function()
+  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    cmd [[packadd packer.nvim]]
+    return true
+  end
+  return false
 end
-
+local packer_bootstrap = ensure_packer()
 local packer = require('packer')
-packer.init { compile_path = fn.stdpath('data') .. '/plugin/packer_compiled.lua' }
+-- packer.init { compile_path = fn.stdpath('data') .. '/plugin/packer_compiled.lua' }
 packer.startup(function(use)
   -- Packer can manage itself
   use {'wbthomason/packer.nvim'}
@@ -184,6 +89,16 @@ packer.startup(function(use)
   -- Manipulate surrounding pairs
   use {'tpope/vim-surround'}
 
+  -- Extend % key to work w/ words
+  use {
+    'andymass/vim-matchup',
+    setup = function()
+      -- may set any options here
+      vim.g.matchup_matchparen_offscreen = { method = "popup" }
+      vim.g.matchup_delim_noskips = 2
+    end
+  }
+
   -- Auto detect indent
   use {'nmac427/guess-indent.nvim'}
   use {'Darazaki/indent-o-matic'}
@@ -229,7 +144,126 @@ packer.startup(function(use)
 
   -- Fun
   use {'eandrju/cellular-automaton.nvim'}
+
+  -- Show context breadcrumbs on winbar
+  use({
+    "utilyre/barbecue.nvim",
+    tag = "*",
+    requires = {
+      "SmiteshP/nvim-navic",
+      "nvim-tree/nvim-web-devicons", -- optional dependency
+    },
+    config = function()
+      require("barbecue").setup()
+    end,
+  })
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require('packer').sync()
+  end
 end)
+
+---------- KEY MAPPINGS ----------
+
+-- Merge 0 and ^
+map('n', '0', "getline('.')[0 : col('.') - 2] =~# '^\\s\\+$' ? '0' : '^'", {silent = true, expr = true})
+
+-- Toggle paste mode
+opt.pastetoggle = '<F3>'
+
+-- Unbind some useless/annoying default key bindings.
+-- 'Q' in normal mode enters Ex mode. You almost never want this.
+map('n', 'Q', '<NOP>')
+
+-- Navigate between tabs
+map('n', 'H', 'gT')
+map('n', 'I', 'gt')
+
+-- LSP
+local ts_builtin = require('telescope.builtin')
+local on_attach = function(_, bufnr)
+  local opts = { noremap = true, silent = true }
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua require"telescope.builtin".lsp_definitions{}<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua require"telescope.builtin".lsp_references{}<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  -- Java specific
+  -- map('n', '<leader>ca', '<cmd>lua require"jdtls".code_action()<CR>', {silent=true})
+end
+
+-- Searching
+-- fzf is still better for fuzzy search
+map('n', '<C-p>', ':Files<CR>', {silent = true})
+map('n', '<C-f>', ':Rg<CR>' , {silent = true})
+vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {silent = true})
+-- map('n', '<C-p>', ':Telescope find_files<CR>', {silent = true})
+-- map('n', '<C-f>', ':Telescope grep_string search=<CR>' , {silent = true})
+vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+
+-- Seamless navigation between tmux & vim
+g.tmux_navigator_no_mappings = 1
+map('n', '<M-h>', ':TmuxNavigateLeft<cr>', {silent = true})
+map('n', '<M-n>', ':TmuxNavigateDown<cr>', {silent = true})
+map('n', '<M-e>', ':TmuxNavigateUp<cr>', {silent = true})
+map('n', '<M-i>', ':TmuxNavigateRight<cr>', {silent = true})
+
+---------- GENERAL OPTIONS ----------
+
+-- Enable mouse
+opt.mouse = 'a'
+
+-- Show line numbers
+opt.number = true
+opt.relativenumber = true
+
+-- Highlight cursor line
+opt.cursorline = true
+
+-- Character limit indicator
+opt.colorcolumn = '79'
+
+-- Make tabs and trailing spaces visible
+opt.list = true
+opt.listchars = {tab='<->', trail='·', extends='>', precedes='<'}
+
+-- This setting makes search case-insensitive when all characters in the string
+-- being searched are lowercase. However, the search becomes case-sensitive if
+-- it contains any capital letters. This makes searching more convenient.
+opt.ignorecase = true
+opt.smartcase = true
+
+-- Enable searching and replacing as we type
+opt.incsearch = true
+opt.inccommand = 'nosplit'
+
+-- Open new splits to the right and bottom
+opt.splitright = true
+opt.splitbelow = true
+
+-- Needed for fast refresh in GitGutter?
+opt.updatetime = 300
+
+-- Make command autocompletion similar to the shell
+opt.wildmode = 'longest:full,full'
+
+-- Disable auto comment insertion
+-- cmd 'autocmd BufNewFile,BufRead,FileType,OptionSet * setlocal formatoptions-=cro'
+
+-- Remember cursor position when opening a file next time
+cmd [[ au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif ]]
+
+-- Highlight on yank
+cmd 'au TextYankPost * lua vim.highlight.on_yank {on_visual = false}'
+
+-- Some custom aliases
+cmd [[ command ClearTrailing %s/\s\+$//e ]]
 
 ---------- MORE SPECIFIC CONFIGURATIONS ----------
 
@@ -249,7 +283,7 @@ local lspconfig = require 'lspconfig'
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Enable the following language servers
-local servers = { 'clangd', 'pyright', 'texlab', 'r_language_server' }
+local servers = { 'clangd', 'pyright', 'texlab', 'r_language_server', 'jsonls'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
@@ -257,19 +291,29 @@ for _, lsp in ipairs(servers) do
   }
 end
 -- Customize lua LSP a bit
-lspconfig.sumneko_lua.setup {
+require'lspconfig'.lua_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
   settings = {
     Lua = {
       runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
         version = 'LuaJIT',
       },
       diagnostics = {
-        globals = { 'vim' }
-      }
-    }
-  }
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
 }
 
 -- -- Custom vim commands for jdtls
@@ -343,7 +387,12 @@ ts.setup {
       'html',
       'markdown'
     }
-  }
+  },
+  matchup = {
+    enable = true,              -- mandatory, false will disable the whole extension
+    -- disable = { "json" },  -- optional, list of language that will be disabled
+    -- [options]
+  },
 }
 
 -- Autocompletion with nvim-cmp
