@@ -63,6 +63,7 @@
     ~/.config/gammastep/config.ini: gammastep
     ~/.config/xdg-desktop-portal-wlr/config: xdg-desktop-portal-wlr
     ~/.config/systemd/user/noisetorch.service: noisetorch/noisetorch.service
+    ~/.config/sioyek: sioyek
 
 - create:
   - ~/.vim/swapfiles
