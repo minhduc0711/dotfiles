@@ -95,7 +95,7 @@ packer.startup(function(use)
     setup = function()
       -- may set any options here
       vim.g.matchup_matchparen_offscreen = { method = "popup" }
-      vim.g.matchup_delim_noskips = 2
+      vim.g.matchup_delim_noskips = 1
     end
   }
 
@@ -194,6 +194,9 @@ local on_attach = function(_, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  vim.keymap.set('n', '<leader>f', function()
+    vim.lsp.buf.format { async = true }
+  end, opts)
   -- Java specific
   -- map('n', '<leader>ca', '<cmd>lua require"jdtls".code_action()<CR>', {silent=true})
 end
@@ -205,7 +208,10 @@ map('n', '<C-f>', ':Rg<CR>' , {silent = true})
 vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {silent = true})
 -- map('n', '<C-p>', ':Telescope find_files<CR>', {silent = true})
 -- map('n', '<C-f>', ':Telescope grep_string search=<CR>' , {silent = true})
-vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>sd',
+  function() require('telescope.builtin').diagnostics({bufnr=0}) end,
+  { desc = '[S]earch [D]iagnostics' }
+)
 
 -- Seamless navigation between tmux & vim
 g.tmux_navigator_no_mappings = 1
@@ -227,7 +233,7 @@ opt.relativenumber = true
 opt.cursorline = true
 
 -- Character limit indicator
-opt.colorcolumn = '79'
+opt.colorcolumn = '88'
 
 -- Make tabs and trailing spaces visible
 opt.list = true
@@ -273,9 +279,6 @@ g.python3_host_prog = "/sbin/python3"
 -- Disable indent after opening a pair in Python files
 g.pyindent_disable_parentheses_indenting = 1
 
--- GAML syntax highlighting
-cmd 'au BufRead,BufNewFile *.gaml setlocal filetype=gaml'
-
 -- LSP settings
 local lspconfig = require 'lspconfig'
 
@@ -283,14 +286,34 @@ local lspconfig = require 'lspconfig'
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Enable the following language servers
-local servers = { 'clangd', 'pyright', 'texlab', 'r_language_server', 'jsonls'}
+local servers = { 'clangd', 'texlab', 'r_language_server', 'jsonls'}
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities
   }
 end
--- Customize lua LSP a bit
+-- LS that needs some customization
+require'lspconfig'.pylsp.setup{
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    pylsp = {
+      plugins = {
+        pyflakes = {
+          enabled = true
+        },
+        pycodestyle = {
+          maxLineLength = 88
+        },
+        black = {
+          enabled = true,
+          line_length= 88
+        }
+      }
+    }
+  }
+}
 require'lspconfig'.lua_ls.setup {
   on_attach = on_attach,
   capabilities = capabilities,
@@ -314,6 +337,13 @@ require'lspconfig'.lua_ls.setup {
       },
     },
   },
+}
+require'lspconfig'.yamlls.setup {
+  settings = {
+    yaml = {
+      keyOrdering = false
+    }
+  }
 }
 
 -- -- Custom vim commands for jdtls
@@ -601,6 +631,13 @@ g.qfenter_keymap = {
   topen = {'<C-t>'}
 }
 g.qfenter_enable_autoquickfix = 0
+
+-- default vim-matchup colors make visual selections hard to see
+vim.api.nvim_create_autocmd({"ColorScheme"}, {
+  group =  vim.api.nvim_create_augroup('matchup_matchparen_highlight', {clear = true}),
+  pattern = {"*"},
+  callback = function () vim.api.nvim_set_hl(0, 'MatchWord', { bg = vim.g.terminal_color_7, fg = vim.g.terminal_color_0 }) end
+})
 
 -- Colorscheme
 opt.termguicolors = true
