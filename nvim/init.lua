@@ -100,7 +100,6 @@ packer.startup(function(use)
   }
 
   -- Auto detect indent
-  use {'nmac427/guess-indent.nvim'}
   use {'Darazaki/indent-o-matic'}
 
   -- Indent lines
@@ -550,11 +549,10 @@ cmd [[command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, f
 -- Make fzf (Rg) ignore file names when searching in files' content
 cmd [[command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]]
 
--- Auto detect indent settings
--- require('guess-indent').setup {}
 -- Defaults (does not override w/ guess-indent I think)
--- opt.tabstop = 4
--- opt.shiftwidth = 4
+opt.tabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = true
 
 require('indent-o-matic').setup {
   -- Number of lines without indentation before giving up (use -1 for infinite)
@@ -687,3 +685,6 @@ vim.g.indentLine_char = '▏'
 vim.g.rout_follow_colorscheme = 1
 vim.g.R_assign = 0
 vim.g.R_auto_start = 2
+
+-- setup nvim-dap
+require('dap-python').setup('~/miniconda3/bin/python')
