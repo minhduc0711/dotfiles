@@ -38,6 +38,8 @@ packer.startup(function(use)
 
   -- Debug with breakpoints
   use 'mfussenegger/nvim-dap'
+  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+  use 'mfussenegger/nvim-dap-python'
 
   -- LSP servers
   use {'neovim/nvim-lspconfig'}
@@ -687,4 +689,13 @@ vim.g.R_assign = 0
 vim.g.R_auto_start = 2
 
 -- setup nvim-dap
-require('dap-python').setup('~/miniconda3/bin/python')
+vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
+vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>")
+vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>")
+vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>")
+vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
+vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
+vim.keymap.set("n", "<leader>db", ":lua require'dapui'.toggle()<CR>")
+
+require('dapui').setup()
+require('dap-python').setup('/data/mdm/apps/mambaforge/bin/python')
