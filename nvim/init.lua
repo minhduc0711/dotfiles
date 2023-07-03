@@ -126,7 +126,7 @@ packer.startup(function(use)
   use {'yssl/QFEnter'}
 
   -- Colorscheme
-  use {'minhduc0711/gruvbox'}
+  use { "ellisonleao/gruvbox.nvim" }
 
   -- Pretty statusline
   use {'nvim-lualine/lualine.nvim'}
@@ -575,13 +575,6 @@ local function format_status(status)
   return table.concat(status_txt, ' ')
 end
 require('gitsigns').setup {
-  signs = {
-    add          = {hl = 'GitGutterAdd',          text = '+',  numhl='GitGutterAdd'},
-    change       = {hl = 'GitGutterChange',       text = '~',  numhl='GitGutterChange'},
-    delete       = {hl = 'GitGutterDelete',       text = '_',  numhl='GitGutterDelete'},
-    topdelete    = {hl = 'GitGutterDelete',       text = '‾',  numhl='GitGutterDelete'},
-    changedelete = {hl = 'GitGutterChangeDelete', text = '~_', numhl='GitGutterChangeDelete'},
-  },
   numhl = true,
   status_formatter=format_status,
   on_attach = function(bufnr)
@@ -640,15 +633,14 @@ vim.api.nvim_create_autocmd({"ColorScheme"}, {
 })
 
 -- Colorscheme
-opt.termguicolors = true
+require("gruvbox").setup({
+  contrast = "hard",
+})
+-- not sure if this option fixes anything
+-- opt.termguicolors = true
 opt.background = 'light'
-g.gruvbox_contrast_light = 'hard'
-g.gruvbox_italic = 1
-g.gruvbox_underline = 1
-g.gruvbox_sign_column = 'bg0'
-g.gruvbox_invert_selection = 0
-vim.env.BAT_THEME='gruvbox-light' -- for fzf preview
 cmd 'colorscheme gruvbox'
+vim.env.BAT_THEME='gruvbox-light' -- for fzf preview
 
 -- Lualine
 local lualine_sections = {
