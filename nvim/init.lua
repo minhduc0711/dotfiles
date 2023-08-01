@@ -1,12 +1,12 @@
 ---------- HELPER FUNCTIONS ----------
-local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
-local fn = vim.fn    -- to call Vim functions e.g. fn.bufnr()
-local g = vim.g      -- a table to access global variables
+local cmd = vim.cmd -- to execute Vim commands e.g. cmd('pwd')
+local fn = vim.fn   -- to call Vim functions e.g. fn.bufnr()
+local g = vim.g     -- a table to access global variables
 local opt = vim.opt
 
 -- Helper function for setting mappings
 local function map(mode, lhs, rhs, opts)
-  local options = {noremap = true}
+  local options = { noremap = true }
   if opts then options = vim.tbl_extend('force', options, opts) end
   vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
@@ -14,9 +14,9 @@ end
 ---------- PLUGINS ----------
 -- Auto install packer.nvim
 local ensure_packer = function()
-  local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+  local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
   if fn.empty(fn.glob(install_path)) > 0 then
-    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+    fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path })
     cmd [[packadd packer.nvim]]
     return true
   end
@@ -27,33 +27,32 @@ local packer = require('packer')
 -- packer.init { compile_path = fn.stdpath('data') .. '/plugin/packer_compiled.lua' }
 packer.startup(function(use)
   -- Packer can manage itself
-  use {'wbthomason/packer.nvim'}
+  use { 'wbthomason/packer.nvim' }
 
   -- Fast & accurate syntax highlighting
-  use {'nvim-treesitter/nvim-treesitter'}
-  use {'nvim-treesitter/playground'}
+  use { 'nvim-treesitter/nvim-treesitter' }
+  use { 'nvim-treesitter/playground' }
   -- Better indent module than the built-in one in treesitter
-  -- use({ "yioneko/nvim-yati", tag = "*", requires = "nvim-treesitter/nvim-treesitter" })
-  use {'Vimjas/vim-python-pep8-indent'}
+  use { 'Vimjas/vim-python-pep8-indent' }
 
   -- Debug with breakpoints
   use 'mfussenegger/nvim-dap'
-  use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
+  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
   use 'mfussenegger/nvim-dap-python'
 
   -- LSP servers
-  use {'neovim/nvim-lspconfig'}
+  use { 'neovim/nvim-lspconfig' }
   -- Eclipse Java LSP
-  use {'mfussenegger/nvim-jdtls'}
+  use { 'mfussenegger/nvim-jdtls' }
 
   -- Better LSP for Scala
   use {
     'scalameta/nvim-metals',
-    requires= {'nvim-lua/plenary.nvim'}
+    requires = { 'nvim-lua/plenary.nvim' }
   }
 
   -- Turn nvim into RStudio
-  use {'jalvesaq/Nvim-R', branch = 'stable'}
+  use { 'jalvesaq/Nvim-R', branch = 'stable' }
 
   -- Auto completion
   use {
@@ -69,27 +68,27 @@ packer.startup(function(use)
   }
 
   -- Fuzzy finder
-  use {'junegunn/fzf'}
-  use {'junegunn/fzf.vim'}
+  use { 'junegunn/fzf' }
+  use { 'junegunn/fzf.vim' }
 
   use {
     'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
+    requires = { { 'nvim-lua/plenary.nvim' } }
   }
-  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
   -- Code commenting
-  use {'tpope/vim-commentary'}
+  use { 'tpope/vim-commentary' }
 
   -- Remove highlighting right when searching is done
-  use {'romainl/vim-cool'}
+  use { 'romainl/vim-cool' }
 
   -- Auto close pairs
-  use {'minhduc0711/vim-closer'}
-  use {'windwp/nvim-ts-autotag'}
+  use { 'minhduc0711/vim-closer' }
+  use { 'windwp/nvim-ts-autotag' }
 
   -- Manipulate surrounding pairs
-  use {'tpope/vim-surround'}
+  use { 'tpope/vim-surround' }
 
   -- Extend % key to work w/ words
   use {
@@ -102,49 +101,49 @@ packer.startup(function(use)
   }
 
   -- Auto detect indent
-  use {'Darazaki/indent-o-matic'}
+  use { 'Darazaki/indent-o-matic' }
 
   -- Indent lines
-  use {'lukas-reineke/indent-blankline.nvim'}
+  use { 'lukas-reineke/indent-blankline.nvim' }
 
   -- Git commands
-  use {'tpope/vim-fugitive'}
+  use { 'tpope/vim-fugitive' }
 
   -- Display Git signs
   use {
     'lewis6991/gitsigns.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
+    requires = { { 'nvim-lua/plenary.nvim' } }
   }
 
   -- tmux + vim navigation
-  use {'christoomey/vim-tmux-navigator'}
+  use { 'christoomey/vim-tmux-navigator' }
 
   -- Live REPL
-  use {'jpalardy/vim-slime'}
+  use { 'jpalardy/vim-slime' }
 
   -- Open buffers from quickfix lists
-  use {'yssl/QFEnter'}
+  use { 'yssl/QFEnter' }
 
   -- Colorscheme
   use { "ellisonleao/gruvbox.nvim" }
 
   -- Pretty statusline
-  use {'nvim-lualine/lualine.nvim'}
+  use { 'nvim-lualine/lualine.nvim' }
 
   -- Display colors in CSS
-  use {'ap/vim-css-color'}
+  use { 'ap/vim-css-color' }
 
   -- Partial diff
-  use {'rickhowe/spotdiff.vim'}
+  use { 'rickhowe/spotdiff.vim' }
 
   -- Display CSV columns in different colors
-  use {'mechatroner/rainbow_csv'}
+  use { 'mechatroner/rainbow_csv' }
 
   -- Auto switch ibus input methods between vim's cmd and insert mode
-  use {'rlue/vim-barbaric'}
+  use { 'rlue/vim-barbaric' }
 
   -- Fun
-  use {'eandrju/cellular-automaton.nvim'}
+  use { 'eandrju/cellular-automaton.nvim' }
 
   -- Show context breadcrumbs on winbar
   use({
@@ -169,7 +168,7 @@ end)
 ---------- KEY MAPPINGS ----------
 
 -- Merge 0 and ^
-map('n', '0', "getline('.')[0 : col('.') - 2] =~# '^\\s\\+$' ? '0' : '^'", {silent = true, expr = true})
+map('n', '0', "getline('.')[0 : col('.') - 2] =~# '^\\s\\+$' ? '0' : '^'", { silent = true, expr = true })
 
 -- Toggle paste mode
 opt.pastetoggle = '<F3>'
@@ -221,24 +220,34 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- Searching
 -- fzf is still better than telescope for fuzzy search
-map('n', '<C-p>', ':Files<CR>', {silent = true})
-map('n', '<C-f>', ':Rg<CR>' , {silent = true})
+map('n', '<C-p>', ':Files<CR>', { silent = true })
+map('n', '<C-f>', ':Rg<CR>', { silent = true })
 
 local ts_builtin = require('telescope.builtin')
-vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {silent = true})
+vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
+vim.keymap.set('n', '<C-g>', ts_builtin.git_files, { silent = true })
 -- map('n', '<C-p>', ':Telescope find_files<CR>', {silent = true})
 -- map('n', '<C-f>', ':Telescope grep_string search=<CR>' , {silent = true})
 vim.keymap.set('n', '<leader>sd',
-  function() require('telescope.builtin').diagnostics({bufnr=0}) end,
+  function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end,
   { desc = '[S]earch [D]iagnostics' }
 )
 
 -- Seamless navigation between tmux & vim
 g.tmux_navigator_no_mappings = 1
-map('n', '<M-h>', ':TmuxNavigateLeft<cr>', {silent = true})
-map('n', '<M-n>', ':TmuxNavigateDown<cr>', {silent = true})
-map('n', '<M-e>', ':TmuxNavigateUp<cr>', {silent = true})
-map('n', '<M-i>', ':TmuxNavigateRight<cr>', {silent = true})
+map('n', '<M-h>', ':TmuxNavigateLeft<cr>', { silent = true })
+map('n', '<M-n>', ':TmuxNavigateDown<cr>', { silent = true })
+map('n', '<M-e>', ':TmuxNavigateUp<cr>', { silent = true })
+map('n', '<M-i>', ':TmuxNavigateRight<cr>', { silent = true })
+
+-- setup nvim-dap
+vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
+vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>")
+vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>")
+vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>")
+vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
+vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
+vim.keymap.set("n", "<leader>db", ":lua require'dapui'.toggle()<CR>")
 
 ---------- GENERAL OPTIONS ----------
 
@@ -257,7 +266,7 @@ opt.colorcolumn = '88'
 
 -- Make tabs and trailing spaces visible
 opt.list = true
-opt.listchars = {tab='<->', trail='·', extends='>', precedes='<'}
+opt.listchars = { tab = '<->', trail = '·', extends = '>', precedes = '<' }
 
 -- This setting makes search case-insensitive when all characters in the string
 -- being searched are lowercase. However, the search becomes case-sensitive if
@@ -306,16 +315,14 @@ local lspconfig = require 'lspconfig'
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Enable the following language servers
-local servers = { 'clangd', 'texlab', 'r_language_server', 'jsonls'}
+local servers = { 'clangd', 'texlab', 'r_language_server', 'jsonls' }
 for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
-    on_attach = on_attach,
     capabilities = capabilities
   }
 end
 -- LS that needs some customization
-require'lspconfig'.pylsp.setup{
-  on_attach = on_attach,
+require 'lspconfig'.pylsp.setup {
   capabilities = capabilities,
   settings = {
     pylsp = {
@@ -328,14 +335,13 @@ require'lspconfig'.pylsp.setup{
         },
         black = {
           enabled = true,
-          line_length= 88
+          line_length = 88
         }
       }
     }
   }
 }
-require'lspconfig'.lua_ls.setup {
-  on_attach = on_attach,
+require 'lspconfig'.lua_ls.setup {
   capabilities = capabilities,
   settings = {
     Lua = {
@@ -345,7 +351,7 @@ require'lspconfig'.lua_ls.setup {
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = {'vim'},
+        globals = { 'vim' },
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
@@ -358,7 +364,7 @@ require'lspconfig'.lua_ls.setup {
     },
   },
 }
-require'lspconfig'.yamlls.setup {
+require 'lspconfig'.yamlls.setup {
   settings = {
     yaml = {
       keyOrdering = false
@@ -370,18 +376,17 @@ require'lspconfig'.yamlls.setup {
 -- require'jdtls.setup'.add_commands()
 
 -- Always detect *.sc as Scala source files
-local filetype_detect_group = vim.api.nvim_create_augroup('filetypedetect', {clear = true})
-vim.api.nvim_create_autocmd({"BufNewFile", "BufRead"}, {
+local filetype_detect_group = vim.api.nvim_create_augroup('filetypedetect', { clear = true })
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
   group = filetype_detect_group,
-  pattern = {"*.sc", "*.scala"},
+  pattern = { "*.sc", "*.scala" },
   command = [[setfiletype scala]]
 })
- 
+
 -- Enable metals for Scala files
 local metals_config = require("metals").bare_config()
 metals_config.init_options.statusBarProvider = "on"
 metals_config.capabilities = capabilities
-metals_config.on_attach = on_attach
 metals_config.settings = {
   fallbackScalaVersion = '3.1.0'
 }
@@ -398,39 +403,25 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.opt_global.shortmess:remove("F")
 
 -- Show LSP diagnostics
-vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    virtual_text = true,
-    signs = true,
-    update_in_insert = false,
-  }
-)
+vim.diagnostic.config({
+  underline = true,
+  virtual_text = true,
+  signs = true,
+  update_in_insert = false,
+  severity_sort = true
+})
 
 -- Treesitter
 local ts = require 'nvim-treesitter.configs'
 -- NOTE: input lag with commment (https://github.com/nvim-treesitter/nvim-treesitter/issues/1267)
 ts.setup {
-  ensure_installed = {'python', 'java', 'scala', 'lua', 'bash', 'latex'},
+  ensure_installed = { 'python', 'java', 'scala', 'lua', 'bash', 'latex' },
   highlight = { enable = true },
   indent = {
     enable = true,
     -- not working properly for Python https://github.com/nvim-treesitter/nvim-treesitter/issues/1136
     disable = { "python" }
   },
-  -- yati = {  -- workaround for Python
-  --   enable = true,
-  --   -- Disable by languages, see `Supported languages`
-  --   disable = { "lua", "c" },
-  --   -- Whether to enable lazy mode (recommend to enable this if bad indent happens frequently)
-  --   default_lazy = true,
-  --   -- Determine the fallback method used when we cannot calculate indent by tree-sitter
-  --   --   "auto": fallback to vim auto indent
-  --   --   "asis": use current indent as-is
-  --   --   "cindent": see `:h cindent()`
-  --   -- Or a custom function return the final indent result.
-  --   default_fallback = "auto"
-  -- },
   autotag = {
     enable = true,
     filetypes = {
@@ -439,7 +430,7 @@ ts.setup {
     }
   },
   matchup = {
-    enable = true,              -- mandatory, false will disable the whole extension
+    enable = true, -- mandatory, false will disable the whole extension
     -- disable = { "json" },  -- optional, list of language that will be disabled
     -- [options]
   },
@@ -454,20 +445,20 @@ end
 local feedkey = function(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
-local cmp = require'cmp'
+local cmp = require 'cmp'
 cmp.setup {
   preselect = cmp.PreselectMode.None,
   sources = {
-    { name = 'nvim_lsp'},
-    { name = 'nvim_lua'},
-    { name = 'path'},
+    { name = 'nvim_lsp' },
+    { name = 'nvim_lua' },
+    { name = 'path' },
   },
   mapping = {
-    ['<C-t>'] = cmp.mapping.confirm {
+        ['<C-t>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Insert,
       select = true
     },
-    ["<Tab>"] = cmp.mapping(function(fallback)
+        ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
       elseif vim.fn["vsnip#available"]() == 1 then
@@ -478,7 +469,7 @@ cmp.setup {
         fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
     end, { "i", "s" }),
-    ["<S-Tab>"] = cmp.mapping(function()
+        ["<S-Tab>"] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item()
       elseif vim.fn["vsnip#jumpable"](-1) == 1 then
@@ -487,12 +478,15 @@ cmp.setup {
     end, { "i", "s" }),
   },
   formatting = {
-    format = require("lspkind").cmp_format({with_text = true, menu = ({
-      buffer = "[Buffer]",
-      nvim_lsp = "[LSP]",
-      luasnip = "[LuaSnip]",
-      nvim_lua = "[Lua]",
-    })}),
+    format = require("lspkind").cmp_format({
+      with_text = true,
+      menu = ({
+        buffer = "[Buffer]",
+        nvim_lsp = "[LSP]",
+        luasnip = "[LuaSnip]",
+        nvim_lua = "[Lua]",
+      })
+    }),
   },
   snippet = {
     expand = function(args)
@@ -502,7 +496,11 @@ cmp.setup {
 }
 
 -- Telescope
-require('telescope').setup{
+local finders = require 'telescope.finders'
+local sorters = require 'telescope.sorters'
+local actions = require 'telescope.actions'
+local pickers = require 'telescope.pickers'
+require('telescope').setup {
   defaults = {
     layout_strategy = "horizontal",
     layout_config = {
@@ -511,7 +509,7 @@ require('telescope').setup{
     },
     mappings = {
       i = {
-        ["<esc>"] = require('telescope.actions').close
+            ["<esc>"] = require('telescope.actions').close
       },
     },
     extensions = {
@@ -520,26 +518,47 @@ require('telescope').setup{
         override_generic_sorter = false, -- override the generic sorter
         override_file_sorter = true,     -- override the file sorter
         case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-                                         -- the default case_mode is "smart_case"
+        -- the default case_mode is "smart_case"
       }
     },
     -- path_display = { "shorten" },
     dynamic_preview_title = false
+  },
+  -- jump to an existing file in already opened tab or window from all file pickers
+  pickers = {
+    buffers = {
+      mappings = {
+        i = { ["<CR>"] = actions.select_tab_drop }
+      }
+    },
+    find_files = {
+      mappings = {
+        i = { ["<CR>"] = actions.select_tab_drop }
+      }
+    },
+    git_files = {
+      mappings = {
+        i = { ["<CR>"] = actions.select_tab_drop }
+      }
+    },
+    old_files = {
+      mappings = {
+        i = { ["<CR>"] = actions.select_tab_drop }
+      }
+    }
   }
 }
+
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
+
 -- Use Telescope for Java code actions
-local finders = require'telescope.finders'
-local sorters = require'telescope.sorters'
-local actions = require'telescope.actions'
-local pickers = require'telescope.pickers'
 require('jdtls.ui').pick_one_async = function(items, prompt, label_fn, cb)
   local opts = {}
   pickers.new(opts, {
-    prompt_title = prompt,
-    finder    = finders.new_table {
+    prompt_title    = prompt,
+    finder          = finders.new_table {
       results = items,
       entry_maker = function(entry)
         return {
@@ -549,7 +568,7 @@ require('jdtls.ui').pick_one_async = function(items, prompt, label_fn, cb)
         }
       end,
     },
-    sorter = sorters.get_generic_fuzzy_sorter(),
+    sorter          = sorters.get_generic_fuzzy_sorter(),
     attach_mappings = function(prompt_bufnr)
       actions.select_default:replace(function()
         local selection = actions.get_selected_entry(prompt_bufnr)
@@ -564,7 +583,7 @@ require('jdtls.ui').pick_one_async = function(items, prompt, label_fn, cb)
 end
 
 -- fzf configs
-g.fzf_layout = { window = { width= 0.9, height= 0.9 } }
+g.fzf_layout = { window = { width = 0.9, height = 0.9 } }
 -- Show tails of file paths
 cmd [[command! -bang -nargs=? -complete=dir Files call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--keep-right']}), <bang>0)]]
 -- Make fzf (Rg) ignore file names when searching in files' content
@@ -588,23 +607,23 @@ require('indent-o-matic').setup {
 local function format_status(status)
   local added, changed, removed = status.added, status.changed, status.removed
   local status_txt = {}
-  table.insert(status_txt, '+'..(added == nil and 0 or added))
-  table.insert(status_txt, '~'..(changed == nil and 0 or changed))
-  table.insert(status_txt, '-'..(removed == nil and 0 or removed))
+  table.insert(status_txt, '+' .. (added == nil and 0 or added))
+  table.insert(status_txt, '~' .. (changed == nil and 0 or changed))
+  table.insert(status_txt, '-' .. (removed == nil and 0 or removed))
   return table.concat(status_txt, ' ')
 end
 require('gitsigns').setup {
   numhl = true,
-  status_formatter=format_status,
+  status_formatter = format_status,
   on_attach = function(bufnr)
     local function gs_map(mode, lhs, rhs, opts)
-        opts = vim.tbl_extend('force', {noremap = true, silent = true}, opts or {})
-        vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
+      opts = vim.tbl_extend('force', { noremap = true, silent = true }, opts or {})
+      vim.api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
     end
 
     -- Navigation
-    gs_map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
-    gs_map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+    gs_map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
+    gs_map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
 
     -- Actions
     gs_map('n', '<leader>hs', ':Gitsigns stage_hunk<CR>')
@@ -637,18 +656,18 @@ g.slime_default_config = {
 
 -- Open buffers from quickfix lists
 g.qfenter_keymap = {
-  open = {'<CR>', '<2-LeftMouse>'},
-  vopen = {'<C-v>'},
-  hopen = {'<C-x>'},
-  topen = {'<C-t>'}
+  open = { '<CR>', '<2-LeftMouse>' },
+  vopen = { '<C-v>' },
+  hopen = { '<C-x>' },
+  topen = { '<C-t>' }
 }
 g.qfenter_enable_autoquickfix = 0
 
 -- default vim-matchup colors make visual selections hard to see
-vim.api.nvim_create_autocmd({"ColorScheme"}, {
-  group =  vim.api.nvim_create_augroup('matchup_matchparen_highlight', {clear = true}),
-  pattern = {"*"},
-  callback = function () vim.api.nvim_set_hl(0, 'MatchWord', { bg = vim.g.terminal_color_7, fg = vim.g.terminal_color_0 }) end
+vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+  group = vim.api.nvim_create_augroup('matchup_matchparen_highlight', { clear = true }),
+  pattern = { "*" },
+  callback = function() vim.api.nvim_set_hl(0, 'MatchWord', { bg = vim.g.terminal_color_7, fg = vim.g.terminal_color_0 }) end
 })
 
 -- Colorscheme
@@ -659,25 +678,26 @@ require("gruvbox").setup({
 -- opt.termguicolors = true
 opt.background = 'light'
 cmd 'colorscheme gruvbox'
-vim.env.BAT_THEME='gruvbox-light' -- for fzf preview
+vim.env.BAT_THEME = 'gruvbox-light' -- for fzf preview
 
 -- Lualine
 local lualine_sections = {
-  lualine_a = {'mode'},
-  lualine_b = {'branch', 'b:gitsigns_status'},
+  lualine_a = { 'mode' },
+  lualine_b = { 'branch', 'b:gitsigns_status' },
   lualine_c = {
     'filename',
-    {'diagnostics',
-      sources = {'nvim_diagnostic'},
-      symbols = {error = 'E:', warn = 'W:', info = 'I:', hint = 'H:'}
+    {
+      'diagnostics',
+      sources = { 'nvim_diagnostic' },
+      symbols = { error = 'E:', warn = 'W:', info = 'I:', hint = 'H:' }
     },
     'g:metals_status'
   },
-  lualine_x = {'filetype'},
-  lualine_y = {{'fileformat', icons_enabled = false}, 'encoding'},
-  lualine_z = {'progress', 'location'},
+  lualine_x = { 'filetype' },
+  lualine_y = { { 'fileformat', icons_enabled = false }, 'encoding' },
+  lualine_z = { 'progress', 'location' },
 }
-require'lualine'.setup {
+require 'lualine'.setup {
   options = {
     icons_enabled = true,
     theme = 'gruvbox_light',
@@ -699,14 +719,19 @@ vim.g.rout_follow_colorscheme = 1
 vim.g.R_assign = 0
 vim.g.R_auto_start = 2
 
--- setup nvim-dap
-vim.keymap.set("n", "<F5>", ":lua require'dap'.continue()<CR>")
-vim.keymap.set("n", "<F10>", ":lua require'dap'.step_over()<CR>")
-vim.keymap.set("n", "<F11>", ":lua require'dap'.step_into()<CR>")
-vim.keymap.set("n", "<F12>", ":lua require'dap'.step_out()<CR>")
-vim.keymap.set("n", "<leader>b", ":lua require'dap'.toggle_breakpoint()<CR>")
-vim.keymap.set("n", "<leader>B", ":lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
-vim.keymap.set("n", "<leader>db", ":lua require'dapui'.toggle()<CR>")
-
 require('dapui').setup()
 require('dap-python').setup('/data/mdm/apps/mambaforge/bin/python')
+table.insert(require 'dap'.configurations.python, {
+  type = 'python',
+  request = 'launch',
+  name = 'FastAPI module',
+  module = 'uvicorn',
+  args = {
+    'src.main:app',
+    -- '--reload', -- doesn't work
+    '--use-colors',
+    '--port', '8025',
+  },
+  pythonPath = 'python',
+  console = 'integratedTerminal',
+})
