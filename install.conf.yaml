@@ -49,8 +49,10 @@
     ~/.config/colors.sh: colors.sh
     ~/.config/starship.toml: starship.toml
     ~/.config/sway/config: sway/sway
-    ~/.config/systemd/user/sway-session.target: sway/sway-session.target
     ~/.config/swaylock/config: sway/swaylock
+    ~/.config/swayidle/config: sway/swayidle
+    ~/.config/systemd/user/sway-session.target: sway/sway-session.target
+    ~/.config/hypr/hyprland.conf: hyprland.conf
     ~/.config/waybar: waybar
     ~/.config/kanshi/config: kanshi/config
     ~/.config/way-displays/cfg.yaml: way-displays.yaml

@@ -1,8 +1,8 @@
 {
-    "layer": "bottom",
+    "layer": "top",
     "height": 30,
     "modules-left": [
-        "sway/workspaces",
+        "hyprland/workspaces",
         "cpu",
         "memory",
         "disk",
@@ -22,11 +22,12 @@
         "idle_inhibitor",
         "tray"
     ],
-    "sway/workspaces": {
+    "hyprland/workspaces": {
         "disable-scroll": true,
         "format": "{name}"
     },
     "clock": {
+        "interval": 30,
         "format": "{:%H:%M - %a, %b %d}",
         "tooltip": false
     },
@@ -48,7 +49,7 @@
         "on-click-right": "pavucontrol"
     },
     "memory": {
-        "interval": 5,
+        "interval": 1,
         "format": " {used:0.1f} GB",
         "states": {
             "warning": 75,
@@ -60,6 +61,7 @@
         "format": " {usage:2}%"
     },
     "battery": {
+        "interval": 30,
         "states": {
             "warning": 30,
             "critical": 15

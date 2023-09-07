@@ -1,7 +1,7 @@
 daemonize
 font=JetBrains Mono NL
 indicator-radius=110
-image=$HOME/Pictures/Wallpapers/The_cat_at_play_Henriette_Ronner.jpg
+image=$HOME/Pictures/Wallpapers/starry_lights.png
 show-failed-attempts
 clock
 datestr=%b %d %Y

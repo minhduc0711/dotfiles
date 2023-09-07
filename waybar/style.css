@@ -3,6 +3,13 @@
   font-family:  "Sarasa Mono J", "Font Awesome 6 Free";
 }
 
+
+/* workaround for padding issue: https://github.com/Alexays/Waybar/issues/1756 */
+/* * { */
+/*   all:initial; */
+/*   border-radius: 0px; */
+/* } */
+
 window#waybar {
   background: rgba(0, 0, 0, 0.8);
   color: #ffffff;
@@ -30,22 +37,33 @@ window#waybar {
 }
 
 #custom-mpris_metadata {
-  margin-left: 3px;
+  /* margin-left: 3px; */
   padding-left: 5px;
+  padding-right: 2px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 #custom-mpris_prev {
-  padding-left: 5px;
+  /* padding-left: 5px; */
+  padding: 0 2px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 #custom-mpris_play_pause {
-  padding-left: 5px;
+  /* padding-left: 5px; */
+  padding: 0 2px;
+  padding-top: 0px;
+  padding-bottom: 0px;
 }
 
 #custom-mpris_next {
-  padding-left: 5px;
+  padding-left: 2px;
   padding-right: 5px;
-  margin-right: 3px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  /* margin-right: 3px; */
 }
 
 #workspaces button {
@@ -54,12 +72,16 @@ window#waybar {
   box-shadow: inset 0 -3px transparent;
 }
 
-#workspaces button.focused {
+#workspaces button.active {
   color: #41c6c8;
 }
 
 #workspaces button.urgent {
   color: #cc241d;
+}
+
+#clock {
+  color: #ffffff;
 }
 
 #pulseaudio {
