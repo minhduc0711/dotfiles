@@ -40,7 +40,7 @@ require('lazy').setup({
   'nvim-treesitter/playground',
 
   -- Better indent module for python than the built-in one in treesitter
-  'Vimjas/vim-python-pep8-indent',
+  -- 'Vimjas/vim-python-pep8-indent',
 
   -- Debug with breakpoints
   {
@@ -108,7 +108,7 @@ require('lazy').setup({
 
   {
     'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
+    branch = 'master',
     dependencies = {
       'nvim-lua/plenary.nvim',
       -- Fuzzy Finder Algorithm which requires local dependencies to be built.
@@ -234,7 +234,7 @@ opt.pastetoggle = '<F3>'
 -- Unbind some useless/annoying default key bindings.
 -- 'Q' in normal mode enters Ex mode. You almost never want this.
 map('n', 'Q', '<NOP>')
-vim.keymap.set({'n', 'v'}, '<Space>', '<NOP>', { silent = true})
+vim.keymap.set({ 'n', 'v' }, '<Space>', '<NOP>', { silent = true })
 
 -- Navigate between tabs
 map('n', 'H', 'gT')
@@ -379,6 +379,15 @@ cmd [[ command ClearTrailing %s/\s\+$//e ]]
 
 -- Python executable's path for pynvim
 g.python3_host_prog = "/sbin/python3"
+local venv_path = os.getenv("CONDA_PREFIX")
+local py_path = nil
+-- decide which python executable to use for mypy
+if venv_path ~= nil then
+  py_path = venv_path .. "/bin/python3"
+else
+  py_path = vim.g.python3_host_prog
+end
+
 
 -- Disable indent after opening a pair in Python parens
 g.pyindent_disable_parentheses_indenting = 1
@@ -396,7 +405,7 @@ vim.defer_fn(function()
     indent = {
       enable = true,
       -- not working properly for Python https://github.com/nvim-treesitter/nvim-treesitter/issues/1136
-      disable = { "python" }
+      -- disable = { "python" }
     },
     incremental_selection = {
       enable = true,
@@ -502,8 +511,17 @@ local servers = {
       plugins = {
         ruff = {
           enabled = true,
-          lineLength = 120,
+          lineLength = 88,
+          select = { "E4", "E7", "E9", "F", "FIX002" },
           extendSelect = { "I" },
+        },
+        black = {
+          line_length = 88
+        },
+        mypy = {
+          enabled = true,
+          -- TODO: doesn't seem to be working...
+          overrides = { "--python-executable", py_path, true }
         }
       }
     }
@@ -663,32 +681,28 @@ require('telescope').setup {
   },
   -- jump to an existing file in already opened tab or window from all file pickers
   -- NOTE: actions.select_tab_drop is not merged into 0.1.x yet
-  -- pickers = {
-    -- buffers = {
-    --   mappings = {
-    --     i = {
-    --       ["<CR>"] = function(bufnr)
-    --         require("telescope.actions.set").select(bufnr, "tab drop")
-    --       end
-    --     }
-    --   }
-    -- },
-    --find_files = {
-    --  mappings = {
-    --    i = { ["<CR>"] = actions.select_tab_drop }
-    --  }
-    --},
-    --git_files = {
-    --  mappings = {
-    --    i = { ["<CR>"] = actions.select_tab_drop }
-    --  }
-    --},
-    --old_files = {
-    --  mappings = {
-    --    i = { ["<CR>"] = actions.select_tab_drop }
-    --  }
-    --}
-  -- }
+  pickers = {
+    buffers = {
+      mappings = {
+        i = { ["<CR>"] = actions.select_tab_drop }
+      }
+    },
+    find_files = {
+      mappings = {
+        i = { ["<CR>"] = actions.select_tab_drop }
+      }
+    },
+    git_files = {
+      mappings = {
+        i = { ["<CR>"] = actions.select_tab_drop }
+      }
+    },
+    old_files = {
+      mappings = {
+        i = { ["<CR>"] = actions.select_tab_drop }
+      }
+    }
+  }
 }
 
 -- To get fzf loaded and working with telescope, you need to call
