@@ -61,7 +61,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      -- { 'j-hui/fidget.nvim', tag = 'legacy', opts = { window = { blend = 0 } } },
+      { 'j-hui/fidget.nvim', opts = { window = { blend = 0 } } },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -378,14 +378,14 @@ cmd [[ command ClearTrailing %s/\s\+$//e ]]
 ---------- MORE SPECIFIC CONFIGURATIONS ----------
 
 -- Python executable's path for pynvim
-g.python3_host_prog = "/sbin/python3"
+g.python3_host_prog = "/usr/bin/python3"
 local venv_path = os.getenv("CONDA_PREFIX")
-local py_path = nil
+local python_path = nil
 -- decide which python executable to use for mypy
 if venv_path ~= nil then
-  py_path = venv_path .. "/bin/python3"
+  python_path = venv_path .. "/bin/python3"
 else
-  py_path = vim.g.python3_host_prog
+  python_path = vim.g.python3_host_prog
 end
 
 
@@ -518,10 +518,9 @@ local servers = {
         black = {
           line_length = 88
         },
-        mypy = {
+        pylsp_mypy = {
           enabled = true,
-          -- TODO: doesn't seem to be working...
-          overrides = { "--python-executable", py_path, true }
+          overrides = { "--python-executable", python_path, true }
         }
       }
     }
