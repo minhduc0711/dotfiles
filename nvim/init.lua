@@ -79,6 +79,11 @@ require('lazy').setup({
     }
   },
 
+  -- Formatters
+  {
+    'stevearc/conform.nvim', opts = {},
+  },
+
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -128,6 +133,9 @@ require('lazy').setup({
 
   -- Code commenting
   'tpope/vim-commentary',
+
+  -- Generate docstrings
+  'danymat/neogen',
 
   -- Remove highlighting right when searching is done
   'romainl/vim-cool',
@@ -282,7 +290,7 @@ local on_attach = function(_, bufnr)
   end, '[W]orkspace [L]ist Folders')
 
   local format = function(_)
-    vim.lsp.buf.format()
+    require("conform").format({ lsp_fallback = true })
   end
   nmap('<leader>f', format, '[F]ormat')
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', format, { desc = 'Format current buffer with LSP' })
@@ -332,7 +340,7 @@ opt.relativenumber = true
 opt.cursorline = true
 
 -- Character limit indicator
-opt.colorcolumn = '120'
+opt.colorcolumn = '88'
 
 -- Make tabs and trailing spaces visible
 opt.list = true
@@ -378,16 +386,7 @@ cmd [[ command ClearTrailing %s/\s\+$//e ]]
 ---------- MORE SPECIFIC CONFIGURATIONS ----------
 
 -- Python executable's path for pynvim
-g.python3_host_prog = "/usr/bin/python3"
-local venv_path = os.getenv("CONDA_PREFIX")
-local python_path = nil
--- decide which python executable to use for mypy
-if venv_path ~= nil then
-  python_path = venv_path .. "/bin/python3"
-else
-  python_path = vim.g.python3_host_prog
-end
-
+g.python3_host_prog = "usr/bin/python3"
 
 -- Disable indent after opening a pair in Python parens
 g.pyindent_disable_parentheses_indenting = 1
@@ -506,25 +505,26 @@ local servers = {
       telemetry = { enable = false },
     },
   },
-  pylsp = {
-    pylsp = {
-      plugins = {
-        ruff = {
-          enabled = true,
-          lineLength = 88,
-          select = { "E4", "E7", "E9", "F", "FIX002" },
-          extendSelect = { "I" },
-        },
-        black = {
-          line_length = 88
-        },
-        pylsp_mypy = {
-          enabled = true,
-          overrides = { "--python-executable", python_path, true }
-        }
-      }
-    }
-  }
+  pyright = {},
+  -- pylsp = {
+  --   pylsp = {
+  --     plugins = {
+  --       ruff = {
+  --         enabled = true,
+  --         lineLength = 88,
+  --         select = { "E4", "E7", "E9", "F", "FIX002" },
+  --         extendSelect = { "I" },
+  --       },
+  --       black = {
+  --         line_length = 88
+  --       },
+  --       pylsp_mypy = {
+  --         enabled = true,
+  --         overrides = { "--python-executable", python_path, true }
+  --       }
+  --     }
+  --   }
+  -- }
 }
 
 -- Setup neovim lua configuration
@@ -591,6 +591,13 @@ vim.diagnostic.config({
   severity_sort = true
 })
 
+-- Formatters
+require("conform").setup({
+  formatters_by_ft = {
+    python = { "isort", "black" },
+  },
+})
+
 -- Autocompletion with nvim-cmp
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -647,6 +654,19 @@ cmp.setup {
       vim.fn["vsnip#anonymous"](args.body)
     end,
   },
+}
+
+-- Docstring generation
+require('neogen').setup {
+  enabled = true,             --if you want to disable Neogen
+  input_after_comment = true, -- (default: true) automatic jump (with insert mode) on inserted annotation
+  languages = {
+    python = {
+      template = {
+        annotation_convention = "google_docstrings",
+      }
+    }
+  }
 }
 
 -- Telescope
@@ -929,4 +949,15 @@ table.insert(require 'dap'.configurations.python, {
   },
   pythonPath = 'python',
   console = 'integratedTerminal',
+})
+
+require("diffview").setup({
+  view = {
+    default = {
+      winbar_info = true,
+    },
+    file_history = {
+      winbar_info = true,
+    },
+  },
 })
