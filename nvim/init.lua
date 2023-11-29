@@ -79,6 +79,9 @@ require('lazy').setup({
     }
   },
 
+  -- Extra linters
+  'mfussenegger/nvim-lint',
+
   -- Formatters
   {
     'stevearc/conform.nvim', opts = {},
@@ -205,10 +208,33 @@ require('lazy').setup({
   -- Partial diff
   'rickhowe/spotdiff.vim',
 
+  -- Colorful pairs
   'hiphish/rainbow-delimiters.nvim',
 
   -- Display CSV columns in different colors
   'mechatroner/rainbow_csv',
+
+  -- Cursor movement indicator when jumping
+  {
+    'gen740/SmoothCursor.nvim',
+    config = function()
+      require('smoothcursor').setup({
+        fancy = {
+          enable = true,
+          head = false,
+          body = {
+            { cursor = "", texthl = "GruvboxRed" },
+            { cursor = "", texthl = "GruvboxOrange" },
+            { cursor = "●", texthl = "GruvboxYellow" },
+            { cursor = "●", texthl = "GruvboxGreen" },
+            { cursor = "•", texthl = "GruvboxAqua" },
+            { cursor = ".", texthl = "GruvboxBlue" },
+            { cursor = ".", texthl = "GruvboxPurple" },
+          },
+        }
+      })
+    end
+  },
 
   -- Auto switch ibus input methods between vim's cmd and insert mode
   'rlue/vim-barbaric',
@@ -589,6 +615,24 @@ vim.diagnostic.config({
   signs = true,
   update_in_insert = false,
   severity_sort = true
+})
+
+-- Linters
+local lint = require('lint')
+lint.linters.flake8.args = {
+  string.format('--max-line-length=%s', opt.colorcolumn._value),
+  "--ignore=F401",
+  '--format=%(path)s:%(row)d:%(col)d:%(code)s:%(text)s',
+  '--no-show-source',
+  '-',
+}
+lint.linters_by_ft = {
+  python = { 'flake8' }
+}
+vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+  callback = function()
+    lint.try_lint()
+  end
 })
 
 -- Formatters
