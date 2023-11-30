@@ -893,6 +893,9 @@ vim.api.nvim_create_autocmd({ "ColorScheme" }, {
 require("gruvbox").setup({
   contrast = "hard",
   transparent_mode = true,
+  overrides = {
+    IncSearch = { bg = "#f9f5d7", fg = "#076678", reverse = true }
+  }
 })
 -- not sure if this option fixes anything
 -- opt.termguicolors = true
