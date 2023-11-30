@@ -620,7 +620,6 @@ vim.diagnostic.config({
 -- Linters
 local lint = require('lint')
 lint.linters.flake8.args = {
-  string.format('--max-line-length=%s', opt.colorcolumn._value),
   "--ignore=F401",
   '--format=%(path)s:%(row)d:%(col)d:%(code)s:%(text)s',
   '--no-show-source',
@@ -629,7 +628,7 @@ lint.linters.flake8.args = {
 lint.linters_by_ft = {
   python = { 'flake8' }
 }
-vim.api.nvim_create_autocmd({ "InsertLeave" }, {
+vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
   callback = function()
     lint.try_lint()
   end
