@@ -982,6 +982,7 @@ require("ibl").setup {
 
 require('dapui').setup()
 require('dap-python').setup('/data/mdm/apps/mambaforge/bin/python')
+vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'GruvboxRed' })
 table.insert(require 'dap'.configurations.python, {
   type = 'python',
   request = 'launch',
