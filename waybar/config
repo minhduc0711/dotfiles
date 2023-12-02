@@ -1,8 +1,8 @@
 {
-    "layer": "top",
-    "height": 30,
+    "layer": "bottom",
+    "height": 26,
     "modules-left": [
-        "hyprland/workspaces",
+        "sway/workspaces",
         "cpu",
         "memory",
         "disk",
@@ -22,7 +22,7 @@
         "idle_inhibitor",
         "tray"
     ],
-    "hyprland/workspaces": {
+    "sway/workspaces": {
         "disable-scroll": true,
         "format": "{name}"
     },

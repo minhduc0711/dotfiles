@@ -8,18 +8,18 @@ ALIGN: TOP
 # The default ORDER is simply the order in which the displays are discovered.
 # Define your own.
 ORDER:
-  - 'ViewSonic Corporation VA2407 SERIES UEP191222296'
-  - 'Unknown 0x06BA 0x00000000'
-  - 'Dell Inc. DELL P2319H 3447NM2'
+  - 'Dell Inc. DELL P2319H 3447NM2 (HDMI-A-1)'
+  - 'Dell Inc. DELL U2412M YPPY07C80KHL'
+  - 'BOE 0x06BA (eDP-1)'
 
 # The default is to scale each display by DPI.
 # This may be disabled and scale 1 will be used, unless a SCALE has been specified.
-AUTO_SCALE: TRUE
+AUTO_SCALE: FALSE
 
 # Auto scale may be overridden for each display.
 SCALE:
-  - NAME_DESC: 'Unknown 0x06BA 0x00000000'
-    SCALE: 1.0
+  - NAME_DESC: 'BOE 0x06BA (eDP-1)'
+    SCALE: 1.25
 
 # Laptop displays usually start with eDP e.g. eDP-1. This may be overridden if
 # your laptop is different.

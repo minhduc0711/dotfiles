@@ -18,16 +18,18 @@ exec "XDG_CURRENT_DESKTOP=KDE ibus-daemon -drx"
 exec nm-applet --indicator
 
 # nightlight
-# exec gammastep-indicator -t 5700:3500
-exec wlsunset -t 3500 -T 5900 -l 43.6415 -L 7.0092
+exec ~/.local/bin/start-wlsunset.sh
 
 # notification daemon
 exec mako
 
+# notifications about battery
+exec poweralertd
+
 # keyring (needed for skype and chromium logins)
 # exec /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 
-set $cursor_size 40
+set $cursor_size 30
 # exec_always ~/.local/bin/import-gsettings.sh \
 #     gtk-theme:gtk-theme-name \
 #     icon-theme:gtk-icon-theme-name \
@@ -36,7 +38,7 @@ set $cursor_size 40
 exec_always {
     gsettings set $gnome-schema gtk-theme 'Yaru-Purple'
     gsettings set $gnome-schema icon-theme 'Yaru-Purple'
-    gsettings set org.gnome.desktop.interface text-scaling-factor 1.4
+    gsettings set org.gnome.desktop.interface text-scaling-factor 1
     gsettings set org.gnome.desktop.interface cursor-size $cursor_size
 }
 
@@ -50,8 +52,6 @@ exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # exec udiskie
 
 # Misc. apps
-exec qbittorrent
-# exec sudo torguard
 exec keepassxc
 
 ### FONTS
@@ -80,14 +80,7 @@ set $term kitty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $bemenu_fg '#41c6c8'
-set $bemenu bemenu -i -H 30 --hf \\$bemenu_fg --tf \\$bemenu_fg --nf '#ffffff' \
-    --fn 'Sarasa Mono J 15' -m $(swaymsg -r -t get_outputs | jq -r '. [] | select (.focused == true) | .name')
-set $menu j4-dmenu-desktop --dmenu="$bemenu" \
-    --usage-log ~/.appmenu_history \
-    --no-generic --no-exec \
-    | xargs swaymsg exec --
-
+set $menu ~/.local/bin/launch_j4_dmenu.sh
 # ibus switch command
 set $switch_ibus_engine "~/.local/bin/switch_ibus_engine.sh"
 
@@ -98,6 +91,8 @@ input "1267:12384:ELAN0501:01_04F3:3060_Touchpad" {
     tap enabled
     natural_scroll enabled
     middle_emulation enabled
+    pointer_accel 0.5
+    accel_profile "adaptive"
 }
 input "type:keyboard" {
     xkb_layout fr,us
@@ -113,7 +108,7 @@ input "type:keyboard" {
 # output "Dell Inc. DELL P2319H 3447NM2" mode 1920x1080 position 1360,0 scale 1
 
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg ~/Pictures/Wallpapers/The_cat_at_play_Henriette_Ronner.jpg fill
+output * bg ~/Pictures/Wallpapers/totoro.jpg fill
 
 ### Idle configuration
 # This will lock your screen after 300 seconds of inactivity, then turn off
@@ -128,11 +123,12 @@ bindsym Scroll_Lock exec '$lock'
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pulsemixer --unmute; \
-        exec --no-startup-id pulsemixer --change-volume +5 --max-volume 100
-bindsym XF86AudioLowerVolume exec --no-startup-id pulsemixer --unmute; \
-        exec --no-startup-id pulsemixer --change-volume -5
-bindsym XF86AudioMute exec --no-startup-id pulsemixer --toggle-mute && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer --unmute; \
+        exec --no-startup-id pamixer -i 5
+bindsym XF86AudioLowerVolume exec --no-startup-id pamixer --unmute; \
+        exec --no-startup-id pamixer -d 5
+# bindsym XF86AudioMute exec --no-startup-id pamixer --toggle-mute  && $refresh_i3status
+bindsym XF86AudioMute exec --no-startup-id pamixer --toggle-mute
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
@@ -181,12 +177,12 @@ bindsym $mod+v split h
 bindsym $mod+x split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+j fullscreen toggle
+bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
+# bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+f layout toggle split
+bindsym $mod+s layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -257,16 +253,10 @@ workspace $ws10 output HDMI-A-1 eDP-1
 # starting workspace
 workspace $ws6
 
-for_window [class="MATLAB R2020b - academic use"] floating enable
 for_window [title="Firefox — Sharing Indicator"] kill
 # assign some apps to preferred workspaces
-for_window [class="Spotify"] move window to workspace $ws9
-assign [class="TorGuard"] $ws5
+for_window [class="Spotify"] move window to workspace $ws4
 assign [title="^Passwords\.kdbx.*$"] $ws5
-assign [class="Skype"] $ws10
-assign [class="Slack"] $ws10
-assign [class="discord"] $ws10
-assign [class="Ferdi"] $ws10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
