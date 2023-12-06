@@ -68,9 +68,6 @@ require('lazy').setup({
     },
   },
 
-  -- Eclipse Java LSP
-  'mfussenegger/nvim-jdtls',
-
   -- Better LSP for Scala
   {
     'scalameta/nvim-metals',
@@ -221,17 +218,18 @@ require('lazy').setup({
       require('smoothcursor').setup({
         fancy = {
           enable = true,
-          head = false,
+          head = { cursor = "", texthl = "GruvboxFg1", linehl = nil },
           body = {
-            { cursor = "", texthl = "GruvboxRed" },
-            { cursor = "", texthl = "GruvboxOrange" },
+            { cursor = "󰝥", texthl = "GruvboxRed" },
+            { cursor = "󰝥", texthl = "GruvboxOrange" },
             { cursor = "●", texthl = "GruvboxYellow" },
             { cursor = "●", texthl = "GruvboxGreen" },
             { cursor = "•", texthl = "GruvboxAqua" },
             { cursor = ".", texthl = "GruvboxBlue" },
             { cursor = ".", texthl = "GruvboxPurple" },
           },
-        }
+        },
+        priority = 1,
       })
     end
   },
@@ -421,11 +419,11 @@ g.pyindent_disable_parentheses_indenting = 1
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'python', 'java', 'scala', 'lua', 'bash', 'latex' },
+    -- ensure_installed = { 'python', 'java', 'scala', 'lua', 'bash', 'latex' },
     sync_install = false,
     ignore_install = {},
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-    auto_install = false,
+    auto_install = true,
     highlight = { enable = true },
     indent = {
       enable = true,
@@ -532,25 +530,6 @@ local servers = {
     },
   },
   pyright = {},
-  -- pylsp = {
-  --   pylsp = {
-  --     plugins = {
-  --       ruff = {
-  --         enabled = true,
-  --         lineLength = 88,
-  --         select = { "E4", "E7", "E9", "F", "FIX002" },
-  --         extendSelect = { "I" },
-  --       },
-  --       black = {
-  --         line_length = 88
-  --       },
-  --       pylsp_mypy = {
-  --         enabled = true,
-  --         overrides = { "--python-executable", python_path, true }
-  --       }
-  --     }
-  --   }
-  -- }
 }
 
 -- Setup neovim lua configuration
@@ -578,35 +557,22 @@ mason_lspconfig.setup_handlers {
   end,
 }
 
--- -- Custom vim commands for jdtls
--- require'jdtls.setup'.add_commands()
-
--- Always detect *.sc as Scala source files
--- local filetype_detect_group = vim.api.nvim_create_augroup('filetypedetect', { clear = true })
--- vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
---   group = filetype_detect_group,
---   pattern = { "*.sc", "*.scala" },
---   command = [[setfiletype scala]]
--- })
-
--- -- Enable metals for Scala files
--- local metals_config = require("metals").bare_config()
--- metals_config.init_options.statusBarProvider = "on"
--- metals_config.capabilities = capabilities
--- metals_config.settings = {
---   fallbackScalaVersion = '3.1.0'
--- }
--- local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = { "scala", "sbt" },
---   callback = function()
---     require("metals").initialize_or_attach(metals_config)
---   end,
---   group = nvim_metals_group,
--- })
-
--- -- Enable help messages for nvim-metals
--- vim.opt_global.shortmess:remove("F")
+-- Enable metals for Scala files
+local metals_config = require("metals").bare_config()
+metals_config.init_options.statusBarProvider = "on"
+metals_config.settings = {
+  showImplicitArguments = true
+}
+metals_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
+metals_config.on_attach = on_attach
+local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "scala", "sbt" },
+  callback = function()
+    require("metals").initialize_or_attach(metals_config)
+  end,
+  group = nvim_metals_group,
+})
 
 -- LSP diagnostics
 vim.diagnostic.config({
@@ -770,35 +736,6 @@ require('telescope').setup {
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
-
--- Use Telescope for Java code actions
-require('jdtls.ui').pick_one_async = function(items, prompt, label_fn, cb)
-  local opts = {}
-  pickers.new(opts, {
-    prompt_title    = prompt,
-    finder          = finders.new_table {
-      results = items,
-      entry_maker = function(entry)
-        return {
-          value = entry,
-          display = label_fn(entry),
-          ordinal = label_fn(entry),
-        }
-      end,
-    },
-    sorter          = sorters.get_generic_fuzzy_sorter(),
-    attach_mappings = function(prompt_bufnr)
-      actions.select_default:replace(function()
-        local selection = actions.get_selected_entry(prompt_bufnr)
-        actions.close(prompt_bufnr)
-
-        cb(selection.value)
-      end)
-
-      return true
-    end,
-  }):find()
-end
 
 -- fzf configs
 g.fzf_layout = { window = { width = 0.9, height = 0.9 } }
@@ -975,7 +912,6 @@ require("ibl").setup {
   indent = {
     highlight = highlight,
     char = '▏',
-    -- tab_char = ''
   },
   scope = { enabled = false }
 }
