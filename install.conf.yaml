@@ -54,14 +54,13 @@
     ~/.config/systemd/user/sway-session.target: sway/sway-session.target
     ~/.config/hypr/hyprland.conf: hyprland.conf
     ~/.config/waybar: waybar
-    ~/.config/kanshi/config: kanshi/config
+    ~/.config/kanshi/config: kanshi
     ~/.config/way-displays/cfg.yaml: way-displays.yaml
     ~/.config/alacritty/alacritty.yml: alacritty.yml
     ~/.config/mako/config: mako
     ~/.config/wofi/config: wofi/config
     ~/.p10k.zsh: p10k.zsh
     ~/.local/bin/: scripts/*
-    ~/.config/systemd/user/kanshi.service: kanshi/kanshi.service
     ~/.config/gammastep/config.ini: gammastep
     ~/.config/xdg-desktop-portal-wlr/config: xdg-desktop-portal-wlr
     ~/.config/systemd/user/noisetorch.service: noisetorch/noisetorch.service

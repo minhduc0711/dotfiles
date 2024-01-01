@@ -1,0 +1,8 @@
+profile default {
+    output eDP-1 enable mode 1920x1080 scale 1.25
+}
+
+profile home_sceaux {
+    output eDP-1 disable
+    output "Dell Inc. DELL U2412M YPPY07C80KHL"
+}
