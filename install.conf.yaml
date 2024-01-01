@@ -23,29 +23,18 @@
     ~/.vimrc: vimrc
     ~/.ideavimrc: ideavimrc
     ~/.inputrc: inputrc
-    ~/.xprofile: xprofile
     ~/.dircolors: dircolors
     ~/.config/nvim: nvim
     ~/.vim/: vim/*
     ~/.tmux.conf: tmux/.tmux.conf
     ~/.tmux.conf.local: tmux/.tmux.conf.local
-    ~/.pam_environment: pam_environment
     ~/.gitconfig: git/gitconfig
     ~/.gitignore_global: git/gitignore_global
-    ~/.config/foot/foot.ini: foot.ini
     ~/.config/kitty: kitty
-    ~/.config/i3: i3
-    ~/.config/dunst: dunst
-    ~/.config/polybar: polybar
-    ~/.config/rofi: rofi
-    ~/.config/picom.conf: picom.conf
     ~/.config/flashfocus/flashfocus.yml: flashfocus.yml
     ~/.gtkrc-2.0: gtkrc-2.0
     ~/.config/gtk-3.0: gtk-3.0
-    ~/.config/redshift: redshift
     ~/.config/ranger: ranger
-    ~/.config/multilock: multilock
-    ~/.config/xfce4/terminal/terminalrc: xfce4-terminal
     ~/.config/colors.sh: colors.sh
     ~/.config/starship.toml: starship.toml
     ~/.config/sway/config: sway/sway
@@ -55,19 +44,10 @@
     ~/.config/hypr/hyprland.conf: hyprland.conf
     ~/.config/waybar: waybar
     ~/.config/kanshi/config: kanshi
-    ~/.config/way-displays/cfg.yaml: way-displays.yaml
-    ~/.config/alacritty/alacritty.yml: alacritty.yml
     ~/.config/mako/config: mako
     ~/.config/wofi/config: wofi/config
     ~/.p10k.zsh: p10k.zsh
     ~/.local/bin/: scripts/*
-    ~/.config/gammastep/config.ini: gammastep
     ~/.config/xdg-desktop-portal-wlr/config: xdg-desktop-portal-wlr
     ~/.config/systemd/user/noisetorch.service: noisetorch/noisetorch.service
     ~/.config/sioyek: sioyek
-
-- create:
-  - ~/.vim/swapfiles
-
-# - shell:
-#     - gcc ~/.config/polybar/monitor_watcher.c -o ~/.config/polybar/monitor_watcher.o -lxcb -lxcb-randr
