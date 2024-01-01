@@ -1,7 +1,7 @@
 ### STARTUP PROGRAMS
 #
 # hot plug monitor support
-exec kanshi
+exec_always "killall kanshi; kanshi"
 
 # Fix flashfocus stop working after logging out of WM
 exec "killall flashfocus; flashfocus"
