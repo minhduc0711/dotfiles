@@ -326,7 +326,7 @@ end
 -- map('n', '<C-f>', ':Rg<CR>', { silent = true })
 
 local ts_builtin = require('telescope.builtin')
-vim.keymap.set('n', '<C-p>', ts_builtin.find_files, {})
+vim.keymap.set('n', '<C-p>', function() ts_builtin.find_files({ no_ignore = true }) end, {})
 vim.keymap.set('n', '<C-f>', ts_builtin.live_grep, {})
 vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
 vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {})
