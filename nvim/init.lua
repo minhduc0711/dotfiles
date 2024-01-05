@@ -276,10 +276,10 @@ map('n', 'I', 'gt')
 vim.o.completeopt = 'menuone,noselect'
 
 -- LSP
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
@@ -322,16 +322,16 @@ end
 
 -- Searching
 -- fzf is still better than telescope for fuzzy search
-map('n', '<C-p>', ':Files<CR>', { silent = true })
-map('n', '<C-f>', ':Rg<CR>', { silent = true })
+-- map('n', '<C-p>', ':Files<CR>', { silent = true })
+-- map('n', '<C-f>', ':Rg<CR>', { silent = true })
 
 local ts_builtin = require('telescope.builtin')
+vim.keymap.set('n', '<C-p>', ts_builtin.find_files, {})
+vim.keymap.set('n', '<C-f>', ts_builtin.live_grep, {})
 vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
-vim.keymap.set('n', '<C-g>', ts_builtin.git_files, { silent = true })
--- map('n', '<C-p>', ':Telescope find_files<CR>', {silent = true})
--- map('n', '<C-f>', ':Telescope grep_string search=<CR>' , {silent = true})
+vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {})
 vim.keymap.set('n', '<leader>sd',
-  function() require('telescope.builtin').diagnostics({ bufnr = 0 }) end,
+  function() ts_builtin.diagnostics({ bufnr = 0 }) end,
   { desc = '[S]earch [D]iagnostics' }
 )
 
