@@ -51,3 +51,4 @@
     ~/.config/xdg-desktop-portal-wlr/config: xdg-desktop-portal-wlr
     ~/.config/systemd/user/noisetorch.service: noisetorch/noisetorch.service
     ~/.config/sioyek: sioyek
+    ~/.config/ruff/ruff.toml: ruff.toml

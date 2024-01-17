@@ -1,0 +1,10 @@
+line-length = 88
+indent-width = 4
+
+target-version = "py39"
+
+[lint]
+select = ["D", "E", "F", "B", "W", "Q"]
+
+[lint.pydocstyle]
+convention = "google"

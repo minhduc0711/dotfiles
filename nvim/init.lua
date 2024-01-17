@@ -76,14 +76,6 @@ require('lazy').setup({
     }
   },
 
-  -- Extra linters
-  'mfussenegger/nvim-lint',
-
-  -- Formatters
-  {
-    'stevearc/conform.nvim', opts = {},
-  },
-
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -313,11 +305,7 @@ local on_attach = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
 
-  local format = function(_)
-    require("conform").format({ lsp_fallback = true })
-  end
-  nmap('<leader>f', format, '[F]ormat')
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', format, { desc = 'Format current buffer with LSP' })
+  nmap('<leader>f', vim.lsp.buf.format, '[F]ormat current buffer with LSP')
 end
 
 -- Searching
@@ -530,6 +518,7 @@ local servers = {
     },
   },
   pyright = {},
+  ruff_lsp = {},
 }
 
 -- Setup neovim lua configuration
@@ -581,30 +570,6 @@ vim.diagnostic.config({
   signs = true,
   update_in_insert = false,
   severity_sort = true
-})
-
--- Linters
-local lint = require('lint')
-lint.linters.flake8.args = {
-  "--ignore=F401",
-  '--format=%(path)s:%(row)d:%(col)d:%(code)s:%(text)s',
-  '--no-show-source',
-  '-',
-}
-lint.linters_by_ft = {
-  python = { 'flake8' }
-}
-vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
-  callback = function()
-    lint.try_lint()
-  end
-})
-
--- Formatters
-require("conform").setup({
-  formatters_by_ft = {
-    python = { "isort", "black" },
-  },
 })
 
 -- Autocompletion with nvim-cmp
