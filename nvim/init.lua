@@ -209,28 +209,6 @@ require('lazy').setup({
   -- Display CSV columns in different colors
   'mechatroner/rainbow_csv',
 
-  -- Cursor movement indicator when jumping
-  {
-    'gen740/SmoothCursor.nvim',
-    config = function()
-      require('smoothcursor').setup({
-        fancy = {
-          enable = true,
-          head = { cursor = "", texthl = "GruvboxFg1", linehl = nil },
-          body = {
-            { cursor = "󰝥", texthl = "GruvboxRed" },
-            { cursor = "󰝥", texthl = "GruvboxOrange" },
-            { cursor = "●", texthl = "GruvboxYellow" },
-            { cursor = "●", texthl = "GruvboxGreen" },
-            { cursor = "•", texthl = "GruvboxAqua" },
-            { cursor = ".", texthl = "GruvboxBlue" },
-            { cursor = ".", texthl = "GruvboxPurple" },
-          },
-        },
-      })
-    end
-  },
-
   -- Auto switch ibus input methods between vim's cmd and insert mode
   'rlue/vim-barbaric',
 
