@@ -104,6 +104,12 @@ require('lazy').setup({
   'junegunn/fzf.vim',
 
   {
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+
+  {
     'nvim-telescope/telescope.nvim',
     branch = 'master',
     dependencies = {
@@ -221,7 +227,6 @@ require('lazy').setup({
             { cursor = ".", texthl = "GruvboxPurple" },
           },
         },
-        priority = 1,
       })
     end
   },
@@ -245,6 +250,12 @@ require('lazy').setup({
       -- configurations go here
     },
   },
+
+  -- Highlight git conflicts
+  {
+    'akinsho/git-conflict.nvim',
+    version = "v1.2.2",
+  }
 }, {})
 
 ---------- KEY MAPPINGS ----------
@@ -286,13 +297,22 @@ local on_attach = function(_, bufnr)
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  -- nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+  -- nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+  -- nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+  -- nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+  -- nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+  -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+  -- nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+  local fzf_lua = require('fzf-lua')
+  nmap('gD', fzf_lua.lsp_declarations, '[G]oto [D]eclaration')
+  nmap('gd', fzf_lua.lsp_definitions, '[G]oto [D]efinition')
+  nmap('gr', fzf_lua.lsp_references, '[G]oto [R]eferences')
+  nmap('gI', fzf_lua.lsp_implementations, '[G]oto [I]mplementation')
+  nmap('<leader>D', fzf_lua.lsp_typedefs, 'Type [D]efinition')
+  nmap('<leader>ds', fzf_lua.lsp_document_symbols, '[D]ocument [S]ymbols')
+  nmap('<leader>ws', fzf_lua.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -313,15 +333,50 @@ end
 -- map('n', '<C-p>', ':Files<CR>', { silent = true })
 -- map('n', '<C-f>', ':Rg<CR>', { silent = true })
 
-local ts_builtin = require('telescope.builtin')
-vim.keymap.set('n', '<C-p>', function() ts_builtin.find_files({ no_ignore = true }) end, {})
-vim.keymap.set('n', '<C-f>', ts_builtin.live_grep, {})
-vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
-vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {})
-vim.keymap.set('n', '<leader>sd',
-  function() ts_builtin.diagnostics({ bufnr = 0 }) end,
-  { desc = '[S]earch [D]iagnostics' }
-)
+-- local ts_builtin = require('telescope.builtin')
+-- vim.keymap.set('n', '<C-p>', function() ts_builtin.find_files({ no_ignore = true }) end, {})
+-- vim.keymap.set('n', '<C-f>', ts_builtin.live_grep, {})
+-- vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
+-- vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {})
+-- vim.keymap.set('n', '<leader>sd',
+--   function() ts_builtin.diagnostics({ bufnr = 0 }) end,
+--   { desc = '[S]earch [D]iagnostics' }
+-- )
+
+local fzf_lua = require('fzf-lua')
+local fzf_lua_actions = require'fzf-lua.actions'
+fzf_lua.setup({
+  'telescope',
+  actions = {
+    files = {
+      ["default"] = fzf_lua_actions.file_switch_or_edit,
+    },
+  },
+  winopts = {
+    width = 0.95,
+    height = 0.95
+  },
+  fzf_colors = {
+    ["fg"] = { "fg", "Normal" },
+    ["bg"] = { "bg", "Normal" },
+    ["hl"] = { "fg", "Directory" },
+    ["fg+"] = { "fg", "Normal" },
+    ["bg+"] = { "bg", "CursorLine" },
+    ["hl+"] = { "fg", "CmpItemKindVariable" },
+    ["info"] = { "fg", "WarningMsg" },
+    ["prompt"] = { "fg", "SpecialKey" },
+    ["pointer"] = { "fg", "DiagnosticError" },
+    ["marker"] = { "fg", "DiagnosticError" },
+    ["spinner"] = { "fg", "Label" },
+    ["header"] = { "fg", "Comment" },
+    ["gutter"] = { "bg", "Normal" },
+  }
+})
+vim.keymap.set('n', '<C-p>', fzf_lua.files, {})
+vim.keymap.set('n', '<C-f>', fzf_lua.grep_project, {})
+vim.keymap.set('n', '<C-b>', fzf_lua.buffers, {})
+vim.keymap.set('n', '<C-g>', fzf_lua.git_files, {})
+vim.keymap.set('n', '<leader>sd', fzf_lua.diagnostics_document, {})
 
 -- Seamless navigation between tmux & vim
 g.tmux_navigator_no_mappings = 1
@@ -908,4 +963,11 @@ require("diffview").setup({
       winbar_info = true,
     },
   },
+})
+
+require('git-conflict').setup({
+  highlights = {
+    incoming = 'DiffAdd',
+    current = 'DiffDelete',
+  }
 })
