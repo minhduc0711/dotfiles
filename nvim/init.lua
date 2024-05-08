@@ -202,6 +202,7 @@ require('lazy').setup({
 
   -- Partial diff
   'rickhowe/spotdiff.vim',
+  'rickhowe/diffchar.vim',
 
   -- Colorful pairs
   'hiphish/rainbow-delimiters.nvim',
@@ -275,22 +276,13 @@ local on_attach = function(_, bufnr)
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-  -- nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  -- nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-  -- nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  -- nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  -- nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-  -- nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  -- nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-  local fzf_lua = require('fzf-lua')
-  nmap('gD', fzf_lua.lsp_declarations, '[G]oto [D]eclaration')
-  nmap('gd', fzf_lua.lsp_definitions, '[G]oto [D]efinition')
-  nmap('gr', fzf_lua.lsp_references, '[G]oto [R]eferences')
-  nmap('gI', fzf_lua.lsp_implementations, '[G]oto [I]mplementation')
-  nmap('<leader>D', fzf_lua.lsp_typedefs, 'Type [D]efinition')
-  nmap('<leader>ds', fzf_lua.lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', fzf_lua.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+  nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+  nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+  nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -307,54 +299,15 @@ local on_attach = function(_, bufnr)
 end
 
 -- Searching
--- fzf is still better than telescope for fuzzy search
--- map('n', '<C-p>', ':Files<CR>', { silent = true })
--- map('n', '<C-f>', ':Rg<CR>', { silent = true })
-
--- local ts_builtin = require('telescope.builtin')
--- vim.keymap.set('n', '<C-p>', function() ts_builtin.find_files({ no_ignore = true }) end, {})
--- vim.keymap.set('n', '<C-f>', ts_builtin.live_grep, {})
--- vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
--- vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {})
--- vim.keymap.set('n', '<leader>sd',
---   function() ts_builtin.diagnostics({ bufnr = 0 }) end,
---   { desc = '[S]earch [D]iagnostics' }
--- )
-
-local fzf_lua = require('fzf-lua')
-local fzf_lua_actions = require'fzf-lua.actions'
-fzf_lua.setup({
-  'telescope',
-  actions = {
-    files = {
-      ["default"] = fzf_lua_actions.file_switch_or_edit,
-    },
-  },
-  winopts = {
-    width = 0.95,
-    height = 0.95
-  },
-  fzf_colors = {
-    ["fg"] = { "fg", "Normal" },
-    ["bg"] = { "bg", "Normal" },
-    ["hl"] = { "fg", "Directory" },
-    ["fg+"] = { "fg", "Normal" },
-    ["bg+"] = { "bg", "CursorLine" },
-    ["hl+"] = { "fg", "CmpItemKindVariable" },
-    ["info"] = { "fg", "WarningMsg" },
-    ["prompt"] = { "fg", "SpecialKey" },
-    ["pointer"] = { "fg", "DiagnosticError" },
-    ["marker"] = { "fg", "DiagnosticError" },
-    ["spinner"] = { "fg", "Label" },
-    ["header"] = { "fg", "Comment" },
-    ["gutter"] = { "bg", "Normal" },
-  }
-})
-vim.keymap.set('n', '<C-p>', fzf_lua.files, {})
-vim.keymap.set('n', '<C-f>', fzf_lua.grep_project, {})
-vim.keymap.set('n', '<C-b>', fzf_lua.buffers, {})
-vim.keymap.set('n', '<C-g>', fzf_lua.git_files, {})
-vim.keymap.set('n', '<leader>sd', fzf_lua.diagnostics_document, {})
+local ts_builtin = require('telescope.builtin')
+vim.keymap.set('n', '<C-p>', function() ts_builtin.find_files({ no_ignore = true }) end, {})
+vim.keymap.set('n', '<C-f>', function() ts_builtin.grep_string({ search = "" }) end, {})
+vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
+vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {})
+vim.keymap.set('n', '<leader>sd',
+  function() ts_builtin.diagnostics({ bufnr = 0 }) end,
+  { desc = '[S]earch [D]iagnostics' }
+)
 
 -- Seamless navigation between tmux & vim
 g.tmux_navigator_no_mappings = 1
@@ -532,6 +485,7 @@ require('mason-lspconfig').setup()
 --
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
+local lspconfig = require('lspconfig')
 local servers = {
   clangd = {},
   texlab = {},
@@ -577,6 +531,16 @@ mason_lspconfig.setup_handlers {
       filetypes = (servers[server_name] or {}).filetypes,
     }
   end,
+}
+lspconfig.ruff_lsp.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  -- init_options = {
+  -- settings = {
+  root_dir = lspconfig.util.root_pattern(unpack({ "pyproject.toml", "ruff.toml", ".git" }))
+  -- root_dir = lspconfig.util.find_git_ancestor(),
+  -- }
+  -- }
 }
 
 -- Enable metals for Scala files
@@ -677,10 +641,15 @@ require('neogen').setup {
 }
 
 -- Telescope
-local finders = require 'telescope.finders'
-local sorters = require 'telescope.sorters'
 local actions = require 'telescope.actions'
-local pickers = require 'telescope.pickers'
+local picker_config = {}
+for _, picker in ipairs({ "buffers", "find_files", "git_files", "live_grep" }) do
+  picker_config[picker] = {
+    mappings = {
+      i = { ["<CR>"] = actions.select_tab_drop }
+    }
+  }
+end
 require('telescope').setup {
   defaults = {
     layout_strategy = "horizontal",
@@ -690,45 +659,21 @@ require('telescope').setup {
     },
     mappings = {
       i = {
-        ["<esc>"] = require('telescope.actions').close
+        ["<esc>"] = actions.close,
+        ["<CR>"] = actions.select_tab_drop,
       },
     },
     extensions = {
       fzf = {
-        fuzzy = true,                    -- false will only do exact matching
-        override_generic_sorter = false, -- override the generic sorter
-        override_file_sorter = true,     -- override the file sorter
-        case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-        -- the default case_mode is "smart_case"
+        fuzzy = false,                  -- false will only do exact matching
+        override_generic_sorter = true, -- override the generic sorter
+        override_file_sorter = true,    -- override the file sorter
+        case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
       }
     },
     -- path_display = { "shorten" },
     dynamic_preview_title = false
   },
-  -- jump to an existing file in already opened tab or window from all file pickers
-  -- NOTE: actions.select_tab_drop is not merged into 0.1.x yet
-  pickers = {
-    buffers = {
-      mappings = {
-        i = { ["<CR>"] = actions.select_tab_drop }
-      }
-    },
-    find_files = {
-      mappings = {
-        i = { ["<CR>"] = actions.select_tab_drop }
-      }
-    },
-    git_files = {
-      mappings = {
-        i = { ["<CR>"] = actions.select_tab_drop }
-      }
-    },
-    old_files = {
-      mappings = {
-        i = { ["<CR>"] = actions.select_tab_drop }
-      }
-    }
-  }
 }
 
 -- To get fzf loaded and working with telescope, you need to call
@@ -915,9 +860,11 @@ require("ibl").setup {
 }
 
 require('dapui').setup()
-require('dap-python').setup('/data/mdm/apps/mambaforge/bin/python')
+require('dap-python').setup('~/miniforge3/bin/python')
+require('dap-python').test_runner = 'pytest'
 vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'GruvboxRed' })
 table.insert(require 'dap'.configurations.python, {
+  justMyCode = false,
   type = 'python',
   request = 'launch',
   name = 'FastAPI module',
@@ -926,12 +873,32 @@ table.insert(require 'dap'.configurations.python, {
     'src.main:app',
     -- '--reload', -- doesn't work
     '--use-colors',
-    '--port', '8025',
+    '--port', '8083',
   },
   pythonPath = 'python',
   console = 'integratedTerminal',
 })
-
+table.insert(require 'dap'.configurations.python, {
+  type = 'python',
+  request = 'launch',
+  name = 'Launch file (justMyCode=false)',
+  program = '${file}',
+  console = 'integratedTerminal',
+  pythonPath = 'python',
+  justMyCode = false,
+})
+table.insert(require 'dap'.configurations.python, {
+  justMyCode = false,
+  type = 'python',
+  request = 'launch',
+  name = 'Pytest',
+  module = 'pytest',
+  args = {
+    './tests/assistant/test_collection_ops.py',
+  },
+  pythonPath = 'python',
+  console = 'integratedTerminal',
+})
 require("diffview").setup({
   view = {
     default = {
