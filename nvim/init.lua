@@ -47,6 +47,7 @@ require('lazy').setup({
     'rcarriga/nvim-dap-ui',
     dependencies = {
       'mfussenegger/nvim-dap',
+      'nvim-neotest/nvim-nio',
     }
   },
   'mfussenegger/nvim-dap-python',
@@ -241,9 +242,6 @@ require('lazy').setup({
 
 -- Combine 0 and ^
 map('n', '0', "getline('.')[0 : col('.') - 2] =~# '^\\s\\+$' ? '0' : '^'", { silent = true, expr = true })
-
--- Toggle paste mode
-opt.pastetoggle = '<F3>'
 
 -- Unbind some useless/annoying default key bindings.
 -- 'Q' in normal mode enters Ex mode. You almost never want this.
@@ -475,7 +473,7 @@ end, 0)
 -- mason-lspconfig requires that these setup functions are called in this order
 -- before setting up the servers.
 require('mason').setup()
-require('mason-lspconfig').setup()
+local mason_lspconfig = require 'mason-lspconfig'
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -485,7 +483,6 @@ require('mason-lspconfig').setup()
 --
 --  If you want to override the default filetypes that your language server will attach to you can
 --  define the property 'filetypes' to the map in question.
-local lspconfig = require('lspconfig')
 local servers = {
   clangd = {},
   texlab = {},
@@ -508,19 +505,17 @@ local servers = {
   ruff_lsp = {},
 }
 
+-- Ensure the servers above are installed
+mason_lspconfig.setup {
+  ensure_installed = vim.tbl_keys(servers),
+}
+
 -- Setup neovim lua configuration
 require('neodev').setup()
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
--- Ensure the servers above are installed
-local mason_lspconfig = require 'mason-lspconfig'
-
-mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
-}
 
 mason_lspconfig.setup_handlers {
   function(server_name)
@@ -531,16 +526,6 @@ mason_lspconfig.setup_handlers {
       filetypes = (servers[server_name] or {}).filetypes,
     }
   end,
-}
-lspconfig.ruff_lsp.setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
-  -- init_options = {
-  -- settings = {
-  root_dir = lspconfig.util.root_pattern(unpack({ "pyproject.toml", "ruff.toml", ".git" }))
-  -- root_dir = lspconfig.util.find_git_ancestor(),
-  -- }
-  -- }
 }
 
 -- Enable metals for Scala files
@@ -665,7 +650,7 @@ require('telescope').setup {
     },
     extensions = {
       fzf = {
-        fuzzy = false,                  -- false will only do exact matching
+        fuzzy = true,                   -- false will only do exact matching
         override_generic_sorter = true, -- override the generic sorter
         override_file_sorter = true,    -- override the file sorter
         case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
