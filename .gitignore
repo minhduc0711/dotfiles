@@ -2,3 +2,13 @@
 bookmarks
 accels.scm
 /nvim/plugin/packer_compiled.lua
+
+/fish/completions/
+/fish/conf.d/
+/fish/fish_variables
+/fish/fishd.tmp.*
+/fish/functions/_*
+/fish/functions/fish_prompt.fish
+/fish/functions/fisher.fish
+/fish/functions/fzf_configure_bindings.fish
+/fish/functions/tide*
