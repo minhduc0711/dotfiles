@@ -2,6 +2,12 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
+# add custom executables to path
+set --prepend PATH "$HOME/.local/bin"
+
+# suppress the default login message
+set -g fish_greeting
+
 fish_vi_key_bindings
 fish_config theme choose Tomorrow
 
@@ -16,17 +22,17 @@ set -x YDIFF_OPTIONS '-s -w0 --wrap'
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if test -f /home/minhduc0711/miniforge3/bin/conda
-    eval /home/minhduc0711/miniforge3/bin/conda "shell.fish" "hook" $argv | source
+if test -f $HOME/miniforge3/bin/conda
+    status is-interactive && eval $HOME/miniforge3/bin/conda "shell.fish" "hook" $argv | source
 else
-    if test -f "/home/minhduc0711/miniforge3/etc/fish/conf.d/conda.fish"
-        . "/home/minhduc0711/miniforge3/etc/fish/conf.d/conda.fish"
+    if test -f "$HOME/miniforge3/etc/fish/conf.d/conda.fish"
+        . "$HOME/miniforge3/etc/fish/conf.d/conda.fish"
     else
-        set -x PATH "/home/minhduc0711/miniforge3/bin" $PATH
+        set -x PATH "$HOME/miniforge3/bin" $PATH
     end
 end
 
-if test -f "/home/minhduc0711/miniforge3/etc/fish/conf.d/mamba.fish"
-    source "/home/minhduc0711/miniforge3/etc/fish/conf.d/mamba.fish"
+if test -f "$HOME/miniforge3/etc/fish/conf.d/mamba.fish"
+    source "$HOME/miniforge3/etc/fish/conf.d/mamba.fish"
 end
 # <<< conda initialize <<<
