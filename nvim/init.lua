@@ -40,7 +40,7 @@ require('lazy').setup({
   'nvim-treesitter/playground',
 
   -- Better indent module for python than the built-in one in treesitter
-  -- 'Vimjas/vim-python-pep8-indent',
+  'Vimjas/vim-python-pep8-indent',
 
   -- Debug with breakpoints
   {
@@ -202,8 +202,7 @@ require('lazy').setup({
   'ap/vim-css-color',
 
   -- Partial diff
-  'rickhowe/spotdiff.vim',
-  'rickhowe/diffchar.vim',
+  'andrewradev/linediff.vim',
 
   -- Colorful pairs
   'hiphish/rainbow-delimiters.nvim',
@@ -299,7 +298,7 @@ end
 -- Searching
 local ts_builtin = require('telescope.builtin')
 vim.keymap.set('n', '<C-p>', function() ts_builtin.find_files({ no_ignore = true }) end, {})
-vim.keymap.set('n', '<C-f>', function() ts_builtin.grep_string({ search = "" }) end, {})
+vim.keymap.set('n', '<C-f>', function() ts_builtin.grep_string({ search = "", only_sort_text = true }) end, {})
 vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
 vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {})
 vim.keymap.set('n', '<leader>sd',
@@ -400,7 +399,7 @@ vim.defer_fn(function()
     indent = {
       enable = true,
       -- not working properly for Python https://github.com/nvim-treesitter/nvim-treesitter/issues/1136
-      -- disable = { "python" }
+      disable = { "python" }
     },
     incremental_selection = {
       enable = true,
