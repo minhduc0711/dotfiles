@@ -13,6 +13,7 @@
 - link:
     # don't want to override bashrc on other machines
     # ~/.bashrc: bashrc
+    ~/.config/fish: fish
     ~/.zprezto: prezto
     ~/.zlogin: prezto/runcoms/zlogin
     ~/.zlogout: prezto/runcoms/zlogout

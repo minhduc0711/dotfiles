@@ -22,7 +22,7 @@ set -x YDIFF_OPTIONS '-s -w0 --wrap'
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if test -f $HOME/miniforge3/bin/conda
+if test -f "$HOME/miniforge3/bin/conda"
     status is-interactive && eval $HOME/miniforge3/bin/conda "shell.fish" "hook" $argv | source
 else
     if test -f "$HOME/miniforge3/etc/fish/conf.d/conda.fish"
@@ -36,3 +36,5 @@ if test -f "$HOME/miniforge3/etc/fish/conf.d/mamba.fish"
     source "$HOME/miniforge3/etc/fish/conf.d/mamba.fish"
 end
 # <<< conda initialize <<<
+
+direnv hook fish | source
