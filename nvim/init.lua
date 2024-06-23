@@ -29,6 +29,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+  { 'echasnovski/mini.nvim', version = '*' },
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -140,7 +141,6 @@ require('lazy').setup({
   'romainl/vim-cool',
 
   -- Auto close pairs
-  'minhduc0711/vim-closer',
   'windwp/nvim-ts-autotag',
 
   -- Manipulate surrounding pairs
@@ -194,6 +194,21 @@ require('lazy').setup({
 
   -- Colorscheme
   "ellisonleao/gruvbox.nvim",
+  {
+    'sainnhe/gruvbox-material',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.opt.termguicolors = true
+      vim.opt.background = 'light'
+      vim.g.gruvbox_material_enable_italic = true
+      vim.g.gruvbox_material_enable_bold = true
+      vim.g.gruvbox_material_background = 'hard'
+      vim.g.gruvbox_material_ui_contrast = 'high'
+      vim.g.gruvbox_material_diagnostic_virtual_text = 'colored'
+      vim.cmd.colorscheme('gruvbox-material')
+    end
+  },
 
   -- Pretty statusline
   'nvim-lualine/lualine.nvim',
@@ -379,7 +394,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 cmd [[ command ClearTrailing %s/\s\+$//e ]]
 
 ---------- MORE SPECIFIC CONFIGURATIONS ----------
-
 -- Python executable's path for pynvim
 g.python3_host_prog = "usr/bin/python3"
 
@@ -553,6 +567,13 @@ vim.diagnostic.config({
   severity_sort = true
 })
 
+require('mini.pairs').setup({
+  mappings = {
+    ['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^\\"].', register = { cr = false } },
+    ["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^%a\\\'].', register = { cr = false } },
+  }
+})
+
 -- Autocompletion with nvim-cmp
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -626,14 +647,6 @@ require('neogen').setup {
 
 -- Telescope
 local actions = require 'telescope.actions'
-local picker_config = {}
-for _, picker in ipairs({ "buffers", "find_files", "git_files", "live_grep" }) do
-  picker_config[picker] = {
-    mappings = {
-      i = { ["<CR>"] = actions.select_tab_drop }
-    }
-  }
-end
 require('telescope').setup {
   defaults = {
     layout_strategy = "horizontal",
@@ -752,21 +765,6 @@ vim.api.nvim_create_autocmd({ "ColorScheme" }, {
   callback = function() vim.api.nvim_set_hl(0, 'MatchWord', { bg = vim.g.terminal_color_7, fg = vim.g.terminal_color_0 }) end
 })
 
--- Colorscheme
-require("gruvbox").setup({
-  contrast = "hard",
-  transparent_mode = true,
-  overrides = {
-    IncSearch = { bg = "#f9f5d7", fg = "#076678", reverse = true }
-  }
-})
--- not sure if this option fixes anything
--- opt.termguicolors = true
-opt.background = 'light'
-cmd 'colorscheme gruvbox'
-vim.env.BAT_THEME = 'gruvbox-light' -- for fzf preview
-require("nvim-web-devicons").refresh()
-
 -- Lualine
 local lualine_sections = {
   lualine_a = { 'mode' },
@@ -787,7 +785,7 @@ local lualine_sections = {
 require 'lualine'.setup {
   options = {
     icons_enabled = true,
-    theme = 'gruvbox_light',
+    theme = 'gruvbox-material',
     component_separators = '|',
     section_separators = '',
     disabled_filetypes = {}
@@ -813,28 +811,14 @@ local hooks = require "ibl.hooks"
 -- create the highlight groups in the highlight setup hook, so they are reset
 -- every time the colorscheme changes
 hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-  vim.api.nvim_set_hl(0, "RainbowRed", { link = "TSRainbowRed" })
-  vim.api.nvim_set_hl(0, "RainbowYellow", { link = "TSRainbowYellow" })
-  vim.api.nvim_set_hl(0, "RainbowBlue", { link = "TSRainbowBlue" })
-  vim.api.nvim_set_hl(0, "RainbowOrange", { link = "TSRainbowOrange" })
-  vim.api.nvim_set_hl(0, "RainbowGreen", { link = "TSRainbowGreen" })
-  vim.api.nvim_set_hl(0, "RainbowViolet", { link = "TSRainbowViolet" })
-  vim.api.nvim_set_hl(0, "RainbowCyan", { link = "TSRainbowCyan" })
+  vim.api.nvim_set_hl(0, "RainbowRed", { link = "RainbowDelimiterRed" })
+  vim.api.nvim_set_hl(0, "RainbowYellow", { link = "RainbowDelimiterYellow" })
+  vim.api.nvim_set_hl(0, "RainbowBlue", { link = "RainbowDelimiterBlue" })
+  vim.api.nvim_set_hl(0, "RainbowOrange", { link = "RainbowDelimiterOrange" })
+  vim.api.nvim_set_hl(0, "RainbowGreen", { link = "RainbowDelimiterGreen" })
+  vim.api.nvim_set_hl(0, "RainbowViolet", { link = "RainbowDelimiterViolet" })
+  vim.api.nvim_set_hl(0, "RainbowCyan", { link = "RainbowDelimiterCyan" })
 end)
-
-local rainbow_delimiters = require 'rainbow-delimiters'
-vim.g.rainbow_delimiters = {
-  strategy = {
-    [''] = rainbow_delimiters.strategy['global'],
-    vim = rainbow_delimiters.strategy['local'],
-  },
-  query = {
-    [''] = 'rainbow-delimiters',
-    lua = 'rainbow-blocks',
-  },
-  highlight = highlight,
-}
-
 require("ibl").setup {
   indent = {
     highlight = highlight,
