@@ -156,6 +156,10 @@ require('lazy').setup({
       -- may set any options here
       vim.g.matchup_matchparen_offscreen = { method = "popup" }
       vim.g.matchup_delim_noskips = 1
+      -- improve responsiveness when opening large files
+      vim.g.matchup_matchparen_deferred = 1
+      vim.g.matchup_matchparen_timeout = 100
+      vim.g.matchup_matchparen_insert_timeout = 60
     end
   },
 
@@ -699,17 +703,16 @@ require('indent-o-matic').setup {
 }
 
 -- Gitsigns
-local function format_status(status)
-  local added, changed, removed = status.added, status.changed, status.removed
-  local status_txt = {}
-  table.insert(status_txt, '+' .. (added == nil and 0 or added))
-  table.insert(status_txt, '~' .. (changed == nil and 0 or changed))
-  table.insert(status_txt, '-' .. (removed == nil and 0 or removed))
-  return table.concat(status_txt, ' ')
-end
 require('gitsigns').setup {
+  signs = {
+    add          = { text = '+' },
+    change       = { text = '~' },
+    delete       = { text = '_' },
+    topdelete    = { text = '‾' },
+    changedelete = { text = '~_' },
+    untracked    = { text = '┆' },
+  },
   numhl = true,
-  status_formatter = format_status,
   on_attach = function(bufnr)
     local function gs_map(mode, lhs, rhs, opts)
       opts = vim.tbl_extend('force', { noremap = true, silent = true }, opts or {})
@@ -738,7 +741,8 @@ require('gitsigns').setup {
     -- Text object
     gs_map('o', 'ih', ':<C-U>Gitsigns select_hunk<CR>')
     gs_map('x', 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-  end
+  end,
+  signs_staged_enable = false
 }
 
 -- Live REPL with vim-slime
