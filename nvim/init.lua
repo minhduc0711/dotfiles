@@ -29,7 +29,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  { 'echasnovski/mini.nvim', version = '*' },
   {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -130,9 +129,6 @@ require('lazy').setup({
       },
     },
   },
-
-  -- Code commenting
-  'tpope/vim-commentary',
 
   -- Generate docstrings
   'danymat/neogen',
@@ -571,13 +567,6 @@ vim.diagnostic.config({
   severity_sort = true
 })
 
-require('mini.pairs').setup({
-  mappings = {
-    ['"'] = { action = 'closeopen', pair = '""', neigh_pattern = '[^\\"].', register = { cr = false } },
-    ["'"] = { action = 'closeopen', pair = "''", neigh_pattern = '[^%a\\\'].', register = { cr = false } },
-  }
-})
-
 -- Autocompletion with nvim-cmp
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -597,7 +586,7 @@ cmp.setup {
   mapping = {
     ['<CR>'] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Replace,
-      select = true
+      select = false
     },
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -834,7 +823,7 @@ require("ibl").setup {
 require('dapui').setup()
 require('dap-python').setup('~/miniforge3/bin/python')
 require('dap-python').test_runner = 'pytest'
-vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'GruvboxRed' })
+vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'Red' })
 table.insert(require 'dap'.configurations.python, {
   justMyCode = false,
   type = 'python',
