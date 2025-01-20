@@ -107,7 +107,7 @@
         "interval": 3
     },
     "custom/mpris_metadata": {
-        "format": "{icon} {}",
+        "format": "{icon} {0}",
         "format-icons": "",
         "max-length": 35,
         "exec": "zscroll -d 0.5 -l 24 -u true 'playerctl metadata --format \"{{title}} - {{artist}}\"' 2> /dev/null",
