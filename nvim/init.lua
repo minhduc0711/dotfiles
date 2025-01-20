@@ -91,6 +91,7 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lua',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-buffer',
+      'rcarriga/cmp-dap',
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
@@ -313,7 +314,8 @@ end
 -- Searching
 local ts_builtin = require('telescope.builtin')
 vim.keymap.set('n', '<C-p>', function() ts_builtin.find_files({ no_ignore = true }) end, {})
-vim.keymap.set('n', '<C-f>', function() ts_builtin.grep_string({ search = "", only_sort_text = true }) end, {})
+-- vim.keymap.set('n', '<C-f>', function() ts_builtin.grep_string({ search = "", only_sort_text = true }) end, {})
+vim.keymap.set('n', '<C-f>', function() ts_builtin.live_grep() end, {})
 vim.keymap.set('n', '<C-b>', ts_builtin.buffers, {})
 vim.keymap.set('n', '<C-g>', ts_builtin.git_files, {})
 vim.keymap.set('n', '<leader>sd',
@@ -515,7 +517,7 @@ local servers = {
     },
   },
   pyright = {},
-  ruff_lsp = {},
+  ruff = {},
 }
 
 -- Ensure the servers above are installed
@@ -623,7 +625,17 @@ cmp.setup {
       vim.fn["vsnip#anonymous"](args.body)
     end,
   },
+  enabled = function()
+    return vim.api.nvim_buf_get_option(0, "buftype") ~= "prompt"
+        or require("cmp_dap").is_dap_buffer()
+  end
 }
+
+require("cmp").setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
+  sources = {
+    { name = "dap" },
+  },
+})
 
 -- Docstring generation
 require('neogen').setup {
@@ -821,7 +833,7 @@ require("ibl").setup {
 }
 
 require('dapui').setup()
-require('dap-python').setup('~/miniforge3/bin/python')
+require("dap-python").setup("uv")
 require('dap-python').test_runner = 'pytest'
 vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'Red' })
 table.insert(require 'dap'.configurations.python, {
@@ -855,7 +867,7 @@ table.insert(require 'dap'.configurations.python, {
   name = 'Pytest',
   module = 'pytest',
   args = {
-    './tests/assistant/test_collection_ops.py',
+    'tests/collection/test_collection_ops.py',
   },
   pythonPath = 'python',
   console = 'integratedTerminal',

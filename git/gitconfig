@@ -4,8 +4,14 @@
 [pull]
 	rebase = false
 [core]
-	excludesfile = /home/minhduc0711/.gitignore_global
+	excludesfile = ~/.gitignore_global
 [alias]
 	graph = log --all --graph --oneline
 [init]
 	defaultBranch = main
+[rerere]
+	enabled = true
+[maintenance]
+	repo = /home/mdm/iva_webapi
+[url "ssh://git@localhost:2221"]
+	insteadOf = ssh://git@frapai04p.hq.ivalua.com:2221
